@@ -1,0 +1,668 @@
+\chapter{Réalisation du Sprint 1 : Gestion des utilisateurs et Authentification }
+
+\section{Introduction}
+
+Ce premier sprint a pour objectif de mettre en place le système de gestion des utilisateurs ainsi que les mécanismes de sécurisation de l'application MSG. 
+Il constitue la base de la plateforme en assurant l'authentification des différents acteurs, la protection des ressources et le contrôle des accès selon les rôles attribués.
+
+La solution développée repose sur \textbf{Spring Security} et l'authentification par \textbf{JSON Web Token (JWT)} afin de garantir un accès sécurisé aux différentes fonctionnalités de l'application.
+Ce sprint couvre également l'inscription des clients, la vérification de l'adresse e-mail, la gestion des mots de passe, la création des employés par l'administrateur ainsi que la gestion des autorisations en fonction des rôles et des départements.
+\section{Analyse du Sprint}
+
+Cette section présente l'analyse du premier sprint consacré à la gestion des utilisateurs et à la sécurisation de l'application MSG.
+Elle décrit les fonctionnalités retenues dans le Sprint Backlog ainsi que les principaux cas d'utilisation réalisés afin de répondre aux besoins des différents acteurs du système.
+
+\subsection{Sprint Backlog}
+
+Le Sprint Backlog regroupe l'ensemble des fonctionnalités sélectionnées pour le premier sprint.
+Chaque fonctionnalité est exprimée sous forme de User Story, permettant de décrire les besoins des utilisateurs du système ainsi que la valeur apportée par chaque fonctionnalité développée.
+
+L'objectif principal de ce sprint est de mettre en place une architecture d'authentification sécurisée, la gestion des utilisateurs et le contrôle des accès selon les rôles.
+
+
+\begin{longtable}{|c|>{\RaggedRight\arraybackslash}p{5cm}|>{\RaggedRight\arraybackslash}p{5cm}|c|}
+\hline
+\textbf{ID} & \textbf{User Story} & \textbf{Critère d'acceptation} & \textbf{Priorité}\\
+\hline
+\endfirsthead
+
+\hline
+\textbf{ID} & \textbf{User Story} & \textbf{Critère d'acceptation} & \textbf{Priorité}\\
+\hline
+\endhead
+
+
+US1 &
+En tant que système, je souhaite initialiser automatiquement un compte administrateur principal au premier démarrage afin de garantir l'accès initial à la plateforme MSG. &
+Le compte Admin est créé automatiquement avec un rôle administrateur et les permissions nécessaires. La création est effectuée uniquement si aucun compte administrateur n'existe dans la base de données. &
+Haute
+\\
+\hline
+
+
+US2 &
+En tant que Customer, je souhaite créer un compte afin d'accéder aux services de l'application MSG. &
+Le compte est créé et un e-mail de vérification est envoyé. &
+Haute
+\\
+\hline
+
+
+US3 &
+En tant que Customer, je souhaite vérifier mon adresse e-mail afin d'activer mon compte. &
+Le compte est activé après validation du lien reçu par e-mail. &
+Moyenne
+\\
+\hline
+
+
+US4 &
+En tant que Customer, je souhaite me connecter afin d'accéder aux fonctionnalités qui me sont autorisées. &
+Une authentification réussie génère un jeton JWT. &
+Haute
+\\
+\hline
+
+
+US5 &
+En tant qu'utilisateur, je souhaite réinitialiser mon mot de passe lorsque je l'ai oublié. &
+Un e-mail contenant un lien de réinitialisation est envoyé. &
+Moyenne
+\\
+\hline
+
+
+US6 &
+En tant qu'Admin, je souhaite me connecter à la plateforme afin d'administrer le système. &
+L'administrateur est authentifié et accède au tableau de bord d'administration. &
+Haute
+\\
+\hline
+
+
+US7 &
+En tant qu'Admin, je souhaite créer un compte employé afin de lui donner accès à la plateforme. &
+Le compte employé est créé avec un rôle et un département puis les identifiants sont envoyés par e-mail. &
+Haute
+\\
+\hline
+
+
+US8 &
+En tant qu'Employee, je souhaite définir un nouveau mot de passe lors de ma première connexion afin de sécuriser mon compte. &
+Le mot de passe est modifié et le compte est activé. &
+Moyenne
+\\
+\hline
+
+
+US9 &
+En tant qu'Employee, je souhaite me connecter afin d'accéder aux fonctionnalités correspondant à mon département. &
+L'authentification réussie génère un JWT contenant les informations du rôle et du département. &
+Haute
+\\
+\hline
+
+
+US10 &
+En tant qu'Administrateur, je souhaite attribuer un rôle et un département à chaque employé afin de contrôler les autorisations d'accès. &
+Les permissions sont appliquées conformément au rôle et au département attribués. &
+Moyenne
+\\
+\hline
+
+
+US11 &
+En tant qu'utilisateur authentifié, je souhaite que mes accès soient contrôlés selon mon rôle afin de protéger les ressources de l'application. &
+Les accès sont autorisés ou refusés par Spring Security en fonction des rôles et permissions. &
+Haute
+\\
+\hline
+
+
+\caption{Sprint Backlog - Gestion des utilisateurs et sécurité}
+\label{tab:sprint_backlog}
+
+\end{longtable}
+
+\section{Diagramme de Cas d'Utilisation }
+
+Le diagramme de cas d'utilisation  présente les fonctionnalités liées à la gestion des utilisateurs et à la sécurisation de l'application MSG.
+Il décrit les interactions entre les différents acteurs du système et les services d'authentification disponibles.
+
+Le système implique trois acteurs principaux :
+
+\begin{itemize}
+    \item \textbf{Customer} : peut créer un compte, vérifier son adresse e-mail, se connecter et réinitialiser son mot de passe.
+    
+    \item \textbf{Admin} : peut se connecter, réinitialiser son mot de passe, créer des comptes Employee et gérer leurs rôles et permissions.
+    
+    \item \textbf{Employee} : reçoit ses informations de connexion après sa création, définit son mot de passe, se connecte et utilise les fonctionnalités autorisées selon son rôle.
+\end{itemize}
+
+
+Les principaux cas d'utilisation réalisés dans ce sprint sont :
+
+\begin{itemize}
+    \item Register Customer
+    \item Verify Email
+    \item Login
+    \item Forgot Password
+    \item Reset Password
+    \item Create Employee
+    \item Manage Roles and Permissions
+\end{itemize}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/uml/use_case_auth.png}
+\caption{Diagramme de cas d'utilisation global du Sprint 1}
+\label{fig:usecase_sprint1}
+\end{figure}
+\subsection{Description des Cas d'Utilisation Principaux}
+
+\subsubsection{UC1 : Se connecter}
+
+\textbf{Description :}
+
+Ce cas d'utilisation permet à un utilisateur (Customer, Employee ou Admin) de s'authentifier afin d'accéder aux fonctionnalités qui lui sont autorisées.
+
+\textbf{Préconditions :}
+
+\begin{itemize}
+    \item L'utilisateur possède un compte actif.
+    \item Les identifiants de connexion sont valides.
+\end{itemize}
+
+\textbf{Scénario nominal :}
+
+\begin{enumerate}
+    \item L'utilisateur accède à la page de connexion.
+    \item Il saisit son adresse e-mail et son mot de passe.
+    \item Le système vérifie les informations d'authentification.
+    \item Le système authentifie l'utilisateur.
+    \item L'utilisateur accède à son espace de travail.
+\end{enumerate}
+
+\textbf{Postconditions :}
+
+\begin{itemize}
+    \item L'utilisateur est authentifié.
+    \item Les fonctionnalités correspondant à son rôle sont accessibles.
+\end{itemize}
+
+
+\subsubsection{UC2 : Mot de passe oublié}
+
+\textbf{Description :}
+
+Ce cas d'utilisation permet à un utilisateur ayant oublié son mot de passe de demander sa réinitialisation.
+
+\textbf{Préconditions :}
+
+\begin{itemize}
+    \item L'utilisateur possède un compte.
+    \item L'adresse e-mail est enregistrée dans le système.
+\end{itemize}
+
+\textbf{Scénario nominal :}
+
+\begin{enumerate}
+    \item L'utilisateur sélectionne l'option « Mot de passe oublié ».
+    \item Il saisit son adresse e-mail.
+    \item Le système vérifie l'existence du compte.
+    \item Le système exécute le cas d'utilisation \textit{Réinitialiser le mot de passe}.
+\end{enumerate}
+
+\textbf{Postconditions :}
+
+\begin{itemize}
+    \item La procédure de réinitialisation est lancée.
+\end{itemize}
+
+
+\subsubsection{UC3 : Créer un employé}
+
+\textbf{Description :}
+
+Ce cas d'utilisation permet à l'Admin de créer un compte Employee afin de lui donner accès à l'application.
+
+\textbf{Préconditions :}
+
+\begin{itemize}
+    \item L'Admin est authentifié.
+    \item L'Admin possède les droits nécessaires.
+\end{itemize}
+
+\textbf{Scénario nominal :}
+
+\begin{enumerate}
+    \item L'Admin saisit les informations de l'Employee.
+    \item Le système crée le compte Employee.
+    \item Le système exécute le cas d'utilisation \textit{Attribuer un département}.
+    \item Le système exécute le cas d'utilisation \textit{Envoyer les identifiants de connexion}.
+\end{enumerate}
+
+\textbf{Postconditions :}
+
+\begin{itemize}
+    \item Le compte Employee est créé.
+    \item Le département est attribué.
+    \item Les identifiants de connexion sont envoyés à l'Employee.
+\end{itemize}
+
+
+\subsubsection{UC4 : Gestion des rôles et des permissions}
+
+\textbf{Description :}
+
+Ce cas d'utilisation permet à l'Admin de gérer les rôles et les permissions des employés afin de contrôler les accès aux différentes fonctionnalités du système.
+
+\textbf{Préconditions :}
+
+\begin{itemize}
+    \item L'Admin est authentifié.
+    \item L'Admin possède les droits d'administration.
+\end{itemize}
+
+\textbf{Scénario nominal :}
+
+\begin{enumerate}
+    \item L'Admin consulte la liste des rôles.
+    \item Il sélectionne un employé.
+    \item Il attribue ou modifie le rôle et les permissions.
+    \item Le système enregistre les modifications.
+\end{enumerate}
+
+\textbf{Postconditions :}
+
+\begin{itemize}
+    \item Les rôles et permissions de l'employé sont mis à jour.
+\end{itemize}
+
+
+\subsubsection{UC5 : S'inscrire}
+
+\textbf{Description :}
+
+Ce cas d'utilisation permet à un Customer de créer un compte afin d'accéder aux services de l'application.
+
+\textbf{Préconditions :}
+
+\begin{itemize}
+    \item Le Customer ne possède pas déjà un compte.
+    \item Le formulaire d'inscription est accessible.
+\end{itemize}
+
+\textbf{Scénario nominal :}
+
+\begin{enumerate}
+    \item Le Customer accède au formulaire d'inscription.
+    \item Il saisit ses informations personnelles.
+    \item Le système valide les informations.
+    \item Le système crée le compte.
+    \item Le système exécute le cas d'utilisation \textit{Envoyer un e-mail de vérification}.
+\end{enumerate}
+
+\textbf{Postconditions :}
+
+\begin{itemize}
+    \item Le compte est enregistré.
+    \item Le compte reste inactif jusqu'à la vérification de l'adresse e-mail.
+\end{itemize}
+
+
+\subsubsection{UC6 : Vérifier l'adresse e-mail}
+
+\textbf{Description :}
+
+Ce cas d'utilisation permet au Customer d'activer son compte en validant son adresse e-mail à l'aide du lien reçu.
+
+\textbf{Préconditions :}
+
+\begin{itemize}
+    \item Le compte Customer existe.
+    \item Un e-mail de vérification a été envoyé.
+\end{itemize}
+
+\textbf{Scénario nominal :}
+
+\begin{enumerate}
+    \item Le Customer ouvre le lien reçu par e-mail.
+    \item Le système vérifie la validité du token.
+    \item Le système active le compte.
+    \item Le système confirme la vérification de l'adresse e-mail.
+\end{enumerate}
+
+\textbf{Postconditions :}
+
+\begin{itemize}
+    \item Le compte est activé.
+    \item Le Customer peut se connecter à l'application.
+\end{itemize}
+\section{Conception}
+
+Cette section présente la conception détaillée des fonctionnalités développées durant le premier sprint.
+Elle décrit les interactions entre les différents composants du système ainsi que la structure des principales entités utilisées pour la gestion des utilisateurs et la sécurisation de l'application MSG.
+
+
+\subsection{Diagramme de Séquence : Création d'un Employé}
+
+Le diagramme de séquence suivant illustre le processus de création d'un nouvel employé par l'administrateur.
+Cette fonctionnalité permet à l'Admin d'enregistrer un employé, de lui attribuer un rôle et un département, puis de lui envoyer ses informations de connexion par e-mail.
+
+Le scénario principal est le suivant :
+
+\begin{itemize}
+    \item L'Admin accède à l'interface de création d'un employé.
+    \item Il saisit les informations personnelles de l'employé.
+    \item Le système vérifie la validité des données saisies.
+    \item Le contrôleur reçoit la requête de création.
+    \item Le service métier applique les règles de gestion.
+    \item Le compte employé est enregistré dans la base de données.
+    \item Le rôle et le département sont associés à l'employé.
+    \item Un e-mail contenant les identifiants de connexion est envoyé à l'employé.
+\end{itemize}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/uml/sequenceCreationEmployee.png}
+    \caption{Diagramme de séquence - Création d'un employé}
+    \label{fig:sequence_employee}
+\end{figure}
+
+
+
+\subsection{Diagramme de Classes}
+
+Le diagramme de classes présente la structure statique du module de gestion des utilisateurs.
+Il décrit les principales entités manipulées par l'application ainsi que les relations entre elles.
+
+Les principales classes représentées sont :
+
+\begin{itemize}
+    \item \textbf{User} : représente la classe principale contenant les informations communes des utilisateurs.
+    
+    \item \textbf{Customer} : représente les clients inscrits sur la plateforme.
+    
+    \item \textbf{Employee} : représente les employés créés par l'administrateur.
+    
+    \item \textbf{Admin} : représente l'administrateur responsable de la gestion du système.
+    
+    \item \textbf{Role} : permet de définir les droits d'accès associés aux utilisateurs.
+    
+    \item \textbf{Department} : représente le département auquel un employé appartient.
+    
+    \item \textbf{Token} : permet de gérer les mécanismes de vérification d'e-mail et de réinitialisation du mot de passe.
+\end{itemize}
+
+
+Les relations principales sont :
+
+\begin{itemize}
+    \item Un utilisateur possède un rôle définissant ses permissions.
+    \item Un employé appartient à un département.
+    \item Un utilisateur peut posséder plusieurs tokens pour les opérations de sécurité.
+    \item L'administrateur peut créer et gérer les comptes employés.
+\end{itemize}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/uml/diagrammeClasse.png}
+    \caption{Diagramme de classes - Gestion des utilisateurs}
+    \label{fig:class_diagram}
+\end{figure}
+\section{Architecture de Sécurité}
+
+La sécurité de l'application \ac{MSG} repose sur l'intégration de \textit{Spring Security} et du mécanisme d'authentification basé sur le \ac{JWT} (\textit{JSON Web Token}). Cette architecture permet d'assurer l'authentification des utilisateurs, la protection des ressources exposées par les API REST ainsi que le contrôle des accès en fonction des rôles attribués à chaque utilisateur.
+
+Comme illustré par la Figure~\ref{fig:architecture-jwt}, le processus de sécurité débute lors de la connexion de l'utilisateur. Après vérification des informations d'authentification, un jeton JWT est généré puis transmis au client. Ce jeton est ensuite utilisé pour accéder aux ressources protégées, où il est systématiquement vérifié avant l'autorisation de chaque requête.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/architecture/archJWT.png}
+    \caption{Architecture de sécurité basée sur Spring Security et JWT}
+    \label{fig:architecture-jwt}
+\end{figure}
+
+\subsection{Architecture Spring Security}
+
+Spring Security est un framework dédié à la sécurisation des applications Spring. Dans l'application MSG, il prend en charge l'authentification des utilisateurs, la protection des API et le contrôle des autorisations en fonction des rôles.
+
+Son fonctionnement repose principalement sur les composants suivants.
+
+\subsubsection{Security Filter Chain}
+
+La \textit{Security Filter Chain} intercepte chaque requête HTTP avant son traitement par l'application. Elle vérifie la présence et la validité du JWT, identifie l'utilisateur authentifié et autorise ou refuse l'accès aux ressources protégées.
+
+\subsubsection{Authentication Provider}
+
+L'\textit{Authentication Provider} est chargé de valider les informations de connexion. Il recherche l'utilisateur dans la base de données, compare le mot de passe fourni avec celui enregistré et confirme l'identité de l'utilisateur.
+
+\subsubsection{UserDetailsService}
+
+Le composant \textit{UserDetailsService} récupère les informations nécessaires à l'authentification depuis la base de données, notamment l'identifiant, le mot de passe chiffré ainsi que les rôles associés à l'utilisateur.
+
+\subsubsection{PasswordEncoder}
+
+Le \textit{PasswordEncoder} assure le chiffrement des mots de passe avant leur stockage et permet une comparaison sécurisée lors de l'authentification, garantissant ainsi qu'aucun mot de passe n'est conservé en clair.
+
+Les mécanismes de sécurité présentés s'appuient sur les recommandations de Spring Security \cite{springSecurityDoc,springInAction}.
+
+\subsection{Authentification basée sur JWT}
+
+Le \ac{JWT} (\textit{JSON Web Token}) est un standard permettant de transmettre de manière sécurisée les informations d'authentification entre le client et le serveur. Contrairement à une authentification basée sur les sessions, cette approche est \textit{stateless} : le serveur ne conserve pas l'état de connexion des utilisateurs, les informations nécessaires étant contenues dans le jeton.
+
+Le processus d'authentification se déroule selon les étapes suivantes.
+
+\begin{enumerate}
+    \item L'utilisateur saisit son adresse e-mail et son mot de passe, qui sont envoyés au serveur.
+
+    \item Les identifiants sont vérifiés à l'aide du \textit{UserDetailsService} et du \textit{PasswordEncoder}. Si les informations sont valides, l'utilisateur est authentifié.
+
+    \item Le service \textit{JwtService} génère un jeton JWT contenant l'identifiant de l'utilisateur, son rôle ainsi que sa date d'expiration.
+
+    \item Lors de chaque requête vers une ressource protégée, le client transmet ce jeton dans l'en-tête HTTP \texttt{Authorization}. Le filtre JWT valide alors le jeton avant de permettre l'accès à la ressource demandée.
+\end{enumerate}
+
+Cette approche améliore les performances des applications distribuées en supprimant la gestion des sessions côté serveur tout en garantissant un niveau élevé de sécurité des échanges \cite{jwtRFC}.
+\subsection{Gestion des rôles et des autorisations}
+
+Afin de garantir un contrôle d'accès sécurisé, l'application \ac{MSG} met en œuvre un modèle de contrôle d'accès basé sur les rôles (\textit{Role-Based Access Control} - \ac{RBAC}). Dans cette approche, les permissions ne sont pas attribuées directement aux utilisateurs, mais aux rôles qui leur sont associés. Chaque utilisateur hérite ainsi des autorisations correspondant à son rôle.
+
+Le modèle RBAC utilisé dans MSG repose sur les principes suivants :
+
+\begin{itemize}
+    \item chaque utilisateur est associé à un rôle ;
+    \item chaque rôle définit un ensemble de fonctionnalités accessibles ;
+    \item les permissions déterminent les actions autorisées sur les différentes ressources de l'application.
+\end{itemize}
+
+Les principaux rôles implémentés dans l'application sont présentés ci-dessous.
+
+\subsubsection{Rôle ADMIN}
+
+Le rôle \textbf{ADMIN} correspond au responsable de l'administration de l'application. Il dispose de l'ensemble des privilèges nécessaires pour gérer le système.
+
+Ses principales permissions sont :
+
+\begin{itemize}
+    \item authentification ;
+    \item gestion des comptes des employés ;
+    \item attribution des rôles ;
+    \item gestion des départements ;
+    \item accès à l'ensemble des fonctionnalités administratives.
+\end{itemize}
+
+\subsubsection{Rôle CUSTOMER}
+
+Le rôle \textbf{CUSTOMER} représente le client utilisant la plateforme. Il dispose uniquement des fonctionnalités destinées aux utilisateurs externes.
+
+Ses principales fonctionnalités sont :
+
+\begin{itemize}
+    \item création d'un compte ;
+    \item vérification de l'adresse e-mail ;
+    \item authentification ;
+    \item réinitialisation du mot de passe ;
+    \item accès aux services proposés aux clients.
+\end{itemize}
+
+\subsubsection{Rôle EMPLOYEE}
+
+Le rôle \textbf{EMPLOYEE} est attribué aux utilisateurs internes créés par l'administrateur. Chaque employé est associé à un département qui détermine les fonctionnalités auxquelles il peut accéder.
+
+Son profil est défini par :
+
+\begin{itemize}
+    \item un rôle ;
+    \item un département ;
+    \item un ensemble de permissions spécifiques.
+\end{itemize}
+
+En complément du modèle RBAC, MSG applique une restriction supplémentaire basée sur le département de l'employé afin de limiter l'accès aux fonctionnalités métier.
+
+\begin{table}[H]
+\centering
+
+\begin{tabular}{|l|p{9cm}|}
+\hline
+\textbf{Département} & \textbf{Permissions} \\ \hline
+Sales & Gestion des produits, consultation du stock et gestion des fournisseurs. \\ \hline
+Mechanic & Gestion des demandes de maintenance et des interventions techniques. \\ \hline
+HR & Gestion des employés, des congés et des avances sur salaire. \\ \hline
+Admin & Accès à l'ensemble des fonctionnalités de l'application. \\ \hline
+\end{tabular}
+\caption{Permissions des employés selon le département}
+\label{tab:departements}
+\end{table}
+
+
+L'association entre les rôles et les permissions permet d'assurer un contrôle d'accès cohérent et sécurisé, tout en garantissant que chaque utilisateur n'accède qu'aux fonctionnalités nécessaires à ses responsabilités. Cette approche facilite également l'administration des droits d'accès et améliore la sécurité globale de l'application \cite{rbac}.
+\section{Réalisation}
+
+Cette section présente les principales fonctionnalités développées au cours de ce sprint concernant la gestion des utilisateurs et la sécurisation de l'application \ac{MSG}. Elle décrit les différentes interfaces réalisées pour l'inscription des clients, l'authentification des utilisateurs, la réinitialisation des mots de passe ainsi que la création et la gestion des comptes des employés.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Inscription d'un Customer et vérification du compte par e-mail}
+
+Le processus d'inscription permet à un \textbf{Customer} de créer un compte dans l'application en renseignant les informations demandées dans le formulaire d'inscription. Après validation des données, le système enregistre le nouvel utilisateur puis envoie automatiquement un e-mail de confirmation contenant un lien de vérification. Le compte n'est activé qu'après la validation de cette adresse électronique.
+
+%---------------------------------------------------------
+% Décommenter lorsque les captures seront disponibles
+%
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.75\textwidth]{images/register_customer.png}
+%    \caption{Interface d'inscription d'un Customer}
+%    \label{fig:registerCustomer}
+%\end{figure}
+%
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.75\textwidth]{images/email_verification.png}
+%    \caption{E-mail de vérification du compte}
+%    \label{fig:emailVerification}
+%\end{figure}
+%---------------------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Authentification des utilisateurs}
+
+L'interface de connexion permet aux différents utilisateurs de l'application (\textbf{Customer}, \textbf{Admin} et \textbf{Employee}) d'accéder à leurs espaces respectifs. Après la saisie des identifiants, Spring Security vérifie les informations de connexion puis génère un jeton JWT permettant d'accéder aux ressources protégées. Selon le rôle de l'utilisateur, celui-ci est automatiquement redirigé vers son interface dédiée.
+
+%---------------------------------------------------------
+% Décommenter lorsque les captures seront disponibles
+%
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.75\textwidth]{images/login.png}
+%    \caption{Interface d'authentification}
+%    \label{fig:login}
+%\end{figure}
+%
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=\textwidth]{images/role_redirection.png}
+%    \caption{Redirection selon le rôle de l'utilisateur}
+%    \label{fig:redirectionRole}
+%\end{figure}
+%---------------------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Réinitialisation du mot de passe}
+
+L'application offre une fonctionnalité permettant aux utilisateurs de récupérer l'accès à leur compte lorsqu'ils oublient leur mot de passe. L'utilisateur renseigne son adresse e-mail afin de recevoir un lien sécurisé de réinitialisation. Ce lien permet ensuite de définir un nouveau mot de passe.
+
+%---------------------------------------------------------
+% Décommenter lorsque les captures seront disponibles
+%
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.75\textwidth]{images/forgot_password.png}
+%    \caption{Interface « Forgot Password »}
+%    \label{fig:forgotPassword}
+%\end{figure}
+%
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.75\textwidth]{images/reset_email.png}
+%    \caption{E-mail de réinitialisation du mot de passe}
+%    \label{fig:resetEmail}
+%\end{figure}
+%
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.75\textwidth]{images/reset_password.png}
+%    \caption{Interface de réinitialisation du mot de passe}
+%    \label{fig:resetPassword}
+%\end{figure}
+%---------------------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Création et initialisation d'un Employee}
+
+Contrairement au \textbf{Customer}, un \textbf{Employee} ne crée pas son compte lui-même. Celui-ci est créé par l'\textbf{Admin} à partir de l'interface de gestion des employés. Lors de cette création, les informations de connexion sont automatiquement envoyées par courrier électronique. À sa première connexion, l'employé utilise les identifiants reçus afin d'accéder à son espace de travail.
+
+%---------------------------------------------------------
+% Décommenter lorsque les captures seront disponibles
+%
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=\textwidth]{images/create_employee.png}
+%    \caption{Interface de création d'un Employee}
+%    \label{fig:createEmployee}
+%\end{figure}
+%
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.75\textwidth]{images/employee_email.png}
+%    \caption{E-mail envoyé à l'Employee}
+%    \label{fig:employeeEmail}
+%\end{figure}
+%
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[width=0.75\textwidth]{images/first_login_employee.png}
+%    \caption{Première connexion d'un Employee}
+%    \label{fig:firstLoginEmployee}
+%\end{figure}
+%---------------------------------------------------------
+\section{Bilan du Sprint}
+
+Ce premier sprint a permis de mettre en place les fondations nécessaires pour assurer la sécurité et la gestion des utilisateurs au sein de l'application MSG.
+
+Les fonctionnalités développées ont permis d'intégrer un système d'authentification sécurisé basé sur \textbf{Spring Security} et \textbf{JSON Web Token (JWT)}. Cette architecture garantit la protection des ressources de l'application et assure un contrôle d'accès selon les rôles attribués aux différents utilisateurs.
+
+Au cours de ce sprint, plusieurs fonctionnalités essentielles ont été réalisées, notamment la création de comptes clients, la vérification des adresses e-mail, la gestion de la réinitialisation des mots de passe ainsi que la création des comptes employés par l'administrateur.
+
+La gestion des autorisations a également été mise en place à travers l'attribution des rôles et des départements, permettant d'adapter les accès aux différentes fonctionnalités selon le profil de chaque utilisateur (\textbf{Customer}, \textbf{Employee} et \textbf{Admin}).
+
+Ainsi, ce sprint constitue une étape fondamentale dans la construction de la plateforme MSG en garantissant une base sécurisée, évolutive et prête à accueillir les fonctionnalités métiers développées dans les prochains sprints.
