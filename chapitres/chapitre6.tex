@@ -1,0 +1,412 @@
+\chapter{Intégration et automatisation avec n8n}
+
+\section{Introduction}
+
+Ce sprint est consacré à l'intégration de la plateforme n8n avec le backend de l'application afin d'automatiser plusieurs processus métier. 
+Contrairement aux sprints précédents, ce sprint ne porte pas sur la création d'un nouveau module fonctionnel, mais sur la mise en place d'un mécanisme d'automatisation permettant au système de déclencher des workflows externes à partir de différents événements.
+
+L'intégration est réalisée entre le backend Spring Boot et n8n à travers des Webhooks HTTP. 
+Lorsqu'un événement métier se produit dans l'application, le backend prépare les informations nécessaires et les transmet au workflow n8n correspondant.
+
+Les principaux événements pris en charge concernent la confirmation des commandes, les paiements de maintenance, les situations de stock faible, la réception des livraisons ainsi que les demandes de congé.
+
+% -------------------------------------------------------------------
+% FIGURE 5.1
+% -------------------------------------------------------------------
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/sprint5/n8n-overview.png}
+%     \caption{Vue générale de l'intégration de n8n}
+%     \label{fig:n8n-overview}
+% \end{figure}
+%
+% Description de la figure :
+% Cette figure présente une vue générale de l'intégration de n8n dans
+% l'application. Elle montre le backend Spring Boot comme source des
+% événements métier, le service N8nNotifierService comme intermédiaire
+% de communication et n8n comme plateforme d'exécution des workflows.
+% -------------------------------------------------------------------
+
+
+\section{Présentation et analyse du Sprint}
+
+\subsection{Présentation de n8n}
+
+n8n est une plateforme d'automatisation permettant de créer et d'exécuter des workflows reliant différentes applications et services. 
+Elle permet notamment de recevoir des données à travers des Webhooks, de les traiter et de déclencher automatiquement différentes actions selon le workflow configuré.
+
+Dans notre application, n8n est utilisé comme un composant externe chargé d'exécuter des traitements d'automatisation à partir d'événements générés par le backend Spring Boot. 
+La communication entre les deux systèmes est réalisée à travers des requêtes HTTP envoyées vers des Webhooks n8n.
+
+Cette approche permet de séparer la logique métier principale de l'application des traitements d'automatisation. 
+Ainsi, les workflows peuvent être modifiés ou enrichis indépendamment du code principal du backend.
+
+% -------------------------------------------------------------------
+% FIGURE 5.2
+% -------------------------------------------------------------------
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.85\textwidth]{images/sprint5/n8n-workflow.png}
+%     \caption{Exemple de workflow n8n utilisé pour l'automatisation}
+%     \label{fig:n8n-workflow}
+% \end{figure}
+%
+% Description de la figure :
+% Cette figure présente l'interface d'un workflow n8n. Elle illustre
+% l'enchaînement des différents noeuds permettant de recevoir les
+% données envoyées par le backend et d'exécuter automatiquement les
+% traitements configurés.
+% -------------------------------------------------------------------
+
+
+\subsection{Objectifs du Sprint}
+
+L'objectif principal de ce sprint est d'intégrer n8n au backend afin d'automatiser plusieurs processus déclenchés par des événements métier.
+
+Les objectifs réalisés durant ce sprint sont les suivants :
+
+\begin{itemize}
+    \item intégrer n8n avec le backend Spring Boot ;
+    \item mettre en place des Webhooks pour recevoir les événements provenant de l'application ;
+    \item automatiser la notification après la confirmation d'une commande ;
+    \item automatiser la notification après un paiement de maintenance ;
+    \item générer des alertes lorsqu'un produit atteint un niveau de stock faible ;
+    \item automatiser la notification lors de la réception d'une livraison ;
+    \item transmettre automatiquement les informations relatives aux demandes de congé.
+\end{itemize}
+
+
+\subsection{Sprint Backlog}
+
+Le Sprint Backlog regroupe les fonctionnalités développées durant ce sprint pour mettre en place l'intégration entre le backend Spring Boot et n8n.
+
+\begin{table}[H]
+\centering
+\caption{Sprint Backlog du Sprint 5}
+\label{tab:sprint5-backlog}
+\begin{tabular}{|p{3.5cm}|p{7cm}|p{2cm}|}
+\hline
+\textbf{Fonctionnalité} & \textbf{Description} & \textbf{Priorité} \\
+\hline
+Intégration de n8n & Mettre en place la communication entre Spring Boot et n8n à travers des Webhooks HTTP. & Haute \\
+\hline
+Confirmation de commande & Transmettre les informations d'une commande confirmée au workflow n8n et mettre à jour la caisse. & Haute \\
+\hline
+Paiement de maintenance & Transmettre les informations relatives au paiement d'une maintenance au workflow n8n. & Haute \\
+\hline
+Alerte de stock faible & Détecter les produits dont le stock est faible et transmettre leurs informations à n8n. & Haute \\
+\hline
+Réception de livraison & Transmettre les informations relatives à une livraison reçue et mettre à jour la caisse. & Haute \\
+\hline
+Demande de congé & Transmettre automatiquement les informations d'une demande de congé à n8n. & Moyenne \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\section{Intégration de n8n}
+
+\subsection{Architecture de l'intégration}
+
+L'intégration repose sur une communication entre le backend Spring Boot et la plateforme n8n. 
+Le backend reste responsable de la logique métier et détecte les événements nécessitant une automatisation. 
+Le service \texttt{N8nNotifierService} assure ensuite la préparation et l'envoi des données vers le Webhook n8n correspondant.
+
+La communication peut être représentée de manière générale comme suit :
+
+\begin{center}
+\textit{Backend Spring Boot}
+$\rightarrow$
+\textit{N8nNotifierService}
+$\rightarrow$
+\textit{Webhook n8n}
+$\rightarrow$
+\textit{Workflow n8n}
+$\rightarrow$
+\textit{Action automatisée}
+\end{center}
+
+% -------------------------------------------------------------------
+% FIGURE 5.3
+% -------------------------------------------------------------------
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/sprint5/n8n-architecture.png}
+%     \caption{Architecture générale de l'intégration entre Spring Boot et n8n}
+%     \label{fig:n8n-architecture}
+% \end{figure}
+%
+% Description de la figure :
+% Cette figure représente l'architecture générale de l'intégration.
+% Elle montre le backend Spring Boot qui déclenche les événements métier,
+% le N8nNotifierService qui prépare les données, les différents Webhooks
+% n8n et les workflows chargés d'exécuter les automatisations.
+% -------------------------------------------------------------------
+
+
+\subsection{Communication entre Spring Boot et n8n}
+
+La communication entre les deux systèmes est réalisée à l'aide de requêtes HTTP. 
+Pour cela, le service \texttt{N8nNotifierService} utilise la classe \texttt{RestTemplate} de Spring afin d'envoyer les données au Webhook correspondant.
+
+Chaque type d'événement possède une URL de Webhook configurée dans les propriétés de l'application. 
+Le service récupère ces URLs à l'aide de l'annotation \texttt{@Value}.
+
+Par exemple, le service possède plusieurs URLs correspondant aux différents événements :
+
+\begin{verbatim}
+n8n.webhook.order-confirmed
+n8n.webhook.low-stock
+n8n.webhook.supply-received
+n8n.webhook.leave-request
+n8n.webhook.maintenance-payment
+\end{verbatim}
+
+Lorsqu'un événement se produit, les données nécessaires sont regroupées dans une structure de type \texttt{Map<String, Object>}, puis envoyées au Webhook correspondant à l'aide de \texttt{RestTemplate}.
+
+% -------------------------------------------------------------------
+% FIGURE 5.4
+% -------------------------------------------------------------------
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.85\textwidth]{images/sprint5/webhook-communication.png}
+%     \caption{Communication HTTP entre Spring Boot et un Webhook n8n}
+%     \label{fig:webhook-communication}
+% \end{figure}
+%
+% Description de la figure :
+% Cette figure illustre le principe de communication HTTP entre le
+% backend Spring Boot et n8n. Elle montre l'envoi d'une requête POST
+% contenant les données de l'événement vers l'URL du Webhook n8n.
+% -------------------------------------------------------------------
+
+
+\subsection{Gestion des Webhooks}
+
+Un Webhook est utilisé comme point d'entrée d'un workflow n8n. 
+Lorsqu'un événement métier est détecté dans l'application, le backend envoie une requête HTTP POST vers le Webhook correspondant.
+
+Le service \texttt{N8nNotifierService} centralise cette communication afin d'éviter de dupliquer la logique d'appel aux Webhooks dans les différents services métier.
+
+Cinq types d'événements sont actuellement pris en charge :
+
+\begin{itemize}
+    \item confirmation d'une commande ;
+    \item paiement d'une maintenance ;
+    \item détection d'un stock faible ;
+    \item réception d'une livraison ;
+    \item création d'une demande de congé.
+\end{itemize}
+
+Chaque événement possède son propre payload contenant les informations nécessaires au traitement du workflow n8n.
+
+% -------------------------------------------------------------------
+% FIGURE 5.5
+% -------------------------------------------------------------------
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/sprint5/webhooks-n8n.png}
+%     \caption{Les Webhooks n8n utilisés dans l'application}
+%     \label{fig:webhooks-n8n}
+% \end{figure}
+%
+% Description de la figure :
+% Cette figure présente les différents Webhooks configurés dans n8n
+% pour les événements métier de l'application. Chaque Webhook constitue
+% un point d'entrée vers un workflow spécifique.
+% -------------------------------------------------------------------
+
+
+\section{Réalisation}
+
+\subsection{Automatisation de la confirmation des commandes}
+
+Lorsqu'une commande est confirmée, le backend déclenche la méthode \texttt{notifyOrderConfirmed}. 
+Cette méthode réalise d'abord l'enregistrement de la vente dans la caisse à travers le service \texttt{CashRegisterService}.
+
+Le montant total de la commande est crédité dans la caisse avec la catégorie \texttt{SALE\_CASH}. 
+Le nouveau solde de la caisse est ensuite récupéré afin de l'intégrer dans les données envoyées à n8n.
+
+Le payload transmis contient notamment :
+
+\begin{itemize}
+    \item l'identifiant de la commande ;
+    \item le nom du client ;
+    \item le montant total ;
+    \item le statut de la commande ;
+    \item le nouveau solde de la caisse.
+\end{itemize}
+
+Le payload est ensuite envoyé au Webhook associé à la confirmation de commande.
+
+% -------------------------------------------------------------------
+% FIGURE 5.6
+% -------------------------------------------------------------------
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/sprint5/order-confirmed-workflow.png}
+%     \caption{Workflow n8n déclenché après la confirmation d'une commande}
+%     \label{fig:order-confirmed-workflow}
+% \end{figure}
+%
+% Description de la figure :
+% Cette figure montre le workflow n8n déclenché lorsqu'une commande est
+% confirmée. Le Webhook reçoit les informations envoyées par Spring Boot
+% et les transmet aux différentes étapes du workflow.
+% -------------------------------------------------------------------
+
+
+\subsection{Automatisation des paiements de maintenance}
+
+Lorsqu'un paiement relatif à une maintenance est effectué, la méthode \texttt{notifyMaintenancePayment} est appelée.
+
+Le service récupère le nouveau solde de la caisse et prépare un payload contenant les informations du paiement. 
+Ces informations comprennent notamment le numéro de facture, le montant payé, le ou les moyens de paiement utilisés, la date du paiement ainsi que le solde actuel de la caisse.
+
+Les données sont ensuite transmises au Webhook n8n dédié aux paiements de maintenance.
+
+% -------------------------------------------------------------------
+% FIGURE 5.7
+% -------------------------------------------------------------------
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/sprint5/maintenance-payment-workflow.png}
+%     \caption{Workflow n8n pour les paiements de maintenance}
+%     \label{fig:maintenance-payment-workflow}
+% \end{figure}
+%
+% Description de la figure :
+% Cette figure présente le workflow n8n déclenché après un paiement
+% de maintenance. Elle montre la réception des informations du paiement
+% par le Webhook et leur traitement dans le workflow.
+% -------------------------------------------------------------------
+
+
+\subsection{Gestion des alertes de stock faible}
+
+Le système permet également d'automatiser la gestion des situations de stock faible.
+
+La méthode \texttt{notifyLowStock} reçoit une liste de produits dont le niveau de stock nécessite une attention particulière. 
+Pour chaque produit, les informations relatives au stock sont préparées avant d'être regroupées dans un payload.
+
+Les données transmises comprennent notamment :
+
+\begin{itemize}
+    \item le nom du produit ;
+    \item la quantité disponible ;
+    \item le seuil de réapprovisionnement ;
+    \item l'emplacement du stock ;
+    \item le nombre de produits concernés ;
+    \item la date et l'heure de la vérification.
+\end{itemize}
+
+Ces informations sont envoyées au Webhook n8n dédié à la gestion des stocks faibles.
+
+% -------------------------------------------------------------------
+% FIGURE 5.8
+% -------------------------------------------------------------------
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/sprint5/low-stock-workflow.png}
+%     \caption{Workflow n8n de gestion des alertes de stock faible}
+%     \label{fig:low-stock-workflow}
+% \end{figure}
+%
+% Description de la figure :
+% Cette figure présente le workflow n8n déclenché lorsqu'un ou plusieurs
+% produits atteignent un niveau de stock faible. Le workflow reçoit la
+% liste des produits concernés à travers le Webhook et effectue les
+% traitements d'automatisation configurés.
+% -------------------------------------------------------------------
+
+
+\subsection{Automatisation de la réception des livraisons}
+
+Lorsqu'une livraison est reçue, la méthode \texttt{notifySupplyReceived} est utilisée pour transmettre les informations relatives à l'opération à n8n.
+
+Avant l'envoi du payload, le coût total de la réception est calculé à partir de la quantité reçue et du prix unitaire. 
+Le montant correspondant est ensuite débité de la caisse avec la catégorie \texttt{PURCHASE\_CASH}.
+
+Le payload envoyé à n8n contient notamment :
+
+\begin{itemize}
+    \item le nom et l'identifiant du produit ;
+    \item le nom et l'identifiant du fournisseur ;
+    \item la quantité reçue ;
+    \item le prix unitaire ;
+    \item le coût total ;
+    \item une éventuelle note ;
+    \item la nouvelle quantité disponible en stock ;
+    \item la date de réception ;
+    \item le nouveau solde de la caisse.
+\end{itemize}
+
+Le Webhook n8n correspondant reçoit ces informations afin de déclencher le workflow associé à la réception de la livraison.
+
+% -------------------------------------------------------------------
+% FIGURE 5.9
+% -------------------------------------------------------------------
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/sprint5/supply-received-workflow.png}
+%     \caption{Workflow n8n déclenché lors de la réception d'une livraison}
+%     \label{fig:supply-received-workflow}
+% \end{figure}
+%
+% Description de la figure :
+% Cette figure présente le workflow n8n associé à la réception d'une
+% livraison. Elle montre la réception des données relatives au produit,
+% au fournisseur, à la quantité reçue et au coût de l'opération.
+% -------------------------------------------------------------------
+
+
+\subsection{Notification des demandes de congé}
+
+L'intégration de n8n est également utilisée pour automatiser le traitement des demandes de congé.
+
+Lorsqu'un employé soumet une demande, le backend sauvegarde la demande puis appelle la méthode \texttt{notifyLeaveRequest}. 
+Cette méthode prépare les informations nécessaires et les transmet au Webhook n8n correspondant.
+
+Le payload contient notamment :
+
+\begin{itemize}
+    \item l'identifiant de la demande ;
+    \item le nom de l'employé ;
+    \item son identifiant Telegram ;
+    \item la date de début et la date de fin du congé ;
+    \item le motif de la demande ;
+    \item le nombre de jours ouvrés ;
+    \item le type de contrat ;
+    \item le nombre de jours de congé restants ;
+    \item la date et l'heure de création de la demande.
+\end{itemize}
+
+Ces informations permettent au workflow n8n de déclencher les actions d'automatisation configurées pour les demandes de congé.
+
+% -------------------------------------------------------------------
+% FIGURE 5.10
+% -------------------------------------------------------------------
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/sprint5/leave-request-workflow.png}
+%     \caption{Workflow n8n pour les demandes de congé}
+%     \label{fig:leave-request-workflow}
+% \end{figure}
+%
+% Description de la figure :
+% Cette figure montre le workflow n8n déclenché lors de la création
+% d'une demande de congé. Le Webhook reçoit les informations de la
+% demande transmises par Spring Boot et les utilise pour effectuer
+% les automatisations configurées.
+% -------------------------------------------------------------------
+
+
+\section{Bilan du Sprint}
+
+Ce sprint a permis d'intégrer la plateforme n8n au backend Spring Boot afin d'automatiser plusieurs processus de l'application.
+
+La mise en place du service \texttt{N8nNotifierService} permet de centraliser la communication avec les différents Webhooks et d'assurer la transmission des données nécessaires aux workflows n8n.
+
+L'intégration couvre plusieurs domaines de l'application, notamment les commandes, les paiements de maintenance, la gestion du stock, les approvisionnements et la gestion des ressources humaines.
+
+Cette approche permet de réduire le traitement manuel de certaines opérations et offre une architecture plus flexible pour l'ajout de nouveaux workflows d'automatisation.

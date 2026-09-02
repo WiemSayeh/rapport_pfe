@@ -1,0 +1,642 @@
+\chapter{Réalisation du Sprint 4 : Gestion des Ressources Humaines}
+
+\section{Introduction}
+
+Ce quatrième sprint a pour objectif de mettre en place les fonctionnalités liées à la gestion des ressources humaines au sein de l'application MSG.
+
+Il permet d'assurer la gestion et le suivi des employés à travers plusieurs fonctionnalités, notamment la vérification de leur identité par reconnaissance du numéro CIN, la gestion des horaires de travail, l'affectation des shifts, ainsi que la gestion des congés et des avances sur salaire.
+
+Ce sprint intègre également des règles métier permettant de contrôler la disponibilité des employés, leur affectation aux créneaux de travail et les conditions associées aux demandes de congé et d'avance sur salaire. La vérification des employés repose également sur l'intégration d'un service OCR permettant d'extraire automatiquement le numéro CIN à partir des documents d'identité fournis.
+
+
+% =========================================================
+% ANALYSE DU SPRINT
+% =========================================================
+
+\section{Analyse du Sprint}
+
+Cette section présente l'analyse du quatrième sprint consacré à la gestion des ressources humaines.
+
+Elle décrit les fonctionnalités sélectionnées dans le Sprint Backlog ainsi que les principaux cas d'utilisation réalisés afin de répondre aux besoins de l'administrateur et des employés.
+
+
+% =========================================================
+% SPRINT BACKLOG
+% =========================================================
+
+\subsection{Sprint Backlog}
+
+Le Sprint Backlog regroupe l'ensemble des fonctionnalités sélectionnées pour le quatrième sprint.
+
+Chaque fonctionnalité est exprimée sous forme de User Story afin de décrire le besoin de l'utilisateur et la valeur apportée par la fonctionnalité développée.
+
+L'objectif principal de ce sprint est de proposer un module RH permettant de gérer les employés, leur disponibilité, leurs horaires, leurs shifts, leurs congés et leurs demandes d'avance sur salaire.
+
+\begin{longtable}{|c|>{\RaggedRight\arraybackslash}p{5cm}|>{\RaggedRight\arraybackslash}p{5cm}|c|}
+\hline
+\textbf{ID} & \textbf{User Story} & \textbf{Critère d'acceptation} & \textbf{Priorité}\\
+\hline
+
+US1 &
+En tant qu'Admin, je souhaite vérifier l'identité d'un employé à partir de son CIN afin de confirmer son identité. &
+Le système extrait le numéro CIN à partir de l'image fournie, recherche l'employé correspondant et valide son compte si le CIN est reconnu. &
+Haute
+\\
+\hline
+
+US2 &
+En tant qu'Admin, je souhaite vérifier automatiquement le CIN d'un employé à l'aide d'un service OCR afin de faciliter le processus de vérification. &
+Le service OCR extrait le numéro CIN et retourne un niveau de confiance associé au résultat. &
+Haute
+\\
+\hline
+
+US3 &
+En tant qu'Admin, je souhaite consulter et gérer les horaires de travail des employés afin d'organiser leur disponibilité. &
+Les horaires sont enregistrés avec le jour, l'heure de début, l'heure de fin et le département concerné. &
+Haute
+\\
+\hline
+
+US4 &
+En tant qu'Admin, je souhaite modifier ou supprimer les horaires d'un employé afin de maintenir son planning à jour. &
+Les horaires existants peuvent être modifiés ou supprimés puis enregistrés dans la base de données. &
+Moyenne
+\\
+\hline
+
+US5 &
+En tant qu'Admin, je souhaite créer un shift pour un employé afin de planifier son intervention sur un créneau donné. &
+Le shift est enregistré avec une date, une heure de début, une heure de fin, un employé, un département et le statut PLANNED. &
+Haute
+\\
+\hline
+
+US6 &
+En tant que système, je souhaite affecter automatiquement un employé disponible à une demande afin d'optimiser la planification des interventions. &
+Le système sélectionne un employé actif et disponible dont l'horaire couvre le créneau demandé et qui ne possède aucun shift en conflit. &
+Haute
+\\
+\hline
+
+US7 &
+En tant qu'Employee, je souhaite consulter mes shifts afin de connaître mes créneaux de travail planifiés. &
+L'employé peut consulter les shifts qui lui sont associés. &
+Moyenne
+\\
+\hline
+
+US8 &
+En tant qu'Employee, je souhaite demander un congé afin de soumettre une période d'absence à l'administration. &
+La demande est enregistrée avec le statut PENDING après vérification des règles liées au contrat et au solde disponible. &
+Haute
+\\
+\hline
+
+US9 &
+En tant que système, je souhaite calculer automatiquement les jours ouvrés d'un congé afin de déterminer la durée réelle de l'absence. &
+Les samedis et dimanches ne sont pas comptabilisés dans le nombre de jours de congé. &
+Haute
+\\
+\hline
+
+US10 &
+En tant qu'Admin, je souhaite approuver ou rejeter une demande de congé afin de gérer les absences des employés. &
+Une demande PENDING peut être approuvée ou rejetée. En cas d'approbation, le solde de congés est automatiquement diminué. &
+Haute
+\\
+\hline
+
+US11 &
+En tant qu'Employee, je souhaite demander une avance sur salaire afin de bénéficier d'une partie de mon salaire avant son versement. &
+Le montant demandé ne dépasse pas 50\% du salaire et le cumul mensuel des avances approuvées respecte également cette limite. &
+Haute
+\\
+\hline
+
+US12 &
+En tant qu'Admin, je souhaite approuver ou rejeter une demande d'avance sur salaire afin de gérer les demandes financières des employés. &
+Une demande PENDING peut être approuvée ou rejetée et son statut est mis à jour. &
+Haute
+\\
+\hline
+
+US13 &
+En tant que système, je souhaite notifier l'administration lorsqu'une demande de congé est créée afin d'assurer son suivi. &
+Une notification est envoyée au service n8n après l'enregistrement de la demande de congé. &
+Moyenne
+\\
+\hline
+
+\caption{Sprint Backlog - Gestion des Ressources Humaines}
+\label{tab:sprint_backlog_rh}
+\end{longtable}
+
+
+% =========================================================
+% CONCEPTION
+% =========================================================
+
+\section{Conception}
+
+Cette section présente la conception détaillée des fonctionnalités développées durant le quatrième sprint.
+
+Elle décrit les interactions entre les différents acteurs du système ainsi que la structure des principales entités utilisées pour la gestion des ressources humaines.
+
+
+% =========================================================
+% DIAGRAMME DE CAS D'UTILISATION
+% =========================================================
+
+\subsection{Diagramme de Cas d'Utilisation}
+
+Le diagramme de cas d'utilisation présente les principales fonctionnalités du module de gestion des ressources humaines.
+
+Il décrit les interactions entre l'administrateur, les employés et les différents services du système intervenant dans la gestion des horaires, des shifts, des congés, des avances sur salaire et de la vérification des employés.
+
+Le système implique principalement les acteurs suivants :
+
+\begin{itemize}
+    \item \textbf{Admin} : gère les horaires, les shifts, les demandes de congé, les demandes d'avance sur salaire et la vérification des employés.
+
+    \item \textbf{Employee} : consulte ses horaires et ses shifts et peut effectuer des demandes de congé et d'avance sur salaire.
+
+    \item \textbf{Service OCR} : intervient dans l'extraction automatique du numéro CIN à partir des documents d'identité.
+
+    \item \textbf{n8n} : intervient dans le processus de notification des demandes de congé.
+\end{itemize}
+
+Les principaux cas d'utilisation réalisés dans ce sprint sont :
+
+\begin{itemize}
+    \item Vérifier un employé par CIN
+    \item Gérer les horaires de travail
+    \item Créer un shift
+    \item Affecter automatiquement un employé
+    \item Consulter les shifts
+    \item Demander un congé
+    \item Approuver un congé
+    \item Rejeter un congé
+    \item Demander une avance sur salaire
+    \item Approuver une avance
+    \item Rejeter une avance
+\end{itemize}
+
+
+% Image temporairement commentée
+%
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/uml/use_case_rh.png}
+%     \caption{Diagramme de cas d'utilisation du Sprint 4}
+%     \label{fig:usecase_sprint4}
+% \end{figure}
+
+
+% =========================================================
+% DESCRIPTION DES CAS D'UTILISATION
+% =========================================================
+
+\subsubsection{Description des Cas d'Utilisation Principaux}
+
+\paragraph{UC1 : Vérifier un employé par CIN}
+
+\textbf{Description :}
+
+Ce cas d'utilisation permet à l'Admin de vérifier l'identité d'un employé à partir des documents CIN fournis. Le système utilise un service OCR afin d'extraire automatiquement le numéro CIN.
+
+\textbf{Préconditions :}
+
+\begin{itemize}
+    \item L'Admin est authentifié.
+    \item Les images recto et verso du CIN sont disponibles.
+    \item Le service OCR est accessible.
+\end{itemize}
+
+\textbf{Scénario nominal :}
+
+\begin{enumerate}
+    \item L'Admin sélectionne les images recto et verso du CIN.
+    \item Le système vérifie les fichiers transmis.
+    \item Les documents sont sauvegardés.
+    \item Le système transmet l'image au service OCR.
+    \item Le service OCR extrait le numéro CIN.
+    \item Le système recherche l'employé correspondant au CIN.
+    \item Le système marque l'employé comme vérifié.
+    \item Une notification de vérification est envoyée à l'administration.
+\end{enumerate}
+
+\textbf{Postconditions :}
+
+\begin{itemize}
+    \item L'employé est marqué comme vérifié.
+    \item Le résultat de la vérification est retourné au client.
+\end{itemize}
+
+
+\paragraph{UC2 : Affecter automatiquement un employé}
+
+\textbf{Description :}
+
+Ce cas d'utilisation permet au système de sélectionner automatiquement un employé disponible pour un créneau donné.
+
+\textbf{Préconditions :}
+
+\begin{itemize}
+    \item Le département concerné existe.
+    \item Le créneau demandé possède une date et des heures définies.
+    \item Des horaires de travail sont configurés pour les employés.
+\end{itemize}
+
+\textbf{Scénario nominal :}
+
+\begin{enumerate}
+    \item Le système récupère les employés du département concerné.
+    \item Il vérifie que leur horaire habituel couvre le créneau demandé.
+    \item Les employés inactifs ou indisponibles sont exclus.
+    \item Le système vérifie l'absence de conflit avec les shifts existants.
+    \item Un employé disponible est sélectionné.
+    \item Le système crée automatiquement un WorkShift pour bloquer le créneau.
+\end{enumerate}
+
+\textbf{Postconditions :}
+
+\begin{itemize}
+    \item Un employé est affecté au créneau.
+    \item Un shift est créé avec le statut PLANNED.
+\end{itemize}
+
+
+\paragraph{UC3 : Demander un congé}
+
+\textbf{Description :}
+
+Ce cas d'utilisation permet à un Employee de soumettre une demande de congé. Le système vérifie les règles applicables selon le type de contrat ainsi que le solde de congés disponible.
+
+\textbf{Préconditions :}
+
+\begin{itemize}
+    \item L'Employee possède un contrat actif.
+    \item Aucun autre congé n'est déjà en attente.
+    \item Le solde de congés est suffisant.
+\end{itemize}
+
+\textbf{Scénario nominal :}
+
+\begin{enumerate}
+    \item L'Employee sélectionne les dates de début et de fin.
+    \item Il saisit le motif du congé.
+    \item Le système calcule le nombre de jours ouvrés.
+    \item Le système vérifie les règles liées au type de contrat.
+    \item Le système vérifie le solde disponible.
+    \item La demande est enregistrée avec le statut PENDING.
+    \item Le système transmet les informations de la demande au service n8n.
+\end{enumerate}
+
+\textbf{Postconditions :}
+
+\begin{itemize}
+    \item La demande de congé est enregistrée.
+    \item Son statut est PENDING.
+    \item Une notification est déclenchée.
+\end{itemize}
+
+
+\paragraph{UC4 : Approuver ou rejeter une demande de congé}
+
+\textbf{Description :}
+
+Ce cas d'utilisation permet à l'Admin de traiter une demande de congé soumise par un employé.
+
+\textbf{Préconditions :}
+
+\begin{itemize}
+    \item La demande existe.
+    \item La demande possède le statut PENDING.
+\end{itemize}
+
+\textbf{Scénario nominal :}
+
+\begin{enumerate}
+    \item L'Admin consulte les demandes de congé.
+    \item Il sélectionne une demande en attente.
+    \item Il choisit de l'approuver ou de la rejeter.
+    \item En cas d'approbation, le système vérifie le solde disponible.
+    \item Le système met à jour le statut de la demande.
+    \item En cas d'approbation, le nombre de jours utilisés est déduit du solde.
+\end{enumerate}
+
+\textbf{Postconditions :}
+
+\begin{itemize}
+    \item La demande est APPROVED ou REJECTED.
+    \item En cas d'approbation, le solde de congés est mis à jour.
+\end{itemize}
+
+
+\paragraph{UC5 : Demander une avance sur salaire}
+
+\textbf{Description :}
+
+Ce cas d'utilisation permet à un Employee de demander une avance sur salaire dans la limite autorisée par son salaire et les avances déjà approuvées durant le mois.
+
+\textbf{Préconditions :}
+
+\begin{itemize}
+    \item L'Employee possède un contrat.
+    \item Aucune demande d'avance n'est déjà en attente.
+    \item Le montant demandé respecte la limite autorisée.
+\end{itemize}
+
+\textbf{Scénario nominal :}
+
+\begin{enumerate}
+    \item L'Employee saisit le montant de l'avance souhaitée.
+    \item Le système récupère le salaire du contrat.
+    \item Le système calcule la limite maximale correspondant à 50\% du salaire.
+    \item Le système calcule les avances approuvées durant le mois.
+    \item Le système vérifie le montant demandé.
+    \item La demande est enregistrée avec le statut PENDING.
+\end{enumerate}
+
+\textbf{Postconditions :}
+
+\begin{itemize}
+    \item La demande d'avance est enregistrée.
+    \item Son statut est PENDING.
+    \item Le montant restant autorisé pour le mois est calculé.
+\end{itemize}
+
+
+% =========================================================
+% DIAGRAMME DE SEQUENCE
+% =========================================================
+
+\subsection{Diagramme de Séquence : Affectation automatique d'un employé}
+
+Le diagramme de séquence suivant illustre le processus d'affectation automatique d'un employé à un créneau de travail.
+
+Cette fonctionnalité constitue un processus métier important du module RH puisqu'elle permet au système de sélectionner automatiquement un employé en fonction de plusieurs conditions de disponibilité.
+
+Le scénario principal est le suivant :
+
+\begin{itemize}
+    \item Le système reçoit une demande d'affectation avec un département, une date et un créneau horaire.
+    \item Le service récupère les horaires habituels correspondant au jour demandé.
+    \item Les employés dont les horaires couvrent le créneau sont sélectionnés.
+    \item Les employés inactifs ou indisponibles sont exclus.
+    \item Le système vérifie les conflits avec les shifts existants.
+    \item Le premier employé satisfaisant les conditions est sélectionné.
+    \item Le système crée automatiquement un WorkShift.
+    \item L'employé sélectionné est retourné au système.
+\end{itemize}
+
+
+% Image temporairement commentée
+%
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=1\textwidth]{images/uml/sequenceAutoAssignEmployee.png}
+%     \caption{Diagramme de séquence - Affectation automatique d'un employé}
+%     \label{fig:sequence_auto_assign}
+% \end{figure}
+
+
+% =========================================================
+% DIAGRAMME DE CLASSES
+% =========================================================
+
+\subsection{Diagramme de Classes}
+
+Le diagramme de classes présente la structure statique du module de gestion des ressources humaines.
+
+Il décrit les principales entités manipulées par le système ainsi que les relations permettant d'assurer la gestion des employés, des contrats, des horaires, des shifts, des congés et des avances sur salaire.
+
+Les principales classes représentées sont :
+
+\begin{itemize}
+    \item \textbf{Employee} : représente l'employé et contient ses informations personnelles ainsi que son état de disponibilité et de vérification.
+
+    \item \textbf{Department} : représente le département auquel l'employé est associé.
+
+    \item \textbf{Contract} : représente le contrat de travail de l'employé et contient notamment le type de contrat et le salaire.
+
+    \item \textbf{WorkingHours} : représente les horaires habituels de travail d'un employé.
+
+    \item \textbf{WorkShift} : représente un créneau de travail planifié pour un employé.
+
+    \item \textbf{LeaveRequest} : représente une demande de congé soumise par un employé.
+
+    \item \textbf{LeaveBalance} : représente le solde de congés disponible pour un employé.
+
+    \item \textbf{SalaryAdvance} : représente une demande d'avance sur salaire.
+\end{itemize}
+
+Les relations principales sont :
+
+\begin{itemize}
+    \item Un employé peut être associé à un département.
+    \item Un employé peut posséder un ou plusieurs contrats.
+    \item Un employé peut avoir plusieurs horaires de travail.
+    \item Un employé peut posséder plusieurs shifts.
+    \item Un employé peut effectuer plusieurs demandes de congé.
+    \item Un employé possède un solde de congés.
+    \item Un employé peut effectuer plusieurs demandes d'avance sur salaire.
+    \item Un shift est associé à un employé et à un département.
+\end{itemize}
+
+
+% Image temporairement commentée
+%
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=1\textwidth]{images/uml/diagrammeClasseRH.png}
+%     \caption{Diagramme de classes - Gestion des ressources humaines}
+%     \label{fig:class_diagram_rh}
+% \end{figure}
+
+
+% =========================================================
+% ARCHITECTURE ET INTEGRATION
+% =========================================================
+
+\section{Architecture et intégration des services}
+
+La gestion des ressources humaines repose sur plusieurs services métier permettant de séparer les responsabilités liées aux différentes fonctionnalités du module.
+
+Le module est principalement organisé autour des services de gestion des horaires, des shifts, des congés et des avances sur salaire.
+
+
+\subsection{Gestion des horaires et des shifts}
+
+La gestion des horaires est assurée par le service \textit{WorkingHoursService}. Celui-ci permet d'enregistrer, de modifier, de supprimer et de consulter les horaires de travail des employés.
+
+Lorsqu'un horaire est enregistré, il est associé à un employé, un département, un jour de la semaine ainsi qu'à une heure de début et une heure de fin.
+
+Le service \textit{WorkShiftService} permet quant à lui de gérer les créneaux de travail planifiés. Il intègre également un mécanisme d'affectation automatique basé sur quatre conditions principales :
+
+\begin{enumerate}
+    \item l'horaire habituel de l'employé doit couvrir le créneau demandé ;
+    \item l'employé doit être actif ;
+    \item l'employé doit être disponible ;
+    \item l'employé ne doit pas avoir de conflit avec un shift existant.
+\end{enumerate}
+
+Lorsqu'un employé répond à ces conditions, un nouveau shift est automatiquement créé afin de réserver le créneau.
+
+
+\subsection{Gestion des congés}
+
+La gestion des congés est assurée par le service \textit{LeaveService}.
+
+Avant l'enregistrement d'une demande, le système vérifie l'existence d'un contrat actif, l'absence d'une autre demande en attente et la disponibilité du solde de congés.
+
+Les règles appliquées dépendent du type de contrat :
+
+\begin{itemize}
+    \item \textbf{CDI} : maximum de 25 jours et préavis minimum de 3 jours ;
+    \item \textbf{CDD} : maximum de 15 jours, préavis minimum de 2 jours et respect de la date de fin du contrat ;
+    \item \textbf{STAGE} : maximum de 5 jours et préavis minimum d'un jour.
+\end{itemize}
+
+Le système calcule également les jours ouvrés en excluant les samedis et les dimanches.
+
+Après l'enregistrement de la demande, les informations sont transmises au service n8n afin de déclencher le mécanisme de notification.
+
+
+\subsection{Gestion des avances sur salaire}
+
+La gestion des avances est assurée par le service \textit{SalaryAdvanceService}.
+
+Lorsqu'un employé demande une avance, le système récupère son contrat et son salaire afin de déterminer le montant maximal autorisé.
+
+La limite est fixée à 50\% du salaire. Le système vérifie également le cumul des avances déjà approuvées durant le mois en cours afin de garantir que le plafond mensuel ne soit pas dépassé.
+
+
+% =========================================================
+% REALISATION
+% =========================================================
+
+\section{Réalisation}
+
+Cette section présente les principales fonctionnalités développées au cours de ce sprint concernant la gestion des ressources humaines.
+
+Elle décrit les différentes interfaces réalisées pour la vérification des employés, la gestion des horaires et des shifts ainsi que la gestion des congés et des avances sur salaire.
+
+
+\subsection{Vérification d'un Employee par CIN}
+
+La fonctionnalité de vérification permet à l'administrateur de vérifier l'identité d'un employé à partir de son document CIN.
+
+L'administrateur fournit les images recto et verso du document. Le système sauvegarde les fichiers puis transmet l'image au service OCR afin d'extraire automatiquement le numéro CIN.
+
+Après extraction, le système recherche l'employé correspondant dans la base de données. Si le CIN est reconnu et qu'un employé correspondant existe, son statut de vérification est mis à jour.
+
+Le système retourne également le niveau de confiance fourni par le service OCR. Dans le cas d'un résultat présentant une faible confiance, un avertissement est affiché afin d'encourager une vérification manuelle.
+
+
+% Image temporairement commentée
+%
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.85\textwidth]{images/interfaces/RH/employeeVerification.png}
+%     \caption{Interface de vérification d'un Employee par CIN}
+%     \label{fig:employee_verification}
+% \end{figure}
+
+
+\subsection{Gestion des horaires de travail}
+
+L'interface de gestion des horaires permet à l'administrateur de définir les horaires habituels des employés.
+
+Pour chaque horaire, le système enregistre le jour de la semaine, l'heure de début, l'heure de fin et le département concerné.
+
+Ces informations sont ensuite utilisées par le mécanisme d'affectation automatique afin de déterminer les employés pouvant être affectés à un créneau donné.
+
+
+% Image temporairement commentée
+%
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.85\textwidth]{images/interfaces/RH/workingHours.png}
+%     \caption{Interface de gestion des horaires de travail}
+%     \label{fig:working_hours}
+% \end{figure}
+
+
+\subsection{Gestion des shifts}
+
+L'interface de gestion des shifts permet de consulter et de planifier les créneaux de travail des employés.
+
+Chaque shift est associé à une date, une heure de début, une heure de fin, un employé et un département. Lorsqu'un shift est créé automatiquement, son statut initial est défini à \textit{PLANNED}.
+
+Le système empêche également l'affectation d'un employé à plusieurs shifts présentant un chevauchement sur la même période.
+
+
+% Image temporairement commentée
+%
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.85\textwidth]{images/interfaces/RH/workShifts.png}
+%     \caption{Interface de gestion des shifts}
+%     \label{fig:work_shifts}
+% \end{figure}
+
+
+\subsection{Gestion des demandes de congé}
+
+L'employé peut soumettre une demande de congé en indiquant la période souhaitée ainsi que le motif de son absence.
+
+Avant d'enregistrer la demande, le système applique automatiquement les règles correspondant au type de contrat de l'employé et vérifie son solde disponible.
+
+Une demande valide est enregistrée avec le statut \textit{PENDING}. L'administrateur peut ensuite consulter les demandes et décider de les approuver ou de les rejeter.
+
+
+% Image temporairement commentée
+%
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.85\textwidth]{images/interfaces/RH/leaveRequests.png}
+%     \caption{Interface de gestion des demandes de congé}
+%     \label{fig:leave_requests}
+% \end{figure}
+
+
+\subsection{Gestion des avances sur salaire}
+
+L'employé peut également effectuer une demande d'avance sur salaire en indiquant le montant souhaité.
+
+Le système récupère automatiquement le salaire correspondant au contrat de l'employé et vérifie que le montant demandé respecte la limite de 50\% du salaire.
+
+Le cumul des avances approuvées durant le mois est également pris en compte. Une demande dépassant le plafond autorisé est automatiquement refusée par le système.
+
+L'administrateur peut ensuite approuver ou rejeter les demandes enregistrées.
+
+
+% Image temporairement commentée
+%
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.85\textwidth]{images/interfaces/RH/salaryAdvances.png}
+%     \caption{Interface de gestion des avances sur salaire}
+%     \label{fig:salary_advances}
+% \end{figure}
+
+
+% =========================================================
+% BILAN
+% =========================================================
+
+\section{Bilan du Sprint}
+
+Ce quatrième sprint a permis de mettre en place les principales fonctionnalités nécessaires à la gestion des ressources humaines au sein de l'application MSG.
+
+Les fonctionnalités développées permettent notamment de vérifier l'identité des employés à l'aide d'un service OCR, de gérer leurs horaires et leurs shifts, ainsi que de suivre leurs demandes de congé et d'avance sur salaire.
+
+Le mécanisme d'affectation automatique améliore également la gestion des ressources en sélectionnant un employé en fonction de son horaire, de son état d'activité, de sa disponibilité et de l'absence de conflit avec les shifts existants.
+
+La gestion des congés intègre plusieurs règles métier adaptées aux différents types de contrats et permet de maintenir automatiquement le solde disponible après approbation d'une demande. De même, la gestion des avances sur salaire garantit le respect d'un plafond mensuel correspondant à 50\% du salaire.
+
+Enfin, l'intégration avec le service OCR et le workflow n8n permet d'automatiser certaines opérations du module RH, notamment la vérification des employés et la notification des demandes de congé.
+
+Ainsi, ce sprint constitue une étape importante dans la mise en place d'un module RH complet, permettant d'améliorer le suivi des employés, l'organisation de leur temps de travail et la gestion des demandes administratives.
