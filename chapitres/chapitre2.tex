@@ -5,8 +5,6 @@
 Ce premier sprint a pour objectif de mettre en place le système de gestion des utilisateurs ainsi que les mécanismes de sécurisation de l'application MSG. 
 Il constitue la base de la plateforme en assurant l'authentification des différents acteurs, la protection des ressources et le contrôle des accès selon les rôles attribués.
 
-La solution développée repose sur \textbf{Spring Security} et l'authentification par \textbf{JSON Web Token (JWT)} afin de garantir un accès sécurisé aux différentes fonctionnalités de l'application.
-Ce sprint couvre également l'inscription des clients, la vérification de l'adresse e-mail, la gestion des mots de passe, la création des employés par l'administrateur ainsi que la gestion des autorisations en fonction des rôles et des départements.
 
 \section{Analyse du Sprint}
 
@@ -55,7 +53,7 @@ Moyenne
 
 US4 &
 En tant que Customer, je souhaite me connecter afin d'accéder aux fonctionnalités qui me sont autorisées. &
-Une authentification réussie génère un jeton JWT. &
+Une authentification réussie génère un jeton \ac{JWT}. &
 Haute
 \\
 \hline
@@ -95,7 +93,7 @@ Moyenne
 
 US9 &
 En tant qu'Employee, je souhaite me connecter afin d'accéder aux fonctionnalités correspondant à mon département. &
-L'authentification réussie génère un JWT contenant les informations du rôle et du département. &
+L'authentification réussie génère un \ac{JWT} contenant les informations du rôle et du département. &
 Haute
 \\
 \hline
@@ -133,7 +131,7 @@ Elle décrit les interactions entre les différents composants du système ainsi
 Le diagramme de cas d'utilisation présente les fonctionnalités liées à la gestion des utilisateurs et à la sécurisation de l'application MSG.
 Il décrit les interactions entre les différents acteurs du système et les services d'authentification disponibles.
 
-Le système implique trois acteurs principaux :
+Le système repose sur un acteur abstrait \textbf{User}, qui regroupe les comportements communs à tous les utilisateurs de la plateforme (se connecter, changer son mot de passe) et dont héritent les trois acteurs principaux :
 
 \begin{itemize}
     \item \textbf{Customer} : peut créer un compte, vérifier son adresse e-mail, se connecter et réinitialiser son mot de passe.
@@ -154,7 +152,7 @@ Le système implique trois acteurs principaux :
 % DESCRIPTION DES CAS D'UTILISATION
 % ============================================================
 
-\section{Description des Cas d’Utilisation}
+\subsection{Description textuelle des Cas d'Utilisation}
 
 Afin de compléter le diagramme de cas d’utilisation présenté précédemment, 
 les principaux cas d’utilisation du système sont décrits dans les tableaux suivants.
@@ -179,7 +177,7 @@ les principaux cas d’utilisation du système sont décrits dans les tableaux s
 Se connecter \\ \hline
 
 \textbf{Acteur(s)} &
-User, Customer, Employee, Admin \\ \hline
+User  \\ \hline
 
 \textbf{Préconditions} &
 L’utilisateur possède un compte et dispose de ses identifiants de connexion. \\ \hline
@@ -189,7 +187,7 @@ L’utilisateur possède un compte et dispose de ses identifiants de connexion. 
 2. Il saisit son adresse e-mail et son mot de passe. \newline
 3. Le système vérifie les informations d’authentification. \newline
 4. Le système authentifie l’utilisateur. \newline
-5. Le système génère un jeton JWT. \newline
+5. Le système génère un jeton \ac{JWT}. \newline
 6. L’utilisateur accède aux fonctionnalités correspondant à son rôle. \\ \hline
 
 \textbf{Postconditions} &
@@ -527,7 +525,7 @@ L’administrateur ne dispose pas des droits nécessaires ou les données saisie
 Changer le mot de passe \\ \hline
 
 \textbf{Acteur(s)} &
-Employee, User \\ \hline
+Employee \\ \hline
 
 \textbf{Préconditions} &
 L’utilisateur est authentifié ou effectue sa première connexion avec les identifiants reçus. \\ \hline
@@ -704,7 +702,7 @@ son solde de congés, puis envoie ses identifiants de connexion par e-mail.
 
 Le diagramme suivant présente le processus d'authentification d'un employé.
 Après la saisie de ses identifiants, le système vérifie les informations
-d'authentification et génère un jeton JWT. Lors de la première connexion,
+d'authentification et génère un jeton \ac{JWT}. Lors de la première connexion,
 l'employé est invité à modifier son mot de passe avant d'accéder au tableau
 de bord. En cas d'échec, le système retourne une erreur d'authentification.
 
@@ -718,55 +716,45 @@ de bord. En cas d'échec, le système retourne une erreur d'authentification.
 
 \subsection{Diagramme de Classes}
 
-Le diagramme de classes présente la structure statique du module de gestion
-des utilisateurs. Il décrit les principales classes, leurs attributs ainsi
-que les relations qui existent entre elles.
+Le diagramme de classes présente la structure statique du module de gestion des
+utilisateurs, à travers ses principales classes, leurs attributs et les relations
+qui les unissent.
 
-Les principales classes représentées sont :
+La classe \textbf{User} centralise les informations communes à tout utilisateur :
+identité, coordonnées et données d'authentification (mot de passe, vérification
+d'email, jetons de réinitialisation, etc.). Trois classes en héritent, correspondant
+chacune à un rôle métier :
 
 \begin{itemize}
-
-    \item \textbf{User} : classe principale regroupant les informations
-    communes à tous les utilisateurs, telles que l'identité, les informations
-    de contact et les données liées à l'authentification.
-
-    \item \textbf{Customer} : représente les clients de la plateforme et
-    contient notamment leurs informations de fidélité.
-
-    \item \textbf{Employee} : représente les employés du système et contient
-    leurs informations professionnelles, leur disponibilité et leur statut.
-
-    \item \textbf{Admin} : représente les administrateurs responsables de
-    la gestion et de l'administration du système.
-
-    \item \textbf{Department} : représente les différents départements
-    auxquels les employés peuvent être affectés.
-
-    \item \textbf{Permission} : représente les permissions disponibles
-    dans le système et permet de définir les droits associés aux départements.
-
-    \item \textbf{EmploymentStatus} : énumération permettant de représenter
-    l'état d'un employé : \textit{ACTIVE}, \textit{ON\_LEAVE},
-    \textit{RESIGNED} ou \textit{TERMINATED}.
-
+    \item \textbf{Customer} : les clients, avec leurs informations de fidélité
+    (points, dépenses totales).
+    \item \textbf{Employee} : les employés, avec leurs informations professionnelles,
+    leur disponibilité et leur statut d'emploi.
+    \item \textbf{Admin} : les administrateurs, responsables de la gestion du
+    système.
 \end{itemize}
 
-Les principales relations sont les suivantes :
+Deux classes complètent ce modèle autour de la gestion des employés :
 
 \begin{itemize}
+    \item \textbf{Department} : les départements auxquels les employés sont
+    rattachés.
+    \item \textbf{Permission} : les droits d'accès du système, associés aux
+    départements.
+\end{itemize}
 
-    \item \textbf{Customer}, \textbf{Employee} et \textbf{Admin} héritent
-    de la classe \textbf{User} et partagent ainsi les informations communes
-    liées aux utilisateurs.
+L'énumération \textbf{EmploymentStatus} définit les états possibles d'un employé :
+\texttt{ACTIVE}, \texttt{ON\_LEAVE}, \texttt{RESIGNED}, \texttt{TERMINATED}.
 
-    \item Un \textbf{Employee} est associé à un \textbf{Department}.
-
-    \item Un \textbf{Department} peut être associé à plusieurs
-    \textbf{Permission}.
-
-    \item Le statut d'un \textbf{Employee} est défini à l'aide de
-    l'énumération \textbf{EmploymentStatus}.
-
+\paragraph{Relations principales}
+\begin{itemize}
+    \item \texttt{Customer}, \texttt{Employee} et \texttt{Admin} héritent de
+    \texttt{User}.
+    \item \texttt{Employee} est associé à \texttt{Department} (0..*).
+    \item \texttt{Department} et \texttt{Permission} sont liés par une relation
+    many-to-many (0..* -- 0..*).
+    \item Le statut d'un \texttt{Employee} est typé par l'énumération
+    \texttt{EmploymentStatus}.
 \end{itemize}
 
 \begin{figure}[H]
@@ -780,7 +768,7 @@ Les principales relations sont les suivantes :
 
 La sécurité de l'application \ac{MSG} repose sur l'intégration de \textit{Spring Security} et du mécanisme d'authentification basé sur le \ac{JWT} (\textit{JSON Web Token}). Cette architecture permet d'assurer l'authentification des utilisateurs, la protection des ressources exposées par les API REST ainsi que le contrôle des accès en fonction des rôles attribués à chaque utilisateur.
 
-Comme illustré par la Figure~\ref{fig:architecture-jwt}, le processus de sécurité débute lors de la connexion de l'utilisateur. Après vérification des informations d'authentification, un jeton JWT est généré puis transmis au client. Ce jeton est ensuite utilisé pour accéder aux ressources protégées, où il est systématiquement vérifié avant l'autorisation de chaque requête.
+Comme illustré par la Figure~\ref{fig:architecture-jwt}, le processus de sécurité débute lors de la connexion de l'utilisateur. Après vérification des informations d'authentification, un jeton \ac{JWT} est généré puis transmis au client. Ce jeton est ensuite utilisé pour accéder aux ressources protégées, où il est systématiquement vérifié avant l'autorisation de chaque requête.
 
 \begin{figure}[H]
     \centering
@@ -791,7 +779,7 @@ Comme illustré par la Figure~\ref{fig:architecture-jwt}, le processus de sécur
 
 \subsection{Architecture Spring Security}
 
-Spring Security est un framework dédié à la sécurisation des applications Spring. Dans l'application MSG, il prend en charge l'authentification des utilisateurs, la protection des API et le contrôle des autorisations en fonction des rôles.
+Spring Security est un framework dédié à la sécurisation des applications Spring. Dans l'application \ac{MSG}, il prend en charge l'authentification des utilisateurs, la protection des API et le contrôle des autorisations en fonction des rôles.
 
 Son fonctionnement repose principalement sur les composants suivants.
 
@@ -969,7 +957,7 @@ Contrairement au \textbf{Customer}, un \textbf{Employee} ne crée pas son compte
 \section{Bilan du Sprint}
 
 Ce premier sprint a permis de mettre en place les fondations de la gestion des
-utilisateurs et de la sécurité de l'application MSG. Les principales
+utilisateurs et de la sécurité de l'application \ac{MSG}. Les principales
 fonctionnalités d'authentification, d'inscription, de vérification des comptes,
 de gestion des mots de passe et de création des employés ont été réalisées.
 La mise en place de Spring Security et du JWT permet également de sécuriser
