@@ -1,0 +1,28 @@
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.1}Introduction}{\reset@font\mtcSfont 32}{section.3.1}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.2}Analyse du Sprint}{\reset@font\mtcSfont 32}{section.3.2}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.2.1}Sprint Backlog}{\reset@font\mtcSSfont 32}{subsection.3.2.1}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.3}Conception}{\reset@font\mtcSfont 34}{section.3.3}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.3.1}Diagramme de Cas d'Utilisation}{\reset@font\mtcSSfont 34}{subsection.3.3.1}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Description des Cas d’Utilisation}{\reset@font\mtcSSSfont 35}{section*.39}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode UC1 : Se connecter}{\reset@font\mtcSSSfont 35}{section*.40}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode UC2 : Réinitialiser le mot de passe}{\reset@font\mtcSSSfont 36}{section*.41}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode UC3 : S’inscrire}{\reset@font\mtcSSSfont 37}{section*.42}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode UC4 : Gérer les employés}{\reset@font\mtcSSSfont 38}{section*.43}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode UC5 : Gérer les rôles et les permissions}{\reset@font\mtcSSSfont 39}{section*.44}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.3.2}Diagrammes de Séquence}{\reset@font\mtcSSfont 40}{subsection.3.3.2}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Diagramme de Séquence : Création d'un Employé}{\reset@font\mtcSSSfont 40}{section*.45}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Diagramme de Séquence : Première Authentification de l'Employé}{\reset@font\mtcSSSfont 41}{section*.47}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.3.3}Diagramme de Classes}{\reset@font\mtcSSfont 42}{subsection.3.3.3}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.4}Architecture de Sécurité}{\reset@font\mtcSfont 44}{section.3.4}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.4.1}Architecture Spring Security}{\reset@font\mtcSSfont 45}{subsection.3.4.1}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Security Filter Chain}{\reset@font\mtcSSSfont 45}{section*.51}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Authentication Provider}{\reset@font\mtcSSSfont 45}{section*.52}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode UserDetailsService}{\reset@font\mtcSSSfont 45}{section*.53}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode PasswordEncoder}{\reset@font\mtcSSSfont 45}{section*.54}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.4.2}Authentification basée sur JWT}{\reset@font\mtcSSfont 45}{subsection.3.4.2}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.5}Réalisation}{\reset@font\mtcSfont 46}{section.3.5}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.5.1}Inscription d'un Customer et vérification du compte par e-mail}{\reset@font\mtcSSfont 46}{subsection.3.5.1}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.5.2}Authentification des utilisateurs}{\reset@font\mtcSSfont 47}{subsection.3.5.2}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.5.3}Réinitialisation du mot de passe}{\reset@font\mtcSSfont 48}{subsection.3.5.3}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {3.5.4}Création et initialisation d'un Employee}{\reset@font\mtcSSfont 50}{subsection.3.5.4}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {3.6}Bilan du Sprint}{\reset@font\mtcSfont 51}{section.3.6}}

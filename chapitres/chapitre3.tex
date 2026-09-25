@@ -1,5 +1,6 @@
-\chapter{Réalisation du Sprint 2 : Gestion des produits et du stock}
-
+\chapter{Sprint 2 : Gestion des produits et du stock}
+\localtableofcontents
+\newpage
 \section{Introduction}
 
 Ce deuxième sprint est consacré à la gestion des produits et du stock. Il permet de mettre en place les fonctionnalités liées à la gestion du catalogue, des catégories, des marques, des fournisseurs et du stock.
@@ -8,12 +9,15 @@ Il couvre également les fonctionnalités de panier, de commandes, de facturatio
 
 \section{Analyse du Sprint}
 
-\subsection{Sprint Backlog}
+Cette section présente les besoins fonctionnels du sprint ainsi que leur organisation à travers le Sprint Backlog.
 
-Le Sprint Backlog regroupe les principales fonctionnalités à réaliser au cours de ce sprint. Il permet de définir les besoins fonctionnels liés à la gestion des produits, du stock, des fournisseurs ainsi qu'aux opérations de commande et de paiement.
+\subsection*{Sprint Backlog}
+Le Tableau~\ref{tab:sprint2-backlog} présente les différentes User Stories du Sprint 2 ainsi que leurs critères d'acceptation et leur niveau de priorité.
 
 \begin{longtable}{|c|>{\RaggedRight\arraybackslash}p{5cm}|>{\RaggedRight\arraybackslash}p{5cm}|c|}
-\hline
+\caption{Sprint Backlog du Sprint 2}
+\label{tab:sprint2-backlog}\\
+    \hline
 \textbf{ID} & \textbf{User Story} & \textbf{Critère d'acceptation} & \textbf{Priorité}\\
 \hline
 \endfirsthead
@@ -120,254 +124,449 @@ Haute
 \hline
 
 
-\caption{Sprint Backlog du Sprint 2}
-\label{tab:sprint2-backlog}
+
 
 \end{longtable}
 
 \section{Conception}
 
-\subsection{Diagramme de Cas d'Utilisation}
+La conception est illustrée à travers les différents diagrammes UML présentés dans cette section.
 
-Le diagramme de cas d'utilisation du Sprint 2 présente les interactions entre les différents acteurs du système et les principales fonctionnalités développées pour la gestion des produits, du stock, des fournisseurs ainsi que pour les opérations commerciales liées au panier, aux commandes et au paiement.
-
-Dans ce sprint, quatre acteurs sont considérés : User, Customer, Employee et Admin. L'acteur User représente l'utilisateur générique du système, tandis que Customer, Employee et Admin correspondent à ses spécialisations. Cette généralisation permet de représenter la hiérarchie des acteurs tout en distinguant les fonctionnalités accessibles selon leur rôle.
-
-Le Customer intervient principalement dans la consultation des produits, la gestion de son panier et les opérations relatives à ses propres commandes. L'Employee intervient dans les opérations de gestion qui lui sont accessibles selon les permissions qui lui sont attribuées. L'Admin dispose de droits étendus sur les fonctionnalités de gestion.
-
-Les permissions d'accès ne sont pas représentées comme des acteurs distincts. Elles constituent des mécanismes de contrôle d'accès permettant de déterminer les fonctionnalités accessibles à un employé.
-
-\subsubsection{Description des acteurs}
-
-\begin{itemize}
-\item \textbf{User :} représente l'acteur générique dont héritent les différents types d'utilisateurs de l'application. Il permet de représenter la généralisation commune aux acteurs Customer, Employee et Admin.
-\item \textbf{Customer :} il peut consulter les produits, gérer son panier, confirmer une commande, consulter ses commandes et annuler une commande selon les règles métier de l'application.
-\item \textbf{Employee :} il accède aux fonctionnalités de gestion selon les permissions qui lui sont attribuées. Il peut notamment intervenir dans la gestion des produits, des catégories, des marques, du stock, des fournisseurs et des commandes lorsque les autorisations correspondantes lui sont accordées.
-\item \textbf{Admin :} il dispose de droits étendus sur les fonctionnalités de gestion. Il peut notamment gérer les produits, les catégories, les marques, le stock, les fournisseurs et les commandes.
-\end{itemize}
-
-\subsubsection{Principaux cas d'utilisation}
-
-Les principaux cas d'utilisation du Sprint 2 sont regroupés selon les domaines fonctionnels suivants :
-
-\begin{itemize}
-\item \textbf{Gestion du catalogue :} consulter les produits, gérer les produits, gérer les catégories et gérer les marques. La consultation du catalogue comprend également la recherche, le filtrage, le tri et la pagination.
-\item \textbf{Gestion du stock :} consulter le stock, réceptionner une livraison et consulter les mouvements de stock.
-\item \textbf{Gestion des fournisseurs :} consulter, rechercher, ajouter, modifier et supprimer un fournisseur.
-\item \textbf{Gestion du panier :} consulter le panier, ajouter des produits, modifier les quantités, supprimer des articles et vider le panier.
-\item \textbf{Gestion des commandes :} confirmer une commande, consulter ses commandes, annuler une commande, consulter les commandes et modifier leur statut.
-\item \textbf{Paiement :} effectuer un paiement associé à une facture.
-\end{itemize}
-
-\subsubsection{Diagramme de Cas d'Utilisation du Sprint 2}
-
-La figure suivante présente le diagramme de cas d'utilisation correspondant aux principales fonctionnalités développées au cours du Sprint 2.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{images/uml/sprint2_GestionProduct.png}
-\caption{Diagramme de cas d'utilisation du Sprint 2}
-\label{fig:sprint2-use-case}
-\end{figure}
-
-\subsubsection{Description des Cas d'Utilisation Principaux}
-
-\paragraph{UC1 : Consulter les produits}
-Ce cas d'utilisation permet aux utilisateurs de consulter les produits disponibles dans le catalogue. La consultation peut être réalisée avec différents paramètres permettant d'organiser les résultats affichés.
-
-\paragraph{UC2 : Gérer les produits}
-Ce cas d'utilisation permet aux utilisateurs disposant des autorisations nécessaires d'ajouter, de modifier et de supprimer les produits du catalogue.
-
-\paragraph{UC3 : Gérer les catégories}
-Ce cas d'utilisation permet de consulter et d'ajouter les catégories utilisées pour organiser les produits du catalogue.
-
-\paragraph{UC4 : Gérer les marques}
-Ce cas d'utilisation permet de consulter, d'ajouter et de supprimer les marques associées aux produits.
-
-\paragraph{UC5 : Gérer le stock}
-Ce cas d'utilisation permet de consulter et de suivre les informations relatives aux quantités disponibles pour les différents produits.
-
-\paragraph{UC6 : Réceptionner une livraison}
-Ce cas d'utilisation permet d'enregistrer la réception d'une livraison provenant d'un fournisseur. Cette opération entraîne la mise à jour du stock et l'enregistrement du mouvement correspondant.
-
-\paragraph{UC7 : Consulter les mouvements de stock}
-Ce cas d'utilisation permet de consulter les mouvements enregistrés afin de suivre les opérations ayant affecté le stock.
-
-\paragraph{UC8 : Gérer les fournisseurs}
-Ce cas d'utilisation permet de consulter, rechercher, ajouter, modifier et supprimer les informations relatives aux fournisseurs.
-
-\paragraph{UC9 : Gérer le panier}
-Ce cas d'utilisation permet au client de consulter son panier, d'ajouter des produits, de modifier leurs quantités, de supprimer des articles ou de vider le panier.
-
-\paragraph{UC10 : Confirmer une commande}
-Ce cas d'utilisation permet au client de confirmer une commande à partir des produits présents dans son panier. La commande est alors enregistrée dans le système.
-
-\paragraph{UC11 : Consulter ses commandes}
-Ce cas d'utilisation permet au client de consulter les commandes qui lui sont associées et de suivre leur état.
-
-\paragraph{UC12 : Annuler une commande}
-Ce cas d'utilisation permet au client d'annuler une commande qui lui appartient, sous réserve des règles métier appliquées par l'application.
-
-\paragraph{UC13 : Consulter les commandes}
-Ce cas d'utilisation permet aux utilisateurs disposant des autorisations nécessaires de consulter les commandes enregistrées dans le système.
-
-\paragraph{UC14 : Modifier le statut d'une commande}
-Ce cas d'utilisation permet aux utilisateurs autorisés de modifier le statut d'une commande afin d'assurer son suivi au cours du processus de traitement.
-
-\paragraph{UC15 : Effectuer un paiement}
-Ce cas d'utilisation permet d'enregistrer le paiement associé à une facture selon les autorisations définies dans l'application.
-
-\subsection{Diagramme de Séquence}
-
-Afin d'illustrer le fonctionnement dynamique des principales fonctionnalités du Sprint 2, trois diagrammes de séquence ont été retenus. Une attention particulière est portée à la gestion du stock, qui constitue le cœur fonctionnel de ce sprint, à travers un diagramme détaillé illustrant la réception d'une livraison et la mise à jour automatique des quantités disponibles.
-
-\subsubsection{Réception d'une livraison et mise à jour du stock}
-
-Ce diagramme illustre le processus central de la gestion du stock : l'enregistrement d'une réception de livraison en provenance d'un fournisseur, la mise à jour du prix d'achat référence chez ce fournisseur, ainsi que la mise à jour automatique de la quantité disponible, du prix moyen pondéré et du mouvement de stock associé.
-
-Le scénario principal est le suivant :
-
-\begin{itemize}
-    \item L'employé saisit le produit, le fournisseur, la quantité, le prix unitaire et une note, puis valide la réception.
-    \item Le contrôleur transmet la requête au service de gestion des approvisionnements.
-    \item Le service vérifie l'existence du produit et du fournisseur.
-    \item La référence fournisseur du produit (prix d'achat, date de dernière livraison) est créée ou mise à jour.
-    \item Le stock du produit est récupéré, ou créé s'il n'existe pas encore.
-    \item Le prix moyen pondéré et la nouvelle quantité disponible sont calculés puis enregistrés.
-    \item Si la quantité disponible devient positive, le statut du produit est mis à jour à « En stock ».
-    \item Un mouvement de stock de type entrée est enregistré avec le fournisseur, la quantité et le prix unitaire.
-    \item Les informations mises à jour du stock sont retournées à l'employé.
-\end{itemize}
+\subsection{Diagramme de Cas d'Utilisation} 
+Le diagramme de cas d'utilisation présente les principales fonctionnalités liées à la gestion des produits, du stock, des fournisseurs et des ventes dans l'application MSG. Il décrit les interactions entre les différents acteurs du système et les fonctionnalités auxquelles ils peuvent accéder. Le système implique trois acteurs principaux : \begin{itemize} \item \textbf{Customer} : peut consulter les produits, gérer son panier, confirmer ou annuler une commande et effectuer un paiement. \item \textbf{Admin} : peut gérer le catalogue, le stock, les fournisseurs ainsi que les commandes et les ventes. \item \textbf{Employee} : peut accéder aux fonctionnalités de gestion selon ses permissions et les départements auxquels il est affecté. \end{itemize} Les interactions entre ces différents acteurs et les fonctionnalités du système sont représentées dans le diagramme de cas d'utilisation présenté à la Figure~\ref{fig:usecase_sprint2}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{images/uml/stockReception.png}
-    \caption{Diagramme de séquence - Réception d'une livraison et mise à jour du stock}
-    \label{fig:sequence_reception_stock}
+    \rotatebox{90}{%
+        \includegraphics[width=0.8\textheight]{images/uml/increUseCase2.drawio (1).png}%
+    }
+    \caption{Diagramme de cas d'utilisation global }
+    \label{fig:usecase_sprint2}
+\end{figure}
+
+% ============================================================
+% DESCRIPTION DES CAS D'UTILISATION
+% ============================================================
+
+\subsubsection{Description des Cas d’Utilisation}
+
+Afin de compléter le diagramme de cas d’utilisation présenté précédemment, les principaux cas d’utilisation du Sprint 2 sont décrits dans les sous-sections suivantes.
+
+% ============================================================
+% UC1 - CONSULTER LES PRODUITS
+% ============================================================
+
+\subsubsection{UC1 : Consulter les produits}
+
+Le Tableau~\ref{tab:uc1_sprint2} présente la description détaillée du cas d’utilisation « Consulter les produits ».
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{10.5cm}|}
+
+\caption{Description du cas d’utilisation « Consulter les produits »}
+\label{tab:uc1_sprint2}\\
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+
+\textbf{Cas d’utilisation} & Consulter les produits \\
+\hline
+
+\textbf{Acteur(s)} & Utilisateur\\
+\hline
+
+\textbf{Préconditions} &
+L’utilisateur dispose d’un accès au catalogue. \\
+\hline
+
+\textbf{Scénario principal} &
+
+1. L’utilisateur accède au catalogue. \newline
+2. Le système récupère les produits disponibles. \newline
+3. Le système affiche les informations des produits. \\
+   \hline
+
+\textbf{Postconditions} &
+Les produits disponibles sont affichés à l’utilisateur. \\
+\hline
+
+\textbf{Exceptions} &
+Une erreur peut survenir lors de la récupération des produits. \\
+\hline
+
+\end{longtable}
+
+% ============================================================
+% UC2 - GERER LES PRODUITS
+% ============================================================
+\vspace{0.3cm}
+\subsubsection{UC2 : Gérer les produits}
+
+Le Tableau~\ref{tab:uc2_sprint2} présente la description détaillée du cas d’utilisation « Gérer les produits ».
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{10.5cm}|}
+
+\caption{Description du cas d’utilisation « Gérer les produits »}
+\label{tab:uc2_sprint2}\\
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+
+\textbf{Cas d’utilisation} & Gérer les produits \\
+\hline
+
+\textbf{Acteur(s)} & Administrateur, Employe \\
+\hline
+
+\textbf{Préconditions} &
+L’utilisateur dispose des permissions nécessaires à la gestion des produits. \\
+\hline
+
+\textbf{Scénario principal} &
+
+1. L’utilisateur accède à la gestion des produits. \newline
+2. Il ajoute, modifie ou supprime les informations nécessaires. \newline
+3. Le système vérifie les données saisies. \newline
+4. Le système enregistre les modifications. \\
+   \hline
+
+\textbf{Postconditions} &
+Les informations des produits sont mises à jour dans le système. \\
+\hline
+
+\textbf{Exceptions} &
+Les données saisies sont invalides ou une référence existe déjà. \\
+\hline
+
+\end{longtable}
+
+% ============================================================
+% UC3 - GERER LE STOCK
+% ============================================================
+\vspace{0.3cm}
+\subsubsection{UC3 : Gérer le stock}
+
+Le Tableau~\ref{tab:uc3_sprint2} présente la description détaillée du cas d’utilisation « Gérer le stock ».
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{10.5cm}|}
+
+\caption{Description du cas d’utilisation « Gérer le stock »}
+\label{tab:uc3_sprint2}\\
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+
+\textbf{Cas d’utilisation} & Gérer le stock \\
+\hline
+
+\textbf{Acteur(s)} & Administrateur, Employe \\
+\hline
+
+\textbf{Préconditions} &
+L’utilisateur dispose des permissions nécessaires à la gestion du stock. \\
+\hline
+
+\textbf{Scénario principal} &
+
+1. L’utilisateur accède à la gestion du stock. \newline
+2. Il consulte les quantités disponibles et les mouvements. \newline
+3. Il effectue l’opération nécessaire sur le stock. \newline
+4. Le système vérifie et enregistre l’opération. \newline
+5. Le système met à jour les quantités disponibles. \\
+   \hline
+
+\textbf{Postconditions} &
+Les quantités et les mouvements de stock sont actualisés. \\
+\hline
+
+\textbf{Exceptions} &
+Le produit n’existe pas ou les données de stock sont invalides. \\
+\hline
+
+\end{longtable}
+\vspace{0.3cm}
+% ============================================================
+% UC4 - RECEPTIONNER UNE LIVRAISON
+% ============================================================
+
+\subsubsection{UC4 : Réceptionner une livraison}
+
+Le Tableau~\ref{tab:uc4_sprint2} présente la description détaillée du cas d’utilisation « Réceptionner une livraison ».
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{10.5cm}|}
+
+\caption{Description du cas d’utilisation « Réceptionner une livraison »}
+\label{tab:uc4_sprint2}\\
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+
+\textbf{Cas d’utilisation} & Réceptionner une livraison \\
+\hline
+
+\textbf{Acteur(s)} & Administrateur, Employe \\
+\hline
+
+\textbf{Préconditions} &
+Une livraison est prévue et l’utilisateur dispose des permissions nécessaires. \\
+\hline
+
+\textbf{Scénario principal} &
+
+1. L’utilisateur sélectionne la livraison concernée. \newline
+2. Il vérifie les produits et les quantités reçus. \newline
+3. Le système enregistre la réception. \newline
+4. Le système met à jour le stock. \\
+   \hline
+
+\textbf{Postconditions} &
+La livraison est enregistrée et les quantités en stock sont actualisées. \\
+\hline
+
+\textbf{Exceptions} &
+Les quantités reçues sont incorrectes ou la livraison n’existe pas. \\
+\hline
+
+\end{longtable}
+\vspace{0.3cm}
+% ============================================================
+% UC5 - GERER LES COMMANDES
+% ============================================================
+
+\subsubsection{UC5 : Gérer les commandes}
+
+Le Tableau~\ref{tab:uc5_sprint2} présente la description détaillée du cas d’utilisation « Gérer les commandes »
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{10.5cm}|}
+
+\caption{Description du cas d’utilisation « Gérer les commandes »}
+\label{tab:uc5_sprint2}\\
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+
+\textbf{Cas d’utilisation} & Gérer les commandes \\
+\hline
+
+\textbf{Acteur(s)} & Administrateur \\
+\hline
+
+\textbf{Préconditions} &
+L’utilisateur dispose d’un compte et des droits nécessaires. \\
+\hline
+
+\textbf{Scénario principal} &
+
+1. L’utilisateur accède aux commandes qui lui sont accessibles. \newline
+2. Il consulte une commande ou effectue une action autorisée. \newline
+3. Le système vérifie l’opération demandée. \newline
+4. Le système met à jour les informations de la commande. \\
+   \hline
+
+\textbf{Postconditions} &
+La commande est enregistrée avec les informations et le statut actualisés. \\
+\hline
+
+\textbf{Exceptions} &
+La commande n’existe pas ou l’opération demandée n’est pas autorisée. \\
+\hline
+
+\end{longtable}
+
+% ============================================================
+% UC6 - GERER LE PANIER ET LE PAIEMENT
+% ============================================================
+
+\vspace{0.3cm}
+\subsubsection{UC6 : Gérer le panier et le paiement}
+
+Le Tableau~\ref{tab:uc6_sprint2} présente la description détaillée du cas d’utilisation « Gérer le panier et le paiement ».
+\begin{longtable}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{10.5cm}|}
+
+\caption{Description du cas d’utilisation « Gérer le panier et le paiement »}
+\label{tab:uc6_sprint2}\\
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+
+\textbf{Cas d’utilisation} & Gérer le panier et le paiement \\
+\hline
+
+\textbf{Acteur(s)} & Client \\
+\hline
+
+\textbf{Préconditions} &
+Le client est connecté et les produits souhaités sont disponibles. \\
+\hline
+
+\textbf{Scénario principal} &
+
+1. Le client ajoute les produits au panier. \newline
+2. Il modifie les quantités si nécessaire. \newline
+3. Il confirme sa commande. \newline
+4. Il choisit un mode de paiement. \newline
+5. Le système traite le paiement et enregistre la commande. \\
+   \hline
+
+\textbf{Postconditions} &
+La commande et le paiement sont enregistrés dans le système. \\
+\hline
+
+\textbf{Exceptions} &
+Un produit est indisponible ou le paiement est refusé. \\
+\hline
+
+\end{longtable}
+
+
+
+\subsection{Diagramme de Séquence}
+
+Afin d'illustrer le fonctionnement dynamique des principales fonctionnalités du Sprint 2, trois processus ont été retenus. Une attention particulière est portée à la gestion du stock, qui constitue le cœur fonctionnel de ce sprint, à travers des diagrammes détaillant la réception d'une livraison et l'ajustement manuel du stock. Le processus d'achat est également présenté à travers l'ajout d'un produit au panier et la confirmation d'une commande.
+
+\subsubsection{Réception d'une livraison et mise à jour du stock}
+
+Le Figure~\ref{fig:sequence_reception_stock} présente le processus de réception d'une livraison. L'employé renseigne le produit, le fournisseur, la quantité et le prix unitaire. Le service vérifie les informations fournies, met à jour la référence fournisseur ainsi que le stock, puis calcule le prix moyen pondéré et la quantité disponible. Enfin, un mouvement de stock de type entrée est enregistré et les informations mises à jour sont retournées à l'employé.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{images/uml/seq3.png}
+\caption{Diagramme de séquence - Réception d'une livraison et mise à jour du stock}
+\label{fig:sequence_reception_stock}
 \end{figure}
 
 \subsubsection{Ajustement manuel du stock}
 
-Ce diagramme illustre le processus permettant à un employé d'ajuster manuellement la quantité disponible d'un produit, par exemple à la suite d'un inventaire ou d'une correction. Chaque ajustement est automatiquement tracé sous la forme d'un mouvement de stock.
-
-Le scénario principal est le suivant :
-
-\begin{itemize}
-    \item L'employé sélectionne un stock et saisit une quantité d'ajustement ainsi qu'un motif.
-    \item Le contrôleur transmet la demande au service de gestion du stock.
-    \item Le service récupère le stock concerné et calcule la nouvelle quantité disponible.
-    \item Si la nouvelle quantité est négative, une erreur est retournée et l'ajustement est rejeté.
-    \item Sinon, la quantité disponible et la date de mise à jour du stock sont enregistrées.
-    \item Un mouvement de stock est créé, de type entrée si l'ajustement est positif ou de type sortie s'il est négatif.
-    \item La confirmation de l'ajustement est retournée à l'employé.
-\end{itemize}
+Le Figure~\ref{fig:sequence_ajustement_stock} présente le processus d'ajustement manuel de la quantité disponible d'un stock. L'employé indique le stock concerné, la quantité à ajuster et le motif. Le service calcule la nouvelle quantité et vérifie qu'elle ne devient pas négative. Si l'ajustement est valide, le stock est mis à jour et un mouvement de type entrée ou sortie est enregistré avant de confirmer l'opération.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{images/uml/AjustementStock.png}
-    \caption{Diagramme de séquence - Ajustement manuel du stock}
-    \label{fig:sequence_ajustement_stock}
+\centering
+\includegraphics[width=1\textwidth]{images/uml/seq4.png}
+\caption{Diagramme de séquence - Ajustement manuel du stock}
+\label{fig:sequence_ajustement_stock}
 \end{figure}
 
 \subsubsection{Ajout au panier et confirmation d'une commande}
 
-Ce diagramme présente le parcours du client, depuis l'ajout d'un produit à son panier jusqu'à la confirmation de sa commande, avec la génération automatique de la facture associée.
+Le Figure~\ref{fig:sequence_ajout_panier} présente le processus d'ajout d'un produit au panier. Le client sélectionne le produit souhaité, puis le système vérifie sa disponibilité avant de mettre à jour le contenu du panier.
 
-Le scénario principal est le suivant :
+Le Figure~\ref{fig:sequence_confirmation_commande} présente ensuite le processus de confirmation de la commande. Celui-ci comprend la création de la commande et de la facture associée, suivie de la vidange du panier une fois l'opération effectuée.
 
-\begin{itemize}
-    \item Le client ajoute un produit à son panier en précisant la quantité souhaitée.
-    \item Le service vérifie l'existence du produit et récupère ou crée le panier du client.
-    \item Si le produit est déjà présent dans le panier, la quantité est incrémentée ; sinon, un nouvel article est ajouté avec son prix actualisé.
-    \item Le panier mis à jour est retourné au client.
-    \item Lorsque le client confirme sa commande, le panier associé est récupéré.
-    \item Si le panier est vide, la confirmation est rejetée.
-    \item Sinon, une commande est créée à partir des articles du panier et son montant total est calculé.
-    \item Une facture est générée et associée à la commande.
-    \item Le panier du client est vidé.
-    \item La confirmation de la commande est retournée au client.
-\end{itemize}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/uml/ajoutpanier1.png}
+\caption{Diagramme de séquence - Ajout d'un produit au panier}
+\label{fig:sequence_ajout_panier}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{images/uml/confirmeorder.png}
+\caption{Diagramme de séquence - Confirmation de la commande}
+\label{fig:sequence_confirmation_commande}
+\end{figure}
+
+\subsection{Diagramme de Classes}
+
+Le diagramme de classes présente les principales entités introduites au cours du projet ainsi que leurs relations. La Figure~\ref{fig:class_diagramSP2} illustre l'évolution progressive de la structure du système à travers les différents sprints.
+
+
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{images/uml/confirmCommande .png}
-    \caption{Diagramme de séquence - Ajout au panier et confirmation d'une commande}
-    \label{fig:sequence_confirmation_commande}
+    \includegraphics[
+        angle=90,
+        width=0.7\textwidth
+    ]{images/uml/wiwi.png}
+
+    \caption{Diagramme de classes global du sprint 2}
+
+    \label{fig:class_diagramSP2}
 \end{figure}
-\subsection{Diagramme de classes}
 
-Le diagramme de classes ci-dessous (Figure~\ref{fig:diagramme-classes-sprint2}) représente la modélisation des entités du sprint 2, dédié à la \textbf{gestion des produits}. Il est organisé en trois grandes parties complémentaires :
 
-\begin{itemize}
-    \item \textbf{Le package Produit} : il modélise le catalogue de l'application autour de la classe abstraite \texttt{Product}, dont héritent deux types concrets, \texttt{Car} et \texttt{SparePart}, selon une stratégie d'héritage \texttt{SINGLE\_TABLE} avec discriminant. Chaque produit est rattaché à une \texttt{Category} et une \texttt{Brand}.
 
-    \item \textbf{Le package Stock \& Fournisseur} : il gère l'approvisionnement. Chaque produit possède un \texttt{Stock} unique, dont l'évolution est tracée par des \texttt{StockMovement} (entrées/sorties). Les fournisseurs (\texttt{Supplier}) sont liés aux produits via \texttt{SupplierProduct}, qui centralise les conditions d'achat (prix, quantité minimale, fournisseur préféré). Les commandes fournisseurs (\texttt{PurchaseOrder}, \texttt{PurchaseOrderItem}) donnent lieu à une \texttt{PurchaseInvoice}, elle-même réglée via un ou plusieurs \texttt{SupplierPayment} découpés en \texttt{SupplierPaymentLine}.
 
-    \item \textbf{Le package Commande, Panier \& Paiement} : il couvre le parcours client, depuis le \texttt{Cart} (panier) et ses \texttt{CartItem}, jusqu'à la validation d'une \texttt{Order} composée de \texttt{OrderItem}. Chaque commande génère une \texttt{Invoice} et est réglée par un \texttt{Payment}, lui-même décomposé en plusieurs \texttt{PaymentLine} pour permettre les paiements mixtes (ex. espèces + chèque).
-\end{itemize}
 
-La classe \texttt{PaymentMethod} est mutualisée entre les deux flux financiers (client et fournisseur), garantissant une gestion homogène des moyens de paiement (espèces, chèque, carte, virement, crédit) dans l'ensemble de l'application.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{images/uml/diagDeClasseSprint2.png}
-    \caption{Diagramme de classes du sprint 2 - Gestion des produits}
-    \label{fig:diagramme-classes-sprint2}
-\end{figure}
 \section{Réalisation}
-
-\subsection{Gestion des produits}
 
 \subsubsection{Consultation et liste des produits}
 
-\subsubsection{Recherche, filtrage et tri des produits}
+Cette interface permet de consulter l'ensemble des produits disponibles dans la plateforme. Elle présente les principales informations relatives à chaque produit et permet d'accéder aux différentes opérations de gestion du catalogue. L'interface de consultation et de gestion des produits est présentée dans la figure~\ref{fig:liste-produits}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint2/1.png}
+\caption{Interface de consultation et de gestion des produits}
+\label{fig:liste-produits}
+\end{figure}
 
 \subsubsection{Ajout d'un produit}
 
-\subsubsection{Modification d'un produit}
+L'ajout d'un produit permet à l'administrateur de renseigner les informations nécessaires à sa création, notamment son nom, sa description, son prix, sa catégorie, sa marque et les informations relatives au stock. Le formulaire permettant d'effectuer cette opération est présenté dans la figure~\ref{fig:ajout-produit}.
 
-\subsubsection{Gestion des catégories}
-
-\subsubsection{Gestion des marques}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint2/2.png}
+\caption{Interface d'ajout d'un produit}
+\label{fig:ajout-produit}
+\end{figure}
 
 \subsection{Gestion du stock}
 
 \subsubsection{Consultation du stock}
 
-\subsubsection{Réception d'une livraison}
+Cette interface permet à l'administrateur de consulter l'état du stock des différents produits disponibles dans la plateforme. Elle présente notamment les quantités disponibles et les informations nécessaires au suivi des produits. L'interface de consultation du stock est illustrée dans la figure~\ref{fig:consultation-stock}.
 
-\subsubsection{Ajustement des quantités}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint2/3.png}
+\caption{Interface de consultation du stock}
+\label{fig:consultation-stock}
+\end{figure}
 
 \subsubsection{Gestion des mouvements de stock}
 
-\subsubsection{Détection des produits en stock faible}
+Cette interface permet de suivre et de gérer les mouvements de stock liés aux produits. Elle permet notamment de mettre à jour les quantités disponibles lors des différentes opérations de gestion. L'interface dédiée au suivi des mouvements de stock est présentée dans la figure~\ref{fig:mouvements-stock}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint2/4.png}
+\caption{Interface de gestion des mouvements de stock}
+\label{fig:mouvements-stock}
+\end{figure}
 
 \subsection{Gestion des fournisseurs}
 
-\subsubsection{Liste et recherche des fournisseurs}
+\subsubsection{Gestion des fournisseurs}
 
-\subsubsection{Ajout et modification d'un fournisseur}
+Cette interface permet de consulter et de gérer les fournisseurs associés à la plateforme. L'administrateur peut notamment rechercher un fournisseur et accéder aux informations nécessaires à son suivi. L'interface de gestion des fournisseurs est présentée dans la figure~\ref{fig:gestion-fournisseurs}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint2/5.png}
+\caption{Interface de gestion des fournisseurs}
+\label{fig:gestion-fournisseurs}
+\end{figure}
 
 \subsection{Gestion du panier et des commandes}
 
-\subsubsection{Ajout des produits au panier}
+\subsubsection{Gestion du panier et création des commandes}
 
-\subsubsection{Gestion des quantités et suppression des articles}
+Cette interface permet au client de consulter les produits ajoutés au panier, de modifier les quantités et de supprimer des articles. Elle permet ensuite de poursuivre le processus de commande et de finaliser l'achat. L'interface de gestion du panier et de création d'une commande est présentée dans la figure~\ref{fig:panier-commandes}.
 
-\subsubsection{Gestion des demandes de maintenance dans le panier}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint2/6.png}
+\caption{Interface de gestion du panier et de création d'une commande}
+\label{fig:panier-commandes}
+\end{figure}
 
-\subsubsection{Création et suivi des commandes}
-
-\subsection{Gestion des factures et des paiements}
-
-\subsubsection{Génération et consultation des factures}
-
-\subsubsection{Gestion des méthodes de paiement}
-
-\subsubsection{Traitement du paiement}
-
-\subsubsection{Mise à jour du stock après paiement}
-
-\subsubsection{Gestion de la caisse}
 
 \section{Bilan du Sprint}
+
+Ce deuxième sprint a permis de mettre en place les principales fonctionnalités liées à la gestion des produits, du stock, des fournisseurs et des opérations de vente dans l'application MSG. Les fonctionnalités développées permettent notamment de gérer le catalogue, de suivre les mouvements de stock, d'enregistrer les réceptions et de gérer les fournisseurs ainsi que le panier et les commandes clients.
+
+Les fonctionnalités de facturation et de paiement ont également été intégrées afin d'assurer la continuité du processus de vente, avec la mise à jour du stock après le paiement. La conception réalisée à travers les diagrammes de cas d'utilisation, de séquence et de classes a permis de structurer les fonctionnalités et de faciliter leur implémentation.
+
+Ainsi, ce sprint constitue une étape importante dans la mise en place du module commercial et de gestion des stocks de l'application.

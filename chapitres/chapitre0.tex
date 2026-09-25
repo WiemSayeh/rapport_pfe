@@ -1,556 +1,412 @@
-
-\chapter{Contexte général et spécification des exigences}
-
+\chapter{Etude Prealable}
+\localtableofcontents
+\newpage
 \section{Introduction}
 
-Ce chapitre présente le contexte général du projet ainsi que les éléments nécessaires à la compréhension et à la définition de la solution proposée. Il commence par la présentation de l'organisme d'accueil et du client MSG, puis décrit les besoins identifiés à travers une étude de l'existant.
-
-Les exigences fonctionnelles et non fonctionnelles sont ensuite présentées afin de définir les principales fonctionnalités et contraintes auxquelles la solution doit répondre. Enfin, les acteurs du système, la méthodologie de développement ainsi que le langage de modélisation adoptés sont introduits.
+Ce premier chapitre a pour objectif de situer notre projet dans son contexte général. Donc dans un premier lieu, nous commençons par présenter l'organisme d'accueil. Dans un second lieu, nous enchaînons par l'étude et la critique de l'existant suivie par une explication du travail demandé. Enfin, nous clôturons ce chapitre par l'énoncé de la méthodologie de gestion de projet adoptée.
 
 \section{Présentation de l'organisme d'accueil}
 
-\subsection{Qartis Technologies}
+Nous abordons dans ce chapitre par la présentation de l'organisme d'accueil.
 
-Qartis Technologies est une startup tunisienne créée en 2024, spécialisée dans le développement de solutions digitales modernes et dans l'accompagnement des entreprises dans leur transformation numérique. L'entreprise intervient notamment dans la conception d'applications web et mobiles adaptées aux besoins spécifiques de ses clients.
+\subsection{La société Qartis Technologies}
 
-Elle s'appuie sur une équipe composée notamment de développeurs, de designers UI/UX et de chefs de projet, ainsi que sur une stack technologique diversifiée comprenant Angular, Flutter, NestJS, Python, Laravel et Firebase.
+Qartis Technologies est une entreprise spécialisée dans le développement de solutions digitales modernes et dans l'accompagnement des entreprises dans leur transformation numérique. Créée en 2024, elle est implantée en Tunisie et dispose également d'une présence au Qatar, lui permettant d'assurer une proximité avec ses clients dans les deux pays. Cette société offre des services de conception et de développement d'applications web et mobiles adaptées aux besoins spécifiques de ses clients.
 
-Qartis Technologies adopte une organisation agile favorisant le développement itératif, la collaboration entre les différents intervenants et l'adaptation continue aux besoins des clients. Elle a notamment participé à la réalisation de plateformes digitales telles qu'une solution de réservation intelligente pour le padel et une marketplace permettant la mise en relation entre prestataires et clients.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.2\textwidth]{images/logos/qartis.jpg}
+    \caption{Logo de la Société Qartis Technologies}
+    \label{fig:qartis}
+\end{figure}
 
-Le projet présenté dans ce rapport a été réalisé dans cet environnement orienté vers l'innovation et le développement de solutions digitales personnalisées.
+\subsection{Les différents domaines d'intervention de la société Qartis Technologies}
 
-%---------------------------------------------------------
-% Image de présentation de Qartis Technologies
-% Décommenter lorsque la capture sera disponible
-%
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=0.85\textwidth]{images/entreprise/qartis.png}
-%    \caption{Présentation de l'organisme d'accueil Qartis Technologies}
-%    \label{fig:qartis}
-%\end{figure}
-%---------------------------------------------------------
+Qartis Technologies met à la disposition de ses clients les services suivants :
+
+\begin{itemize}
+    \item \textbf{Le développement web :}
+    Qartis Technologies conçoit et développe des applications web sur mesure, adaptées aux besoins spécifiques de chaque client, en s'appuyant sur des technologies modernes telles qu'Angular et NestJS.
+
+    \item \textbf{Le développement mobile :}
+    L'entreprise propose également des solutions mobiles multiplateformes développées avec Flutter, permettant à ses clients de toucher aussi bien les utilisateurs Android qu'iOS.
+
+    \item \textbf{L'accompagnement à la transformation numérique :}
+    Qartis Technologies accompagne les entreprises dans la digitalisation de leurs processus internes, en leur proposant des solutions centralisées et évolutives.
+
+    \item \textbf{La conception de plateformes métiers :}
+    L'entreprise a notamment participé à la réalisation de plateformes digitales telles qu'une solution de réservation intelligente pour le padel et une marketplace permettant la mise en relation entre prestataires et clients.
+
+    \item \textbf{Le design UI/UX :}
+    Qartis Technologies s'appuie sur des designers \ac{UI}/\ac{UX} afin de garantir des interfaces ergonomiques et une expérience utilisateur adaptée aux besoins de chaque client.
+\end{itemize}
+
+\subsection{Les technologies utilisées par Qartis Technologies}
+
+Les technologies utilisées par Qartis Technologies sont diversifiées et couvrent l'ensemble des besoins de développement de ses projets :
+
+\begin{itemize}
+    \item \textbf{Développement Web :} Angular, NestJS, Laravel.
+    \item \textbf{Développement Mobile :} Flutter, applications cross-platform.
+    \item \textbf{Backend et gestion des données :} Python, Firebase.
+    \item \textbf{Base de données :} \ac{SGBD} relationnels et non relationnels selon les besoins du projet.
+    \item \textbf{Automatisation :} n8n, pour l'automatisation des tâches et des notifications.
+\end{itemize}
 
 \subsection{Présentation du client MSG}
 
-MSG est un garage automobile spécialisé dans la vente de pièces automobiles et dans la réalisation de services de maintenance. L'entreprise souhaite moderniser ses processus de gestion et améliorer l'expérience proposée à ses clients à travers une solution digitale centralisée.
+MSG (Monster Speed) est une entreprise basée au Qatar, spécialisée dans le domaine automobile. Elle propose notamment des produits et accessoires destinés aux véhicules, et dispose d'une présence active sur les réseaux sociaux sous le nom \textit{Monster Speed}, dédiée à la présentation de ses produits et services.
 
-Le projet réalisé vise ainsi à répondre aux besoins spécifiques de MSG en regroupant les fonctionnalités liées au commerce de pièces automobiles, à la gestion interne de l'entreprise et aux services de maintenance au sein d'une même plateforme.
+Le projet réalisé vise à accompagner MSG dans sa transformation numérique à travers la mise en place d'une plateforme digitale centralisée. Cette solution permet de regrouper les fonctionnalités liées à la vente de pièces automobiles, à la gestion interne de l'entreprise, à la gestion des stocks ainsi qu'aux services de maintenance. Elle a pour finalité de faciliter la gestion des différentes activités de MSG, d'améliorer le suivi des opérations et de proposer une meilleure expérience à ses clients.
 
-\section{Analyse des besoins}
+%---------------------------------------------------------
 
-L'analyse des besoins a été réalisée à partir des activités de MSG et des différentes catégories d'utilisateurs amenées à utiliser la solution.
+\section{Présentation générale du projet}
 
-Plusieurs domaines fonctionnels ont ainsi été identifiés :
+Dans le cadre du projet de fin d'études pour l'obtention du diplôme national d'ingénieur en Génie Informatique, nous avons réalisé le projet intitulé « \textbf{Conception et développement d'une plateforme web combinant \ac{ERP} et e-commerce pour la gestion d'un garage automobile} » qui consiste à développer une application web destinée à l'entreprise \textbf{MSG} afin d'assurer la gestion de ses produits, de ses stocks, de ses fournisseurs, de ses commandes et de ses clients. La plateforme met également en place la gestion des services de maintenance et des interventions, la gestion des employés et de certaines opérations liées aux ressources humaines, ainsi que l'automatisation de certaines tâches et notifications à travers l'outil n8n.
+
+
+\section{Motivation et problématique}
+
+Actuellement, \textbf{MSG} ne dispose d'aucune solution informatique dédiée à la gestion de ses activités. L'ensemble des opérations est géré de manière manuelle, notamment :
 
 \begin{itemize}
-    \item gestion des utilisateurs et des autorisations ;
-    \item gestion des produits, des catégories, des marques et des fournisseurs ;
-    \item gestion des stocks et des approvisionnements ;
-    \item gestion des ventes, des commandes et des paniers ;
-    \item gestion des factures et des paiements ;
-    \item gestion des services de maintenance et des interventions ;
-    \item gestion des employés, des horaires, des shifts et des congés ;
-    \item automatisation de certaines opérations métier.
+    \item le suivi des produits et des niveaux de stock, souvent tenu à l'aide de fichiers Excel ou de supports papier ;
+    \item la gestion des commandes et des paiements, traitée au cas par cas sans outil centralisé ;
+    \item la communication avec les fournisseurs, réalisée par téléphone ou par messagerie sans historique structuré ;
+    \item la vente des pièces automobiles, effectuée principalement à travers la présence de l'entreprise sur les réseaux sociaux sous le nom \textit{Monster Speed}, sans réelle plateforme e-commerce ;
+    \item la gestion des interventions de maintenance, réalisée sans planification ni suivi formalisé ;
+    \item la gestion des employés, effectuée sans outil dédié aux ressources humaines.
 \end{itemize}
 
-Cette analyse constitue la base de la définition des fonctionnalités du système et permet d'organiser leur développement progressivement à travers les différents Sprints.
+Cette gestion manuelle, bien qu'elle ait permis à MSG de fonctionner jusqu'à présent, présente plusieurs limites :
+
+\begin{itemize}
+    \item l'absence de centralisation des informations, ce qui rend leur consultation et leur mise à jour difficiles ;
+    \item un risque élevé d'erreurs humaines, notamment dans le suivi des stocks et des commandes ;
+    \item l'absence de visibilité en temps réel sur les niveaux de stock, pouvant entraîner des ruptures ou des surstocks ;
+    \item l'absence de traçabilité des opérations effectuées, que ce soit au niveau des ventes, des commandes ou des interventions de maintenance ;
+    \item l'absence de système de notifications, empêchant un suivi réactif des commandes, des stocks critiques ou des interventions ;
+    \item une expérience client limitée, l'achat de pièces automobiles ne pouvant se faire que par contact direct sur les réseaux sociaux, sans catalogue structuré ni processus de commande en ligne ;
+    \item une perte de temps considérable pour le personnel, consacrée à des tâches répétitives qui pourraient être automatisées.
+\end{itemize}
+
+Pour remédier aux différents problèmes cités précédemment, MSG souhaite mettre en place une plateforme web centralisée permettant de digitaliser l'ensemble de ses processus, aussi bien commerciaux qu'internes.
+
+Avant de démarrer l'élaboration de la solution, nous sommes amenés à faire une étude de l'existant.
+
+%---------------------------------------------------------
 
 \section{Étude de l'existant}
 
-Avant la conception de la solution, une étude de l'existant a été menée afin d'analyser les solutions actuellement disponibles sur le marché et d'identifier leurs avantages ainsi que leurs limites par rapport aux besoins spécifiques de MSG.
+Avant la conception de la solution, une étude de l'existant a été réalisée afin d'identifier les principales solutions disponibles et leurs limites par rapport aux besoins de MSG.
 
-Trois catégories principales de solutions ont été étudiées : les plateformes e-commerce généralistes, les ERP traditionnels et les solutions spécialisées dans le secteur automobile.
+Trois catégories de solutions ont été étudiées : les plateformes e-commerce, les \ac{ERP} et les solutions spécialisées dans le domaine automobile.
 
+%---------------------------------------------------------
 \subsection{Solutions e-commerce}
 
-Les plateformes e-commerce telles que WooCommerce permettent de créer rapidement des boutiques en ligne et proposent un grand nombre d'extensions pour ajouter différentes fonctionnalités.
+Les plateformes e-commerce, telles que WooCommerce, permettent principalement de gérer la vente en ligne, les produits et les commandes \cite{woocommerceDocs}. Leur principale limite pour MSG concerne la gestion des activités spécifiques au garage. Par exemple, la gestion d'une demande de maintenance et son suivi ne sont pas couverts directement et nécessitent des extensions ou des développements complémentaires. Un exemple de plateforme e-commerce est présenté à la Figure~\ref{fig:solutions_existantes1}.
 
-Cependant, leur utilisation dans un contexte professionnel complexe peut nécessiter l'installation de nombreux plugins, ce qui peut entraîner des difficultés de maintenance, de personnalisation et de performance.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/solutionExis/woocommerce (1).png}
+    \caption{Plateforme WooCommerce}
+    \label{fig:solutions_existantes1}
+\end{figure}
 
+%---------------------------------------------------------
 \subsection{Solutions ERP}
 
-Les ERP tels qu'Odoo ou ERPNext permettent de centraliser plusieurs processus métiers, notamment la gestion des stocks, des fournisseurs, des ventes et des ressources humaines.
+Les \ac{ERP}, tels qu'Odoo et ERPNext, couvrent plusieurs fonctions de gestion comme les stocks, les achats, les ventes et les ressources humaines \cite{odooDocs,erpnextDocs}. Leur limite pour MSG réside dans leur adaptation aux processus spécifiques d'un garage. Par exemple, la gestion complète d'une intervention automobile avec affectation d'un employé et suivi de son avancement peut nécessiter une personnalisation. Deux exemples de solutions ERP sont présentés aux Figures~\ref{fig:solutions_existantes2} et~\ref{fig:solutions_existantes3}.
 
-Cependant, leur configuration peut être relativement complexe et leur personnalisation nécessite parfois des connaissances spécifiques. Leur interface peut également être moins adaptée aux besoins d'une plateforme e-commerce destinée aux clients externes.
+\begin{figure}[H]
+    \centering
 
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/solutionExis/odoo (1).png}
+        \caption{Plateforme Odoo}
+        \label{fig:solutions_existantes2}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/solutionExis/erpnext (2).jpg}
+        \caption{Plateforme ERPNext}
+        \label{fig:solutions_existantes3}
+    \end{minipage}
+
+\end{figure}
+
+%---------------------------------------------------------
 \subsection{Solutions spécialisées dans le secteur automobile}
 
-Des solutions telles que TecDoc, AutoZone ou PartSouq proposent des fonctionnalités adaptées au domaine automobile, notamment la recherche et la compatibilité entre les pièces et les véhicules.
+Les solutions telles que TecDoc, AutoZone et PartSouq sont principalement orientées vers la recherche et la vente de pièces automobiles \cite{tecdoc,autozone,partsouq}. Leur principale faiblesse pour MSG est l'absence d'une gestion globale du garage. Par exemple, elles ne permettent pas de gérer de manière centralisée les ressources humaines, les congés et les interventions de maintenance. Quelques exemples de solutions spécialisées dans le secteur automobile sont présentés aux Figures~\ref{fig:solutions_existantes4}, \ref{fig:solutions_existantes5} et~\ref{fig:solutions_existantes6}.
 
-Toutefois, ces solutions sont généralement propriétaires et peuvent présenter des limitations en matière de personnalisation et d'intégration avec les processus internes spécifiques d'un garage.
+\begin{figure}[H]
+    \centering
+
+    \begin{minipage}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/solutionExis/tecdoc (1).png}
+        \caption{Plateforme TecDoc}
+        \label{fig:solutions_existantes4}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/solutionExis/AutoZone (1).jpg}
+        \caption{Plateforme AutoZone}
+        \label{fig:solutions_existantes5}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.31\textwidth}
+        \centering
+        \includegraphics[width=0.5\textwidth]{images/solutionExis/partsouq (1).jpg}
+        \caption{Plateforme PartSouq}
+        \label{fig:solutions_existantes6}
+    \end{minipage}
+
+\end{figure}
 
 %---------------------------------------------------------
-% Image présentant les solutions existantes
-% Décommenter lorsque la capture sera disponible
-%
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=0.85\textwidth]{images/existant/solutions_existantes.png}
-%    \caption{Exemples de solutions existantes étudiées}
-%    \label{fig:solutions_existantes}
-%\end{figure}
-%---------------------------------------------------------
-
 \subsection{Comparaison des solutions existantes}
 
-Afin de mieux mettre en évidence les limites des solutions étudiées, une comparaison a été réalisée selon plusieurs critères fonctionnels et techniques.
+Afin de synthétiser cette étude, le Tableau~\ref{tab:comparaison_existant} compare les principales fonctionnalités couvertes par les différentes catégories de solutions.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|>{\RaggedRight\arraybackslash}p{4cm}|c|c|c|c|}
-        \hline
-        \textbf{Critère} &
-        \textbf{E-commerce} &
-        \textbf{ERP} &
-        \textbf{Solutions auto} &
-        \textbf{Solution proposée} \\
-        \hline
 
-        Gestion e-commerce &
-        \checkmark &
-        Limitée &
-        \ding{55} &
-        \checkmark \\
-        \hline
-
-        Gestion ERP &
-        \ding{55} &
-        \checkmark &
-        \ding{55} &
-        \checkmark \\
-        \hline
-
-        Gestion des stocks et fournisseurs &
-        Limitée &
-        \checkmark &
-        \ding{55} &
-        \checkmark \\
-        \hline
-
-        Compatibilité véhicule/pièce &
-        \ding{55} &
-        \ding{55} &
-        \checkmark &
-        \checkmark \\
-        \hline
-
-        Services de maintenance &
-        \ding{55} &
-        Limitée &
-        Limitée &
-        \checkmark \\
-        \hline
-
-        Fonctionnalités intelligentes &
-        \ding{55} &
-        \ding{55} &
-        \ding{55} &
-        \checkmark \\
-        \hline
-
-        Facilité d'intégration &
-        Moyenne &
-        Faible &
-        Faible &
-        Élevée \\
-        \hline
-    \end{tabular}
-    \caption{Comparaison des solutions existantes avec la solution proposée}
+    \caption{Comparaison des principales fonctionnalités des solutions étudiées}
     \label{tab:comparaison_existant}
+
+    \renewcommand{\arraystretch}{1.4}
+
+    \begin{tabular}{|p{4cm}|p{2.5cm}|p{2cm}|p{3cm}|p{3cm}|}
+        \hline
+
+        \textbf{Fonctionnalité} &
+        \textbf{E-commerce} &
+        \textbf{\ac{ERP}} &
+        \textbf{Solutions automobiles} &
+        \textbf{AutoParts Pro} \\
+
+        \hline
+
+        Vente de pièces en ligne &
+        Complète &
+        Limitée &
+        Complète &
+        Complète \\
+
+        \hline
+
+        Stocks et fournisseurs &
+        Partielle &
+        Complète &
+        Limitée &
+        Complète \\
+
+        \hline
+
+        Ressources humaines &
+        Non couverte &
+        Complète &
+        Non couverte &
+        Complète \\
+
+        \hline
+
+        Maintenance automobile &
+        Non couverte &
+        Partielle &
+        Limitée &
+        Complète \\
+
+        \hline
+
+        Automatisation &
+        Limitée &
+        Variable &
+        Limitée &
+        Intégrée \\
+
+        \hline
+
+        Intégration des fonctionnalités &
+        Partielle &
+        Élevée &
+        Limitée &
+        Centralisée \\
+
+        \hline
+
+    \end{tabular}
 \end{table}
 
-Cette comparaison montre qu'aucune des solutions étudiées ne répond simultanément à l'ensemble des besoins identifiés pour MSG. Les plateformes e-commerce sont principalement orientées vers la vente en ligne, tandis que les ERP privilégient la gestion interne de l'entreprise. Les solutions automobiles spécialisées proposent quant à elles des fonctionnalités spécifiques au domaine, mais restent généralement limitées en matière de personnalisation et d'intégration.
+Cette étude montre que les solutions existantes présentent chacune des limites par rapport aux besoins spécifiques de MSG. La solution \textbf{AutoParts Pro} vise ainsi à regrouper la vente de pièces, la gestion des stocks, les ressources humaines, la maintenance automobile et l'automatisation au sein d'une même plateforme.
 
-La solution proposée vise donc à regrouper ces différents besoins au sein d'une plateforme intégrée combinant \textbf{e-commerce, ERP, gestion des services de maintenance et fonctionnalités intelligentes}.
-
-
-\section{Spécification des exigences}
-
-Dans cette section, nous procédons à l'identification des acteurs de notre système ainsi qu'à la spécification des exigences fonctionnelles et non fonctionnelles. Cette étape permet de déterminer les différents utilisateurs susceptibles d'interagir avec la plateforme ainsi que les fonctionnalités et contraintes auxquelles la solution doit répondre.
-
-\subsection{Identification des acteurs}
-
-L'identification des acteurs constitue une étape essentielle dans la délimitation du système. Un acteur représente un rôle joué par une entité externe qui interagit directement avec le système en échangeant des informations et en utilisant les fonctionnalités qui lui sont autorisées.
-
-Notre solution comporte principalement quatre acteurs susceptibles d'interagir avec le système :
-
-\begin{itemize}
-    \item \textbf{Customer} : représente le client du garage. Il peut créer un compte, consulter les produits disponibles, rechercher des pièces adaptées à son véhicule, gérer son panier, passer des commandes et effectuer des paiements. Il peut également consulter les services de maintenance proposés par MSG et effectuer des réservations pour une intervention.
-
-    \item \textbf{Employee} : représente un employé du garage. Son accès au système dépend de son rôle et de son département. Il peut effectuer les opérations métier correspondant à ses responsabilités, notamment la gestion des produits, des stocks, des ventes, des demandes de maintenance ou encore des ressources humaines.
-
-    \item \textbf{Admin} : représente l'administrateur de la plateforme. Il possède les privilèges nécessaires pour administrer le système, gérer les comptes des employés, attribuer les rôles et les départements, gérer les permissions et superviser les différentes ressources de l'application.
-
-    \item \textbf{Système} : représente les mécanismes automatiques de la plateforme. Il intervient notamment dans l'envoi des e-mails de vérification et de réinitialisation du mot de passe, la génération des tokens d'authentification, certaines notifications ainsi que l'exécution de traitements automatisés.
-\end{itemize}
-
-
-\subsection{Identification des exigences fonctionnelles}
-
-Les exigences fonctionnelles décrivent les services et les fonctionnalités que le système doit fournir à ses différents utilisateurs. Elles sont définies à partir des besoins exprimés par MSG et des différents processus métiers identifiés.
-
-Les principales exigences fonctionnelles de notre système sont présentées ci-dessous.
-
-\subsubsection{Fonctionnalités destinées au Customer}
-
-Après une authentification valide, le \textbf{Customer} doit pouvoir :
-
-\begin{itemize}
-    \item créer un compte utilisateur en renseignant ses informations personnelles ;
-    
-    \item vérifier son adresse e-mail à partir du lien de confirmation reçu après son inscription ;
-    
-    \item se connecter à son compte à l'aide de ses identifiants ;
-    
-    \item demander la réinitialisation de son mot de passe en cas d'oubli ;
-    
-    \item définir un nouveau mot de passe à partir du lien sécurisé reçu par e-mail ;
-    
-    \item consulter les produits disponibles sur la plateforme ;
-    
-    \item rechercher et filtrer les produits selon différents critères tels que la catégorie, la marque ou les caractéristiques du produit ;
-    
-    \item rechercher des pièces compatibles avec son véhicule ;
-    
-    \item consulter les informations détaillées d'un produit ;
-    
-    \item ajouter des produits à son panier ;
-    
-    \item modifier les quantités des produits présents dans son panier ;
-    
-    \item passer une commande à partir des produits sélectionnés ;
-    
-    \item consulter l'historique et l'état de ses commandes ;
-    
-    \item consulter les informations relatives aux factures et aux paiements associés à ses commandes ;
-    
-    \item consulter les services de maintenance proposés par MSG ;
-    
-    \item réserver un service de maintenance en renseignant les informations nécessaires concernant son véhicule et l'intervention souhaitée ;
-    
-    \item consulter l'état de ses demandes et réservations de maintenance.
-\end{itemize}
-
-
-\subsubsection{Fonctionnalités destinées à l'Employee}
-
-Après une authentification valide, l'\textbf{Employee} doit pouvoir accéder aux fonctionnalités correspondant à son rôle et à son département.
-
-Selon les autorisations qui lui sont attribuées, il doit pouvoir :
-
-\begin{itemize}
-    \item consulter les informations nécessaires à l'exécution de ses tâches ;
-    
-    \item gérer les produits et leurs informations ;
-    
-    \item consulter et gérer les niveaux de stock ;
-    
-    \item gérer les fournisseurs et les opérations d'approvisionnement ;
-    
-    \item gérer les ventes et les commandes selon ses permissions ;
-    
-    \item gérer les demandes de maintenance et les interventions techniques ;
-    
-    \item consulter les informations relatives aux clients nécessaires à son activité ;
-    
-    \item consulter et gérer les informations des employés selon les droits accordés ;
-    
-    \item consulter et gérer les congés, horaires et shifts selon son département ;
-    
-    \item accéder uniquement aux fonctionnalités autorisées par son rôle et son département.
-\end{itemize}
-
-Les fonctionnalités accessibles à l'employé sont ainsi contrôlées par le mécanisme d'autorisation mis en place dans l'application.
-
-
-\subsubsection{Fonctionnalités destinées à l'Admin}
-
-Après une authentification valide, l'\textbf{Admin} doit pouvoir administrer l'ensemble de la plateforme.
-
-Il doit notamment pouvoir :
-
-\begin{itemize}
-    \item gérer les comptes des employés ;
-    
-    \item créer un compte Employee ;
-    
-    \item modifier les informations d'un employé ;
-    
-    \item attribuer un rôle à un employé ;
-    
-    \item affecter un département à un employé ;
-    
-    \item gérer les permissions associées aux différents rôles ;
-    
-    \item consulter la liste des utilisateurs et leurs informations ;
-    
-    \item activer ou désactiver les comptes selon les besoins ;
-    
-    \item gérer les départements de l'entreprise ;
-    
-    \item consulter les informations nécessaires à la supervision du système ;
-    
-    \item accéder aux différentes fonctionnalités administratives de la plateforme.
-\end{itemize}
-
-
-\subsubsection{Fonctionnalités automatiques du système}
-
-Le \textbf{système} doit également assurer plusieurs traitements automatiques nécessaires au bon fonctionnement de la plateforme.
-
-Il doit notamment pouvoir :
-
-\begin{itemize}
-    \item créer automatiquement le compte administrateur principal lors du premier démarrage lorsque aucun administrateur n'existe ;
-    
-    \item générer et envoyer un e-mail de vérification lors de l'inscription d'un Customer ;
-    
-    \item générer un token de vérification permettant d'activer un compte ;
-    
-    \item envoyer un e-mail contenant un lien sécurisé lors d'une demande de réinitialisation du mot de passe ;
-    
-    \item générer les identifiants de connexion lors de la création d'un Employee ;
-    
-    \item envoyer les informations de connexion au nouvel Employee par e-mail ;
-    
-    \item générer un token JWT après une authentification réussie ;
-    
-    \item vérifier la validité du token JWT lors de l'accès aux ressources protégées ;
-    
-    \item contrôler les autorisations de l'utilisateur en fonction de son rôle et, pour les employés, de son département ;
-    
-    \item exécuter les traitements automatiques nécessaires au fonctionnement des différents modules de la plateforme.
-\end{itemize}
-
-
-\subsection{Identification des exigences non fonctionnelles}
-
-Les exigences non fonctionnelles définissent les contraintes de qualité et les propriétés que la solution doit respecter afin d'assurer son bon fonctionnement, sa sécurité et sa facilité d'utilisation.
-
-Pour garantir la qualité de la plateforme MSG, les contraintes suivantes doivent être respectées :
-
-\begin{itemize}
-
-    \item \textbf{Ergonomie :}
-    l'application doit proposer des interfaces simples, intuitives et cohérentes afin de faciliter la navigation et l'utilisation des différentes fonctionnalités par les Customers, Employees et Admins.
-
-    \item \textbf{Sécurité :}
-    la solution doit garantir la confidentialité et l'intégrité des données des utilisateurs. L'accès aux ressources protégées doit être contrôlé à l'aide d'un mécanisme d'authentification sécurisé basé sur Spring Security et JWT. Les mots de passe doivent être stockés de manière sécurisée et les utilisateurs doivent uniquement accéder aux fonctionnalités qui leur sont autorisées.
-
-    \item \textbf{Contrôle d'accès :}
-    le système doit appliquer des droits d'accès en fonction des rôles attribués aux utilisateurs. Pour les employés, les autorisations doivent également prendre en compte leur département afin de limiter l'accès aux fonctionnalités nécessaires à leurs responsabilités.
-
-    \item \textbf{Performance :}
-    l'application doit garantir des temps de réponse satisfaisants lors de l'utilisation des différentes fonctionnalités. Les traitements effectués par le système doivent être optimisés afin d'assurer une utilisation fluide de la plateforme.
-
-    \item \textbf{Fiabilité :}
-    le système doit garantir la cohérence et l'intégrité des données manipulées. Les opérations telles que les commandes, les paiements, les mouvements de stock et les opérations de maintenance doivent être enregistrées de manière fiable.
-
-    \item \textbf{Disponibilité :}
-    les fonctionnalités principales de la plateforme doivent être accessibles de manière stable afin de permettre aux utilisateurs de réaliser leurs opérations sans interruption anormale.
-
-    \item \textbf{Maintenabilité :}
-    le code source doit être organisé, structuré et compréhensible afin de faciliter la correction des erreurs, la maintenance du système et l'ajout de nouvelles fonctionnalités.
-
-    \item \textbf{Modularité et extensibilité :}
-    la solution doit être conçue de manière modulaire afin de permettre l'évolution indépendante des différents modules fonctionnels. Cette organisation doit faciliter l'intégration de nouvelles fonctionnalités sans modifier de manière importante les fonctionnalités existantes.
-
-    \item \textbf{Évolutivité :}
-    l'architecture doit permettre à la plateforme d'évoluer en fonction des futurs besoins de MSG, notamment par l'ajout de nouveaux modules, de nouveaux rôles ou de nouvelles fonctionnalités métier.
-
-    \item \textbf{Compatibilité :}
-    l'application doit être accessible depuis les principaux navigateurs web utilisés par les utilisateurs et garantir une expérience cohérente sur les différents appareils pris en charge.
-
-\end{itemize}
+%---------------------------------------------------------
 
 
 
+\section{Méthodologie adoptée et planification du travail}
 
-\section{Méthodologie de développement}
-
-Pour organiser le développement de la plateforme MSG, nous avons adopté une approche agile basée sur la méthodologie Scrum. Ce choix est lié à la nature du projet, qui regroupe plusieurs modules et dont certaines fonctionnalités peuvent évoluer selon les besoins du client.
+Pour organiser le développement de la plateforme \textbf{AutoParts Pro}, nous avons adopté une approche agile basée sur la méthodologie Scrum. Ce choix est lié à la nature du projet, qui regroupe plusieurs modules et dont certaines fonctionnalités peuvent évoluer selon les besoins du client.
 
 Le principe de Scrum consiste à diviser le développement en plusieurs périodes courtes appelées \textit{Sprints}. Chaque Sprint se concentre sur un ensemble de fonctionnalités prioritaires et aboutit à une version fonctionnelle d'une partie de la solution.
 
 Cette organisation nous permet de suivre l'avancement du projet de manière progressive, de vérifier régulièrement les fonctionnalités développées et d'intégrer les éventuels retours du client.
 
-\subsection{Méthodologie Scrum}
+%---------------------------------------------------------
 
-Scrum est un cadre de travail agile fondé sur un développement itératif et progressif. Au lieu de réaliser l'ensemble du projet en une seule étape, les fonctionnalités sont réparties sur plusieurs Sprints.
+\subsection{Méthodologie adoptée Scrum}
+
+Scrum est un cadre de travail agile fondé sur un développement itératif et progressif. Au lieu de réaliser l'ensemble du projet en une seule étape, les fonctionnalités sont réparties sur plusieurs Sprints \cite{scrumGuide2020}.
 
 Pour chaque Sprint, l'équipe sélectionne les fonctionnalités les plus importantes à partir du \textit{Product Backlog}. Ces fonctionnalités sont ensuite analysées, conçues, développées et testées avant la fin de l'itération.
 
-Dans le cadre de notre projet, les Sprints sont organisés autour des principaux domaines fonctionnels de la plateforme MSG, notamment :
+Chaque Sprint suit plusieurs étapes permettant de transformer les besoins sélectionnés en fonctionnalités opérationnelles \cite{scrumGuide2020}. Le déroulement de ces différentes étapes est illustré à la Figure~\ref{fig:deroulement-sprint}.
 
 \begin{itemize}
-    \item la gestion des utilisateurs et de l'authentification ;
-    \item la gestion des produits, du stock et des fournisseurs ;
-    \item la gestion des ventes, commandes, factures et paiements ;
-    \item la gestion des services de maintenance ;
-    \item la gestion des employés et des ressources humaines ;
-    \item les fonctionnalités e-commerce et les fonctionnalités intelligentes.
+    \item \textbf{Planification :}
+    l'équipe sélectionne les User Stories prioritaires du Product Backlog et définit l'objectif du Sprint.
+
+    \item \textbf{Analyse et conception :}
+    les besoins et les règles métier sont étudiés, puis les diagrammes \ac{UML} nécessaires sont élaborés.
+
+    \item \textbf{Développement :}
+    les fonctionnalités sont implémentées à travers le développement frontend, backend, base de données et \ac{API}.
+
+    \item \textbf{Suivi quotidien :}
+    l'équipe suit l'avancement des tâches, coordonne les travaux et identifie les éventuelles difficultés.
+
+    \item \textbf{Tests et validation :}
+    les fonctionnalités développées sont vérifiées à travers des tests fonctionnels et des tests manuels. Ces vérifications permettent de contrôler le comportement attendu des fonctionnalités, les échanges entre le frontend et le backend ainsi que la gestion des différents cas d'utilisation. Les anomalies détectées sont corrigées avant la validation du Sprint.
+
+    \item \textbf{Sprint Review :}
+    les fonctionnalités développées sont présentées afin de vérifier les résultats obtenus et recueillir les remarques.
+
+    \item \textbf{Sprint Retrospective :}
+    l'équipe analyse le déroulement du Sprint et identifie les améliorations à appliquer lors des prochaines itérations.
 \end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/architecture/Déroulement d'un Sprint.png}
+    \caption{Déroulement d'un Sprint selon Scrum}
+    \label{fig:deroulement-sprint}
+\end{figure}
+
+Notre choix s'est orienté vers Scrum pour plusieurs raisons : sa souplesse et sa flexibilité, favorables à l'équipe de développement ; sa capacité à assurer un suivi continu à travers des itérations courtes ; son encouragement à la collaboration continue entre les intervenants ; et sa grande capacité d'adaptation au changement, permettant d'avancer plus rapidement dans la réalisation du projet.
+
+%---------------------------------------------------------
 
 \subsection{Les rôles au sein de l'équipe Scrum}
 
-L'organisation Scrum repose sur une répartition des responsabilités entre les différents membres participant au projet.
+L'organisation Scrum repose sur une répartition claire des responsabilités entre les différents membres participant au projet.
 
 \begin{itemize}
 
-    \item \textbf{Product Owner :}
-    
-    Le Product Owner est chargé de représenter les besoins du client et de maintenir une vision globale du produit. Il participe notamment à :
-    
-    \begin{itemize}
-        \item l'identification des besoins fonctionnels ;
-        \item la définition et la priorisation des User Stories ;
-        \item la gestion du Product Backlog ;
-        \item la validation des fonctionnalités réalisées.
-    \end{itemize}
-    
-    Dans notre projet, ce rôle est assuré par \textbf{M. Ahmed Ben Salah}, représentant du client MSG.
-    
-    \item \textbf{Scrum Master :}
-    
-    Le Scrum Master accompagne l'équipe dans l'application de Scrum. Il veille à la bonne organisation du travail et facilite la résolution des difficultés rencontrées pendant le développement.
-    
-    Ses principales responsabilités sont :
-    
-    \begin{itemize}
-        \item organiser et faciliter les réunions Scrum ;
-        \item suivre le déroulement des Sprints ;
-        \item identifier les obstacles pouvant ralentir l'équipe ;
-        \item favoriser la communication entre les différents intervenants ;
-        \item encourager l'amélioration continue.
-    \end{itemize}
-    
-    Ce rôle est assuré par \textbf{M. Mohamed Trabelsi}, chef de projet chez Qartis Technologies.
-    
-    \item \textbf{Équipe de développement :}
-    
-    L'équipe de développement prend en charge la réalisation technique de la plateforme. Elle intervient dans les différentes étapes allant de l'analyse jusqu'aux tests.
-    
-    Dans le cadre de notre projet, l'équipe assure notamment :
-    
-    \begin{itemize}
-        \item la conception des fonctionnalités ;
-        \item le développement frontend ;
-        \item le développement backend ;
-        \item la conception et la gestion de la base de données ;
-        \item l'intégration des différents composants ;
-        \item les tests et la correction des anomalies.
-    \end{itemize}
+\item \textbf{Product Owner :}
+Le Product Owner représente les besoins du client et assure la gestion du Product Backlog. Il participe à l'identification des besoins, à la priorisation des User Stories et à la validation des fonctionnalités réalisées.
+
+Dans notre projet, ce rôle est assuré par \textbf{M. Ahmed Ben Salah}, représentant du client MSG.
+
+\item \textbf{Scrum Master :}
+Le Scrum Master veille à la bonne application de Scrum et facilite l'organisation du travail de l'équipe. Il accompagne les Sprints, facilite les réunions et contribue à la résolution des obstacles rencontrés.
+
+Ce rôle est assuré par \textbf{M. Yassine Benzid}, chef de projet chez Qartis Technologies.
+
+\item \textbf{Équipe de développement :}
+L'équipe de développement est chargée de la réalisation technique de la solution. Elle assure principalement la conception, le développement frontend et backend, la gestion de la base de données, l'intégration ainsi que les tests et la correction des anomalies.
 
 \end{itemize}
 
+%---------------------------------------------------------
 
-\subsection{Les éléments de gestion de Scrum}
+\subsection{Sprint planning}
+
+Parmi les réunions les plus importantes dans Scrum figure la réunion de planification des sprints, qui a pour objectif de préparer le planning du travail et d'identifier le backlog de chaque sprint.
 
 Pour organiser les fonctionnalités et suivre l'avancement du projet, plusieurs éléments de Scrum sont utilisés.
 
 \begin{itemize}
 
-    \item \textbf{Product Backlog :}
-    
-    Le Product Backlog représente la liste complète des fonctionnalités identifiées pour la plateforme MSG. Les besoins sont généralement décrits sous forme de User Stories et classés selon leur niveau de priorité.
+\item \textbf{Product Backlog :}
+Le Product Backlog représente la liste complète des fonctionnalités identifiées pour la plateforme \textbf{AutoParts Pro}. Les besoins sont généralement décrits sous forme de User Stories et classés selon leur niveau de priorité.
 
-    \item \textbf{Sprint Backlog :}
-    
-    Le Sprint Backlog contient les User Stories sélectionnées pour un Sprint donné. Il permet à l'équipe de déterminer les fonctionnalités qui doivent être réalisées pendant l'itération ainsi que les tâches nécessaires à leur réalisation.
+\item \textbf{Sprint Backlog :}
+Le Sprint Backlog contient les User Stories sélectionnées pour un Sprint donné. Il permet à l'équipe de déterminer les fonctionnalités qui doivent être réalisées pendant l'itération ainsi que les tâches nécessaires à leur réalisation.
 
-    \item \textbf{User Story :}
-    
-    Une User Story décrit une fonctionnalité du système du point de vue de l'utilisateur. Elle permet d'exprimer clairement le besoin, l'utilisateur concerné et l'objectif recherché.
-    
-    Dans notre projet, les User Stories concernent principalement les acteurs \textbf{Customer}, \textbf{Employee} et \textbf{Admin}.
+\item \textbf{User Story :}
+Une User Story décrit une fonctionnalité du système du point de vue de l'utilisateur. Elle permet d'exprimer clairement le besoin, l'utilisateur concerné et l'objectif recherché.
+
+Dans notre projet, les User Stories concernent principalement les acteurs \textbf{Customer}, \textbf{Employee} et \textbf{Admin}.
 
 \end{itemize}
 
+Pour notre projet, nous avons choisi de développer six Sprints, comme présenté dans le Tableau~\ref{tab:planification-sprints-ch1}.
 
-\subsection{Déroulement d'un Sprint}
-
-Chaque Sprint suit une succession d'étapes permettant de transformer les besoins sélectionnés en fonctionnalités opérationnelles.
-
-\begin{itemize}
-
-    \item \textbf{Planification du Sprint :}
-    
-    Au début du Sprint, l'équipe examine les éléments prioritaires du Product Backlog. Les User Stories retenues sont intégrées au Sprint Backlog en fonction de leur priorité et de la capacité de l'équipe. Un objectif est également défini pour l'itération.
-
-    \item \textbf{Analyse et conception :}
-    
-    Les besoins sélectionnés sont étudiés afin de comprendre les règles métier et les interactions nécessaires. Les diagrammes UML appropriés sont ensuite élaborés afin de préparer l'implémentation.
-
-    \item \textbf{Développement :}
-    
-    Les fonctionnalités sont implémentées par l'équipe de développement. Cette phase concerne les interfaces Angular, les services backend, les API REST, la base de données ainsi que les différents mécanismes nécessaires au fonctionnement du système.
-
-    \item \textbf{Suivi quotidien :}
-    
-    L'équipe réalise des points réguliers afin de suivre l'avancement des tâches, signaler les difficultés et coordonner les travaux en cours.
-
-    \item \textbf{Tests et validation :}
-    
-    Les fonctionnalités développées sont testées afin de vérifier leur conformité avec les besoins et les critères d'acceptation définis. Les anomalies identifiées sont corrigées avant la validation du Sprint.
-
-    \item \textbf{Sprint Review :}
-    
-    À la fin du Sprint, les fonctionnalités réalisées sont présentées afin de vérifier les résultats obtenus et de recueillir les remarques nécessaires pour la suite du projet.
-
-    \item \textbf{Sprint Retrospective :}
-    
-    Une rétrospective permet à l'équipe d'analyser le déroulement du Sprint. Les points positifs, les difficultés et les améliorations possibles sont identifiés afin d'améliorer le travail durant les prochaines itérations.
-
-\end{itemize}
+\begin{table}[H]
+\centering
+\caption{Planification des sprints}
+\label{tab:planification-sprints-ch1}
+\begin{tabular}{|l|p{9cm}|}
+\hline
+\textbf{Sprint} & \textbf{Description} \\
+\hline
+Sprint 0 & Initialisation du projet : mise en place de l'environnement de développement, de la structure du projet, de l'architecture générale et des configurations initiales. \\
+\hline
+Sprint 1 & Gestion des utilisateurs et authentification : inscription, vérification e-mail, authentification, gestion des employés et contrôle des accès. \\
+\hline
+Sprint 2 & Gestion des produits et du stock : produits, stocks, fournisseurs et opérations d'approvisionnement. \\
+\hline
+Sprint 3 & Maintenance et interventions : services de maintenance, véhicules, demandes de maintenance et suivi des interventions. \\
+\hline
+Sprint 4 & Gestion des ressources humaines : vérification CIN, horaires de travail, shifts, congés et avances sur salaire. \\
+\hline
+Sprint 5 & Intégration et automatisation avec n8n : automatisation des processus métier, notifications et workflows associés. \\
+\hline
+\end{tabular}
+\end{table}
 
 
-%---------------------------------------------------------
-% Figure du processus Scrum
-% Décommenter lorsque la figure sera disponible
-%
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=0.9\textwidth]{images/scrum/processus_scrum.png}
-%    \caption{Déroulement d'un Sprint selon Scrum}
-%    \label{fig:processus_scrum}
-%\end{figure}
+\subsection{Outil de planification du projet}
+
+Pour bien pratiquer et appliquer la méthodologie Scrum, nous avons utilisé \textbf{ClickUp}.
+
+ClickUp est un outil de gestion de projet collaboratif qui permet aux équipes d'organiser, de planifier et de suivre l'avancement de leur travail \cite{clickupDocs2026}. Il propose notamment la création de tâches, l'organisation en Sprints, le suivi de l'état d'avancement des fonctionnalités ainsi que la visualisation du travail sous forme de tableaux ou de listes.
+Dans le cadre de notre projet, ClickUp a été utilisé pour organiser le Product Backlog, répartir les User Stories entre les différents Sprints et suivre l'état d'avancement de chaque tâche tout au long du développement. La Figure~\ref{fig:clickup-logo} présente le logo de l'outil ClickUp.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/logos/clickuppt.jpg}
+    \caption{Logo ClickUp}
+    \label{fig:clickup-logo}
+\end{figure}
+
+La Figure~\ref{fig:clickup-dashboard} présente un exemple de tableau de bord sur ClickUp de notre application.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/architecture/clickup.png}
+    \caption{Un exemple de tableau de bord sur ClickUp}
+    \label{fig:clickup-dashboard}
+\end{figure}
+
 %---------------------------------------------------------
 
 
-\subsection{Langage de modélisation UML}
 
-Après avoir défini la méthodologie de développement, nous avons choisi le langage de modélisation utilisé pour représenter les différents aspects de la solution.
-
-Nous avons adopté \textbf{UML (\textit{Unified Modeling Language})}, qui constitue un langage standard permettant de représenter graphiquement la structure et le comportement d'un système logiciel.
-
-Dans le cadre de la plateforme MSG, UML est utilisé principalement pour les diagrammes suivants :
-
-\begin{itemize}
-
-    \item \textbf{Diagramme de cas d'utilisation :}
-    
-    Il permet d'identifier les acteurs du système et de représenter les fonctionnalités auxquelles ils peuvent accéder.
-
-    \item \textbf{Diagramme de séquence :}
-    
-    Il décrit le déroulement chronologique d'une fonctionnalité en représentant les échanges entre les acteurs, les interfaces et les différents composants du système.
-
-    \item \textbf{Diagramme de classes :}
-    
-    Il représente la structure statique de la solution. Il permet d'identifier les principales classes, leurs attributs, leurs méthodes ainsi que les relations entre elles.
-
-\end{itemize}
-
-L'utilisation d'UML permet ainsi de disposer d'une représentation claire du système avant son implémentation et facilite la communication entre les différents intervenants du projet.
 
 
 
 \section{Conclusion}
 
-Ce chapitre a permis de présenter le contexte général du projet, l'organisme d'accueil ainsi que le client MSG. L'étude des besoins et l'analyse de l'existant ont permis d'identifier les principales limites des solutions disponibles et de justifier le développement d'une plateforme personnalisée.
+À travers ce premier chapitre, nous avons présenté l'organisme d'accueil ainsi que le client MSG. Ensuite, nous avons dégagé la problématique abordée à travers l'étude de l'existant. Finalement, nous avons donné un aperçu sur la méthodologie que nous allons adopter tout au long de ce rapport.
 
-Les exigences fonctionnelles et non fonctionnelles, les acteurs du système ainsi que les choix méthodologiques et de modélisation ont également été définis. La solution proposée vise ainsi à intégrer les fonctionnalités e-commerce, ERP et maintenance au sein d'une plateforme unique, sécurisée et évolutive.
+Dans le chapitre suivant, nous menons une étude théorique afin d'analyser les besoins et étudier la conception générale de notre application.
 
-Le chapitre suivant sera consacré au pilotage du projet et à la conception générale de la solution.
+
 

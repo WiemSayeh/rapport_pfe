@@ -1,634 +1,612 @@
 
-\chapter{Réalisation du Sprint 3 : Gestion des services de maintenance et des interventions}
-
+\chapter{Sprint 3 : Gestion des services de maintenance et des interventions}
+\localtableofcontents
+\newpage
 \section{Introduction}
 
-Ce troisième sprint est consacré à la mise en place du module de gestion des services de maintenance et des interventions automobiles. Il constitue une extension de la plateforme e-commerce en intégrant les prestations de maintenance dans le système ERP.
+Ce troisième sprint porte sur la gestion des services de maintenance et des interventions. Il permet au client de consulter les services, d'enregistrer ses véhicules et de créer des demandes de maintenance.
 
-Ce sprint permet au client de consulter les différents services de maintenance proposés, de sélectionner une prestation et de l'associer à l'un de ses véhicules. Il peut ainsi créer une demande de maintenance directement depuis l'application en renseignant le véhicule concerné ainsi que le créneau souhaité.
+L'ERP permet de gérer les services, les demandes et l'affectation des employés, tout en intégrant la planification, le panier et la facturation.
 
-Du côté de l'ERP, les administrateurs peuvent gérer les services de maintenance, consulter les demandes des clients, affecter les employés aux interventions et suivre leur état d'avancement. Le système prend également en compte les horaires de travail et les interventions déjà planifiées afin de déterminer les employés disponibles.
-
-Le module permet également de gérer les véhicules des clients. Chaque véhicule contient différentes informations techniques telles que la marque, le modèle, l'année, l'immatriculation, le numéro VIN, le kilométrage et le type de carburant. Ces informations sont utilisées lors de la création d'une demande de maintenance.
-
-Enfin, ce sprint assure l'intégration entre le parcours e-commerce et les fonctionnalités ERP. Lors de la création d'une demande, une facture de maintenance peut être générée et le service peut être ajouté au panier du client. La demande peut ensuite être confirmée automatiquement lorsqu'un employé est disponible ou rester en attente lorsqu'aucune disponibilité n'est trouvée.
+% ============================================================
+% ANALYSE DU SPRINT
+% ============================================================
 
 \section{Analyse du Sprint}
 
-\subsection{Sprint Backlog}
+Cette section présente les besoins fonctionnels retenus pour le sprint ainsi que leur organisation et leur priorisation.
 
-Le Sprint Backlog regroupe les principales fonctionnalités à réaliser au cours de ce sprint. Il permet de définir les besoins fonctionnels liés à la gestion des services de maintenance, des véhicules clients, des demandes d'intervention, de leur planification ainsi que de leur intégration avec le panier et la facturation.
+\subsection*{Sprint Backlog}
 
-\begin{longtable}{|c|>{\RaggedRight\arraybackslash}p{5cm}|>{\RaggedRight\arraybackslash}p{5cm}|c|}
-\hline
-\textbf{ID} & \textbf{User Story} & \textbf{Critère d'acceptation} & \textbf{Priorité}\\
-\hline
-\endfirsthead
+Le Tableau~\ref{tab:sprint3-backlog} présente les différentes User Stories du Sprint 3 ainsi que leurs critères d'acceptation et leur niveau de priorité.
 
-\hline
-\textbf{ID} & \textbf{User Story} & \textbf{Critère d'acceptation} & \textbf{Priorité}\\
-\hline
-\endhead
+\begin{longtable}{|c|p{5cm}|p{5cm}|c|}
+\caption{Sprint Backlog du Sprint 3}
+\label{tab:sprint3-backlog}\\
+    \hline
+\textbf{ID} & \textbf{User Story} & \textbf{Critère d'acceptation} & \textbf{Priorité} \\ \hline
 
 US1 &
 En tant que client, je souhaite consulter les services de maintenance afin de choisir une prestation adaptée à mon véhicule. &
 Les services sont affichés avec leur nom, leur description, leur prix, leur durée estimée et leur image. &
-Haute
-\\
-\hline
+Haute \\ \hline
 
 US2 &
 En tant qu'administrateur, je souhaite gérer les services de maintenance afin de maintenir le catalogue des prestations à jour. &
 Un service peut être ajouté, modifié ou supprimé et peut être associé à un département. &
-Haute
-\\
-\hline
+Haute \\ \hline
 
 US3 &
 En tant que client, je souhaite enregistrer mon véhicule afin de pouvoir l'utiliser lors d'une demande de maintenance. &
 Les informations du véhicule sont enregistrées et associées au client concerné. &
-Haute
-\\
-\hline
+Haute \\ \hline
 
 US4 &
 En tant que client, je souhaite consulter mes véhicules afin de sélectionner celui qui sera concerné par l'intervention. &
 Les véhicules associés au client connecté sont affichés avec leurs principales informations. &
-Haute
-\\
-\hline
+Haute \\ \hline
 
 US5 &
 En tant que client, je souhaite demander un service de maintenance pour mon véhicule afin de réserver une intervention. &
 Une demande est créée avec le service, le véhicule, la date de demande et le créneau souhaité. &
-Haute
-\\
-\hline
+Haute \\ \hline
 
 US6 &
 En tant qu'administrateur, je souhaite créer une demande de maintenance pour un client afin d'enregistrer une intervention dans l'ERP. &
 Une demande est créée pour le véhicule et le service sélectionnés et son état est enregistré. &
-Haute
-\\
-\hline
+Haute \\ \hline
 
 US7 &
 En tant qu'employé, je souhaite consulter les demandes de maintenance afin de suivre les interventions qui me sont attribuées. &
 Les demandes sont affichées avec les informations du client, du véhicule, du service et leur statut. &
-Haute
-\\
-\hline
+Haute \\ \hline
 
 US8 &
 En tant que système, je souhaite rechercher automatiquement un employé disponible afin d'affecter une intervention au créneau demandé. &
 Un employé actif et disponible appartenant au département concerné est affecté lorsque les conditions sont respectées. &
-Haute
-\\
-\hline
+Haute \\ \hline
 
 US9 &
 En tant que système, je souhaite rechercher un créneau proche lorsqu'aucun employé n'est disponible afin de proposer une alternative. &
-Un créneau disponible est recherché dans la période définie et la demande est confirmée lorsqu'un employé peut être affecté. &
-Haute
-\\
-\hline
+Un créneau disponible est recherché et la demande est confirmée lorsqu'un employé peut être affecté. &
+Haute \\ \hline
 
 US10 &
 En tant qu'administrateur, je souhaite affecter manuellement un employé à une demande afin de gérer les interventions. &
 Un employé est affecté à la demande et un créneau de travail correspondant est enregistré. &
-Haute
-\\
-\hline
+Haute \\ \hline
 
 US11 &
 En tant qu'employé ou administrateur, je souhaite modifier le statut d'une demande afin de suivre son avancement. &
 Le statut de la demande évolue selon les états prévus par le système. &
-Haute
-\\
-\hline
+Haute \\ \hline
 
 US12 &
 En tant que client, je souhaite consulter mes demandes de maintenance afin de suivre l'état de mes interventions. &
 Les demandes associées aux véhicules du client sont affichées avec leur statut. &
-Moyenne
-\\
-\hline
+Moyenne \\ \hline
 
 US13 &
 En tant que système, je souhaite générer une facture lors de la création d'une demande afin d'assurer le suivi financier de la prestation. &
 Une facture de maintenance est créée et son numéro est associé à la demande. &
-Haute
-\\
-\hline
+Haute \\ \hline
 
 US14 &
 En tant que système, je souhaite ajouter automatiquement le service de maintenance au panier du client afin d'intégrer la prestation au processus commercial. &
 Le service est ajouté au panier avec une quantité de 1 et le prix correspondant au service demandé. &
-Haute
-\\
-\hline
+Haute \\ \hline
 
-\caption{Sprint Backlog du Sprint 3}
-\label{tab:sprint3-backlog}
 
 \end{longtable}
 
+
+% ============================================================
+% CONCEPTION
+% ============================================================
+
 \section{Conception}
+
+La conception du sprint est présentée à travers les différents diagrammes UML décrivant les fonctionnalités et les interactions du système.
 
 \subsection{Diagramme de Cas d'Utilisation}
 
-Le diagramme de cas d'utilisation du Sprint 3 présente les interactions entre les différents acteurs du système et les fonctionnalités liées aux services de maintenance et aux interventions.
-
-Dans ce sprint, trois acteurs principaux sont considérés : \textbf{Customer}, \textbf{Employee} et \textbf{Admin}. Le Customer intervient principalement dans la consultation des services, la gestion de ses véhicules, la création de demandes de maintenance et le suivi de ses interventions.
-
-L'Employee intervient dans le traitement des interventions qui lui sont affectées. Il peut consulter les demandes qui lui sont attribuées et mettre à jour leur état selon les autorisations qui lui sont accordées.
-
-L'Admin dispose de droits étendus sur le module de maintenance. Il peut gérer les services, consulter les véhicules et les demandes, créer une demande pour un client et affecter manuellement un employé à une intervention.
-
-\subsubsection{Description des acteurs}
-
-\begin{itemize}
-
-\item \textbf{Customer :} il peut consulter les services de maintenance, gérer ses véhicules, créer une demande de maintenance pour l'un de ses véhicules et consulter ses demandes afin de suivre leur état.
-
-\item \textbf{Employee :} il intervient dans le traitement des demandes de maintenance qui lui sont affectées. Il peut consulter les interventions et mettre à jour leur statut au cours de leur réalisation.
-
-\item \textbf{Admin :} il dispose de droits étendus sur le module de maintenance. Il peut gérer les services, consulter les véhicules et les demandes, créer des demandes pour les clients, affecter manuellement des employés et superviser les interventions.
-
-\end{itemize}
-
-\subsubsection{Principaux cas d'utilisation}
-
-Les principaux cas d'utilisation du Sprint 3 sont regroupés selon les domaines fonctionnels suivants :
-
-\begin{itemize}
-
-\item \textbf{Gestion des services de maintenance :} consulter, rechercher, filtrer, ajouter, modifier et supprimer les services de maintenance.
-
-\item \textbf{Gestion des véhicules clients :} ajouter, modifier, consulter et supprimer les véhicules associés aux clients.
-
-\item \textbf{Gestion des demandes :} créer et consulter les demandes de maintenance associées aux véhicules et aux services.
-
-\item \textbf{Affectation des interventions :} rechercher automatiquement un employé disponible ou permettre à l'administrateur d'effectuer une affectation manuelle.
-
-\item \textbf{Planification :} rechercher un créneau disponible en fonction du service, du département, des horaires de travail et des interventions déjà planifiées.
-
-\item \textbf{Suivi des interventions :} modifier et consulter le statut d'une demande pendant son cycle de traitement.
-
-\item \textbf{Intégration commerciale :} ajouter le service de maintenance au panier et générer la facture associée à la demande.
-
-\end{itemize}
-
-\subsubsection{Diagramme de Cas d'Utilisation du Sprint 3}
-
-La figure suivante présente le diagramme de cas d'utilisation correspondant aux principales fonctionnalités développées au cours du Sprint 3.
-
 \begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{images/uml/sprint3_MaintenanceUseCase.png}
-\caption{Diagramme de cas d'utilisation du Sprint 3}
-\label{fig:sprint3-use-case}
+    \centering
+    \rotatebox{90}{%
+        \includegraphics[width=0.9\textheight]{images/uml/Copie de increUseCase3.drawio.png}%
+    }
+    \caption{Diagramme de cas d'utilisation global du Sprint 3}
+    \label{fig:sprint3-use-case}
 \end{figure}
 
-\subsubsection{Description des Cas d'Utilisation Principaux}
+Le diagramme de cas d'utilisation présente les principales fonctionnalités liées à la gestion des services de maintenance et des interventions. Il décrit les interactions entre les différents acteurs du système et les fonctionnalités auxquelles ils peuvent accéder.
 
-\paragraph{UC1 : Consulter les services de maintenance}
+Le système implique trois acteurs principaux :
 
-Ce cas d'utilisation permet au client de consulter les prestations de maintenance disponibles. Les informations associées à chaque prestation comprennent notamment son nom, sa description, son prix, sa durée estimée et son image.
+\begin{itemize}
 
-\paragraph{UC2 : Gérer les services de maintenance}
+    \item \textbf{Customer} : peut consulter les services de maintenance, gérer ses véhicules, créer des demandes et suivre leur état.
 
-Ce cas d'utilisation permet à l'administrateur de gérer le catalogue des services de maintenance. Il comprend l'ajout, la modification et la suppression des prestations ainsi que leur association à un département.
+    \item \textbf{Employee} : peut consulter les interventions qui lui sont affectées et mettre à jour leur statut.
 
-\paragraph{UC3 : Gérer les véhicules clients}
+    \item \textbf{Admin} : peut gérer les services, consulter les véhicules et les demandes, créer des demandes pour les clients et affecter les employés aux interventions.
 
-Ce cas d'utilisation permet au client d'enregistrer et de gérer ses véhicules. Chaque véhicule contient les principales informations nécessaires à son identification et à son suivi dans le cadre des interventions de maintenance.
+\end{itemize}
 
-\paragraph{UC4 : Consulter les véhicules}
+Afin de mettre en évidence l'incrément fonctionnel apporté par ce sprint, les principaux cas d'utilisation spécifiques au Sprint 3 sont présentés ci-dessous.
 
-Ce cas d'utilisation permet au client de consulter ses propres véhicules. L'administrateur peut également consulter l'ensemble des véhicules enregistrés dans le système afin d'assurer leur gestion dans l'ERP.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/uml/sprint3usecase.drawio (1).png}
+    \caption{Cas d'utilisation spécifiques au Sprint 3}
+    \label{fig:usecase-specific-sprint3}
+\end{figure}
+\subsubsection{Description des Cas d'Utilisation}
 
-\paragraph{UC5 : Créer une demande de maintenance}
+Afin de compléter le diagramme de cas d'utilisation du Sprint 3, les principaux cas d'utilisation liés à la gestion de la maintenance sont décrits dans les tableaux suivants. Chaque tableau présente les préconditions, le scénario principal, les postconditions ainsi que les éventuelles exceptions.
 
-Ce cas d'utilisation permet au client de sélectionner un véhicule, un service et un créneau souhaité afin de créer une demande de maintenance.
+\subsubsection{UC1 : Consulter et gérer les services de maintenance}
 
-Le système enregistre la date de création de la demande et recherche automatiquement un employé disponible pour le créneau demandé.
+Le Tableau~\ref{tab:uc1-maintenance} présente la description du cas d'utilisation « Consulter et gérer les services de maintenance ».
 
-\paragraph{UC6 : Créer une demande pour un client}
+% Tableau UC1
+\begin{longtable}{|>{\RaggedRight\arraybackslash}p{4cm}|>{\RaggedRight\arraybackslash}p{10.5cm}|}
 
-Ce cas d'utilisation permet à l'administrateur de créer une demande de maintenance pour un client donné. Le véhicule et le service sont sélectionnés puis le système recherche les disponibilités nécessaires à la planification de l'intervention.
+\caption{Description du cas d'utilisation « Consulter et gérer les services de maintenance »}
+\label{tab:uc1-maintenance}\\
 
-\paragraph{UC7 : Consulter les demandes de maintenance}
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+\endfirsthead
 
-Ce cas d'utilisation permet aux utilisateurs autorisés de consulter les demandes enregistrées dans le système.
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+\endhead
 
-Les informations affichées comprennent notamment le client, son numéro de téléphone, le véhicule, le service, l'employé affecté, le numéro de facture et le statut de la demande.
+\textbf{Cas d'utilisation} &
+Consulter et gérer les services de maintenance \\
+\hline
 
-\paragraph{UC8 : Affecter automatiquement un employé}
+\textbf{Acteur(s)} &
+Client, Administrateur \\
+\hline
 
-Ce cas d'utilisation permet au système de rechercher automatiquement un employé pouvant réaliser l'intervention.
+\textbf{Préconditions} &
+L'utilisateur est authentifié pour accéder aux fonctionnalités concernées. \\
+\hline
 
-La recherche prend en compte le département du service, les horaires de travail de l'employé, son état actif et sa disponibilité ainsi que les autres créneaux déjà planifiés.
+\textbf{Scénario} &
+Le client consulte les services disponibles. L'administrateur peut ajouter, modifier ou supprimer un service. \\
+\hline
 
-\paragraph{UC9 : Rechercher un créneau proche}
+\textbf{Postconditions} &
+Les services sont consultés ou les modifications sont enregistrées. \\
+\hline
 
-Lorsque aucun employé n'est disponible pour le créneau initialement demandé, le système recherche automatiquement un créneau alternatif proche.
+\textbf{Exceptions} &
+Les données saisies sont invalides ou les droits sont insuffisants. \\
+\hline
 
-La recherche est effectuée sur une période pouvant aller jusqu'à trente jours et permet de trouver un créneau correspondant à la durée de l'intervention.
+\end{longtable}
 
-\paragraph{UC10 : Affecter manuellement un employé}
 
-Ce cas d'utilisation permet à l'administrateur de sélectionner manuellement un employé pour une demande de maintenance.
+\subsubsection{UC2 : Consulter les véhicules}
 
-Un \texttt{WorkShift} correspondant au rendez-vous est alors créé avec le département, les horaires et l'employé sélectionné.
+Le Tableau~\ref{tab:uc2-vehicles} présente la description du cas d'utilisation « Consulter les véhicules ».
 
-\paragraph{UC11 : Modifier le statut d'une demande}
+% Tableau UC2
+\begin{longtable}{|>{\RaggedRight\arraybackslash}p{4cm}|>{\RaggedRight\arraybackslash}p{10.5cm}|}
 
-Ce cas d'utilisation permet de modifier le statut d'une demande de maintenance.
+\caption{Description du cas d'utilisation « Consulter les véhicules »}
+\label{tab:uc2-vehicles}\\
 
-Les différents états prévus sont \texttt{REQUESTED}, \texttt{CONFIRMED}, \texttt{IN\_PROGRESS}, \texttt{COMPLETED} et \texttt{CANCELLED}.
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+\endfirsthead
 
-\paragraph{UC12 : Consulter ses demandes}
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+\endhead
 
-Ce cas d'utilisation permet au client de consulter les demandes associées à ses véhicules afin de suivre le déroulement de ses interventions.
+\textbf{Cas d'utilisation} &
+Consulter les véhicules \\
+\hline
 
-\paragraph{UC13 : Générer une facture de maintenance}
+\textbf{Acteur(s)} &
+Client, Administrateur \\
+\hline
 
-Ce cas d'utilisation permet de créer automatiquement une facture lors de l'enregistrement d'une demande de maintenance.
+\textbf{Préconditions} &
+L'utilisateur est authentifié. \\
+\hline
 
-Le numéro de facture généré est ensuite associé à la demande.
+\textbf{Scénario} &
+Le client consulte ses véhicules enregistrés. L'administrateur peut consulter les véhicules associés aux clients. \\
+\hline
 
-\paragraph{UC14 : Ajouter le service au panier}
+\textbf{Postconditions} &
+Les informations des véhicules sont affichées. \\
+\hline
 
-Ce cas d'utilisation permet d'intégrer la prestation de maintenance au panier du client. Un \texttt{CartItem} est créé avec la demande de maintenance, une quantité de un et le prix du service.
+\textbf{Exceptions} &
+Aucun véhicule n'est enregistré ou les informations sont indisponibles. \\
+\hline
 
-\subsection{Diagramme de Séquence}
+\end{longtable}
 
-Afin d'illustrer le fonctionnement dynamique des principales fonctionnalités du Sprint 3, trois diagrammes de séquence ont été retenus. Ils représentent respectivement la création d'une demande de maintenance, l'affectation automatique et la planification d'une intervention, puis le traitement et le suivi de celle-ci.
+
+\subsubsection{UC3 : Créer une demande pour un client}
+
+Le Tableau~\ref{tab:uc3-request} présente la description du cas d'utilisation « Créer une demande pour un client ».
+
+% Tableau UC3
+\begin{longtable}{|>{\RaggedRight\arraybackslash}p{4cm}|>{\RaggedRight\arraybackslash}p{10.5cm}|}
+
+\caption{Description du cas d'utilisation « Créer une demande pour un client »}
+\label{tab:uc3-request}\\
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+\endfirsthead
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+\endhead
+
+\textbf{Cas d'utilisation} &
+Créer une demande pour un client \\
+\hline
+
+\textbf{Acteur(s)} &
+Client, Administrateur \\
+\hline
+
+\textbf{Préconditions} &
+Un véhicule et un service de maintenance sont disponibles. \\
+\hline
+
+\textbf{Scénario} &
+Le client sélectionne son véhicule, le service de maintenance et le créneau souhaité. L'administrateur peut également créer une demande pour un client. \\
+\hline
+
+\textbf{Postconditions} &
+La demande de maintenance est enregistrée. \\
+\hline
+
+\textbf{Exceptions} &
+Le véhicule ou le service est indisponible, ou les informations saisies sont invalides. \\
+\hline
+
+\end{longtable}
+
+
+\subsubsection{UC4 : Affecter automatiquement un employé}
+
+Le Tableau~\ref{tab:uc4-assignment} présente la description du cas d'utilisation « Affecter automatiquement un employé ».
+
+% Tableau UC4
+\begin{longtable}{|>{\RaggedRight\arraybackslash}p{4cm}|>{\RaggedRight\arraybackslash}p{10.5cm}|}
+
+\caption{Description du cas d'utilisation « Affecter automatiquement un employé »}
+\label{tab:uc4-assignment}\\
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+\endfirsthead
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+\endhead
+
+\textbf{Cas d'utilisation} &
+Affecter automatiquement un employé \\
+\hline
+
+\textbf{Acteur(s)} &
+Administrateur \\
+\hline
+
+\textbf{Préconditions} &
+Une demande de maintenance est enregistrée. \\
+\hline
+
+\textbf{Scénario} &
+Le système vérifie les disponibilités des employés et affecte automatiquement un employé selon les contraintes de planification. Si aucune disponibilité n'est trouvée, un créneau alternatif est recherché. \\
+\hline
+
+\textbf{Postconditions} &
+Un employé et un créneau sont associés à la demande de maintenance. \\
+\hline
+
+\textbf{Exceptions} &
+Aucun employé ou créneau disponible n'est trouvé. \\
+\hline
+
+\end{longtable}
+
+
+\subsubsection{UC5 : Affecter manuellement un employé}
+
+Le Tableau~\ref{tab:uc5-manual-assignment} présente la description du cas d'utilisation « Affecter manuellement un employé ».
+
+% Tableau UC5
+\begin{longtable}{|>{\RaggedRight\arraybackslash}p{4cm}|>{\RaggedRight\arraybackslash}p{10.5cm}|}
+
+\caption{Description du cas d'utilisation « Affecter manuellement un employé »}
+\label{tab:uc5-manual-assignment}\\
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+\endfirsthead
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+\endhead
+
+\textbf{Cas d'utilisation} &
+Affecter manuellement un employé \\
+\hline
+
+\textbf{Acteur(s)} &
+Administrateur \\
+\hline
+
+\textbf{Préconditions} &
+Une demande de maintenance est enregistrée. \\
+\hline
+
+\textbf{Scénario} &
+L'administrateur sélectionne un employé disponible et l'associe à la demande de maintenance. \\
+\hline
+
+\textbf{Postconditions} &
+L'employé sélectionné est associé à la demande. \\
+\hline
+
+\textbf{Exceptions} &
+L'employé sélectionné n'est pas disponible ou l'affectation est invalide. \\
+\hline
+
+\end{longtable}
+
+
+\subsubsection{UC6 : Gérer les demandes de maintenance}
+
+Le Tableau~\ref{tab:uc6-maintenance-requests} présente la description du cas d'utilisation « Gérer les demandes de maintenance ».
+
+% Tableau UC6
+\begin{longtable}{|>{\RaggedRight\arraybackslash}p{4cm}|>{\RaggedRight\arraybackslash}p{10.5cm}|}
+
+\caption{Description du cas d'utilisation « Gérer les demandes de maintenance »}
+\label{tab:uc6-maintenance-requests}\\
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+\endfirsthead
+
+\hline
+\textbf{Élément} & \textbf{Description} \\
+\hline
+\endhead
+
+\textbf{Cas d'utilisation} &
+Gérer les demandes de maintenance \\
+\hline
+
+\textbf{Acteur(s)} &
+Administrateur, Employé \\
+\hline
+
+\textbf{Préconditions} &
+Une ou plusieurs demandes de maintenance sont enregistrées. \\
+\hline
+
+\textbf{Scénario} &
+L'administrateur consulte et supervise les demandes. L'employé consulte les demandes qui lui sont affectées et met à jour leur statut. \\
+\hline
+
+\textbf{Postconditions} &
+Le statut et les informations de la demande sont mis à jour. \\
+\hline
+
+\textbf{Exceptions} &
+L'utilisateur tente d'effectuer une opération non autorisée. \\
+\hline
+
+\end{longtable}
+
+\subsection{Diagrammes de séquence}
+
+Afin de représenter le fonctionnement dynamique des principales fonctionnalités du sprint, trois diagrammes de séquence sont présentés. Ils illustrent successivement la création d'une demande de maintenance, son affectation et sa planification, puis le traitement et le suivi de l'intervention.
 
 \subsubsection{Création d'une demande de maintenance}
 
-Ce diagramme présente le parcours du client depuis la sélection d'un service et d'un véhicule jusqu'à l'enregistrement de la demande.
-
-Le scénario principal est le suivant :
-
-\begin{itemize}
-
-\item Le client sélectionne un service de maintenance.
-
-\item Le client sélectionne l'un de ses véhicules.
-
-\item Le client renseigne le créneau souhaité pour l'intervention.
-
-\item La requête est transmise au contrôleur de maintenance.
-
-\item Le service récupère le client connecté à partir de son adresse e-mail.
-
-\item Le véhicule sélectionné est récupéré à partir de son identifiant.
-
-\item Le service de maintenance est récupéré à partir de son identifiant.
-
-\item Le système vérifie que le service est associé à un département.
-
-\item Une nouvelle instance de \texttt{MaintenanceRequest} est créée.
-
-\item La demande est associée au véhicule et au service sélectionnés.
-
-\item La date de création ainsi que les horaires demandés sont enregistrés.
-
-\item Le système recherche automatiquement un employé disponible.
-
-\item La demande est enregistrée avec le statut approprié.
-
-\item Une facture de maintenance est générée.
-
-\item Le numéro de facture est associé à la demande.
-
-\item Le service de maintenance est ajouté au panier du client.
-
-\item La demande enregistrée est retournée au client.
-
-\end{itemize}
+La Figure~\ref{fig:seq-creation-maintenance} présente le processus de création d'une demande de maintenance par le client. Après la sélection du véhicule, du service et du créneau souhaité, le système vérifie les informations fournies puis crée la demande. Le processus d'affectation est ensuite déclenché afin de déterminer la disponibilité d'un employé. Une facture est générée et la prestation est ajoutée au panier du client.
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=1\textwidth]{images/uml/createMaintenanceRequest.png}
-\caption{Diagramme de séquence - Création d'une demande de maintenance}
-\label{fig:sequence-create-maintenance}
+    \centering
+    \includegraphics[width=1\textwidth]{images/uml/seqM1.png}
+    \caption{Diagramme de séquence de la création d'une demande de maintenance}
+    \label{fig:seq-creation-maintenance}
 \end{figure}
+
 
 \subsubsection{Affectation automatique et planification d'une intervention}
 
-Ce diagramme présente le mécanisme permettant de rechercher automatiquement un employé disponible pour réaliser l'intervention.
-
-Le scénario principal est le suivant :
-
-\begin{itemize}
-
-\item Le système récupère le département associé au service demandé.
-
-\item Le service de planification recherche les employés correspondant au département.
-
-\item Les horaires de travail sont vérifiés afin de déterminer si le créneau demandé est compatible avec les horaires de l'employé.
-
-\item Les employés inactifs ou indisponibles sont exclus.
-
-\item Les \texttt{WorkShift} existants sont analysés afin d'éviter les conflits de planning.
-
-\item Si un employé est disponible, il est automatiquement affecté à la demande.
-
-\item Un \texttt{WorkShift} correspondant à l'intervention est enregistré.
-
-\item La demande passe au statut \texttt{CONFIRMED}.
-
-\item Si aucun employé n'est disponible, la demande reste au statut \texttt{REQUESTED}.
-
-\item Le système recherche alors un créneau proche correspondant à la durée de l'intervention.
-
-\item Lorsqu'un créneau disponible est trouvé, un employé est affecté et la demande est confirmée.
-
-\end{itemize}
+La Figure~\ref{fig:seq-affectation-maintenance} illustre le processus d'affectation automatique d'une intervention. Lors de la création d'une demande, le système recherche un employé actif et disponible, vérifie ses horaires ainsi que l'absence de conflit avec les interventions planifiées. Si un employé est disponible, l'intervention est affectée et la plage de travail correspondante est créée. Dans le cas contraire, le système recherche un créneau alternatif.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=1\textwidth]{images/uml/maintenanceAutoAssignment.png}
-\caption{Diagramme de séquence - Affectation automatique et planification d'une intervention}
-\label{fig:sequence-maintenance-auto-assignment}
+\includegraphics[width=0.8\textwidth]{images/uml/seqM3.png}
+\caption{Diagramme de séquence de l'affectation automatique d'un employé}
+\label{fig:seq-affectation-maintenance}
 \end{figure}
+
 
 \subsubsection{Traitement et suivi d'une intervention}
 
-Ce diagramme illustre le traitement d'une demande de maintenance par l'employé affecté ou par l'administrateur.
-
-Le scénario principal est le suivant :
-
-\begin{itemize}
-
-\item L'employé consulte les interventions qui lui sont affectées.
-
-\item L'employé démarre l'intervention.
-
-\item Le statut de la demande passe à \texttt{IN\_PROGRESS}.
-
-\item L'employé réalise les opérations de maintenance prévues.
-
-\item Lorsque l'intervention est terminée, le statut passe à \texttt{COMPLETED}.
-
-\item L'administrateur peut également modifier le statut d'une demande lorsque cela est nécessaire.
-
-\item Le client peut consulter le statut actualisé de sa demande depuis son espace.
-
-\end{itemize}
-
-Le système applique un contrôle d'accès lors de la modification du statut. Un employé ne peut modifier que les demandes qui lui sont affectées, tandis que l'administrateur dispose de droits plus larges sur les demandes.
+La Figure~\ref{fig:seq-suivi-maintenance} présente le processus de traitement et de suivi d'une intervention après son affectation. L'employé consulte les demandes qui lui sont attribuées et peut faire évoluer leur statut jusqu'à leur finalisation. L'administrateur peut annuler une intervention, tandis que le client consulte l'état actualisé de ses demandes. Les modifications sont enregistrées afin d'assurer le suivi de l'intervention.
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=1\textwidth]{images/uml/maintenanceTracking.png}
-\caption{Diagramme de séquence - Traitement et suivi d'une intervention}
-\label{fig:sequence-maintenance-tracking}
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/uml/seqM3a.png}
 \end{figure}
+
+\newpage
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/uml/seqM3b.png}
+    \caption{Diagramme de séquence du suivi d'une demande de maintenance}
+    \label{fig:seq-suivi-maintenance}
+\end{figure}
+
+
 
 \subsection{Diagramme de Classes}
 
-Le diagramme de classes ci-dessous représente les principales entités du Sprint 3, dédié à la gestion des services de maintenance et des interventions.
+Le diagramme de classes présente la structure des principales entités développées dans le Sprint 3. Il met en évidence les classes liées aux services de maintenance, aux véhicules clients, aux demandes et à la planification des interventions.
 
-Il est organisé autour de plusieurs éléments complémentaires :
+La classe \texttt{MaintenanceService} représente les prestations proposées et est associée à un \texttt{Department}. La classe \texttt{CustomerCar} représente les véhicules enregistrés par les clients. La classe \texttt{MaintenanceRequest} constitue le lien entre le véhicule, le service et l'intervention planifiée. La planification repose également sur les employés et leurs \texttt{WorkShift}. Enfin, l'énumération \texttt{MaintenanceStatus} permet de représenter les différents états d'une demande : \texttt{REQUESTED}, \texttt{CONFIRMED}, \texttt{IN\\\_PROGRESS}, \texttt{COMPLETED} et \texttt{CANCELLED}.
 
-\begin{itemize}
 
-\item \textbf{Le package Service de maintenance :} il est représenté par la classe \texttt{MaintenanceService}. Cette classe contient le nom, la description, le prix, la durée estimée et l'image du service. Elle est également associée à un \texttt{Department}.
 
-\item \textbf{Le package Véhicule client :} il est représenté par la classe \texttt{CustomerCar}. Cette classe permet d'enregistrer les informations du véhicule, notamment sa marque, son modèle, son année, son immatriculation, son VIN, son kilométrage et son carburant. Elle est associée à un \texttt{Customer}.
 
-\item \textbf{Le package Demande de maintenance :} il est représenté par la classe \texttt{MaintenanceRequest}. Cette classe constitue le lien entre le véhicule du client et le service demandé. Elle contient également la date de demande, le statut, l'employé affecté, les horaires planifiés et le numéro de facture.
+% ============================================================
 
-\item \textbf{Le package Planification :} les informations de planification sont représentées par les horaires de début et de fin de l'intervention. La classe \texttt{ProposedSlot} permet également de représenter un créneau proposé lorsqu'une proposition de rendez-vous est nécessaire.
+% REALISATION
 
-\item \textbf{Le package Ressources humaines et planning :} les employés et leurs \texttt{WorkShift} sont utilisés pour déterminer les disponibilités et éviter les conflits de planning lors de l'affectation d'une intervention.
-
-\item \textbf{Le suivi de la demande :} l'énumération \texttt{MaintenanceStatus} représente les différents états d'une demande : \texttt{REQUESTED}, \texttt{CONFIRMED}, \texttt{IN\_PROGRESS}, \texttt{COMPLETED} et \texttt{CANCELLED}.
-
-\end{itemize}
-
-La modélisation permet ainsi de relier le parcours du client à la gestion opérationnelle de l'ERP. Une demande de maintenance relie un client, son véhicule, un service de maintenance et, lorsqu'une disponibilité est trouvée, un employé chargé de l'intervention.
+% ============================================================
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{images/uml/diagDeClasseSprint3.png}
-\caption{Diagramme de classes du Sprint 3 - Gestion des services de maintenance}
-\label{fig:diagramme-classes-sprint3}
+    \centering
+    \rotatebox{90}{%
+        \includegraphics[width=0.6\textheight]{images/uml/Diagramme de classe sprint3.drawio.png}%
+    }
+    \caption{Diagramme de classes du Sprint 3 - Gestion des services de maintenance}
+    \label{fig:diagramme-classes-sprint3}
 \end{figure}
+
+% ============================================================
+% REALISATION
+% ============================================================
+
+
+La phrase est volontairement différente de celle du Sprint 4 pour éviter une répétition trop visible dans le rapport.
 
 \section{Réalisation}
 
 \subsection{Gestion des services de maintenance}
 
+Chaque service de maintenance présente son nom, sa description, son prix, sa durée estimée et son image, et peut être associé à un département afin de faciliter la recherche des employés capables de réaliser l'intervention. Côté ERP, l'administrateur peut ajouter, modifier et supprimer les services, tandis que le client peut consulter le catalogue avec recherche, filtrage et pagination.
+
 \subsubsection{Consultation des services de maintenance}
 
-La consultation des services de maintenance permet aux clients d'accéder au catalogue des prestations disponibles.
+La Figure~\ref{fig:services-maintenance-client} présente l'interface permettant au client de consulter, rechercher et filtrer les prestations proposées par le garage.
 
-Chaque service contient plusieurs informations permettant au client de choisir une prestation adaptée à ses besoins, notamment le nom, la description, le prix, la durée estimée et l'image.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint3/2.png}
+\caption{Interface de consultation des services de maintenance côté client}
+\label{fig:services-maintenance-client}
+\end{figure}
 
-La récupération des services prend également en charge la recherche, le filtrage par prix et la pagination afin de faciliter la navigation dans le catalogue.
+\subsubsection{Gestion des services de maintenance}
 
-\subsubsection{Ajout et modification d'un service}
+La Figure~\ref{fig:services-maintenance-erp} présente l'interface permettant à l'administrateur d'ajouter, modifier ou supprimer les services de maintenance depuis l'application ERP.
 
-L'administrateur peut ajouter un nouveau service de maintenance en renseignant son nom, sa description, son prix et sa durée estimée.
-
-Un service peut également être associé à un département. Cette association est importante pour le processus d'affectation automatique, car le système utilise le département du service pour rechercher les employés capables de réaliser l'intervention.
-
-Lors d'une modification, les informations du service sont mises à jour dans la base de données.
-
-\subsubsection{Gestion des images des services}
-
-Chaque service peut être associé à une image afin d'améliorer sa présentation dans l'interface e-commerce.
-
-Lorsqu'une nouvelle image est chargée, le système peut supprimer l'ancienne image locale avant d'enregistrer la nouvelle.
-
-Cette fonctionnalité permet de maintenir les ressources associées au catalogue de maintenance à jour.
-
-\subsubsection{Suppression d'un service}
-
-L'administrateur peut supprimer un service de maintenance.
-
-Lorsqu'une image locale est associée au service, celle-ci est également supprimée afin d'éviter la conservation de fichiers qui ne sont plus utilisés.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint3/1.png}
+\caption{Interface de gestion des services de maintenance côté ERP}
+\label{fig:services-maintenance-erp}
+\end{figure}
 
 \subsection{Gestion des véhicules clients}
 
-\subsubsection{Ajout d'un véhicule}
+Le client enregistre ses véhicules depuis son espace personnel (marque, modèle, année, immatriculation, VIN, kilométrage, carburant), avec la possibilité de les consulter, modifier ou supprimer.
 
-Le client peut enregistrer un véhicule depuis son espace personnel.
+\subsubsection{Enregistrement d'un véhicule}
 
-Les informations enregistrées comprennent notamment la marque, le modèle, l'année, l'immatriculation, le numéro VIN, le kilométrage et le type de carburant.
+La Figure~\ref{fig:enregistrement-vehicule} présente l'interface permettant au client d'ajouter un véhicule à son compte.
 
-Le véhicule est associé au client concerné et possède un code véhicule permettant de l'identifier dans le système.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint3/3.png}
+\caption{Interface d'enregistrement d'un véhicule}
+\label{fig:enregistrement-vehicule}
+\end{figure}
 
-\subsubsection{Consultation des véhicules}
+\subsubsection{Gestion des véhicules}
 
-Le client peut consulter les véhicules qui lui appartiennent afin de sélectionner celui qui sera utilisé lors d'une demande de maintenance.
+La Figure~\ref{fig:gestion-vehicules} présente l'interface permettant à l'Admin de consulter et gérer les véhicules associés aux comptes clients.
 
-L'administrateur peut également consulter l'ensemble des véhicules enregistrés dans l'ERP afin d'accéder aux informations nécessaires au traitement des demandes.
-
-\subsubsection{Modification d'un véhicule}
-
-Le propriétaire peut modifier les informations de son véhicule afin de maintenir les données techniques à jour.
-
-Les informations peuvent notamment concerner le kilométrage, l'immatriculation, le modèle ou les autres caractéristiques enregistrées.
-
-\subsubsection{Suppression d'un véhicule}
-
-Le client peut supprimer un véhicule qui lui appartient.
-
-Avant la suppression, le système vérifie que le véhicule est bien associé au client connecté. Cette vérification permet d'empêcher un utilisateur de supprimer le véhicule d'un autre client.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint3/4.png}
+\caption{Interface de gestion des véhicules par l'Admin}
+\label{fig:gestion-vehicules}
+\end{figure}
 
 \subsection{Gestion des demandes de maintenance}
 
-\subsubsection{Création d'une demande par le Customer}
+Une demande de maintenance associe un véhicule, un service et un créneau, et peut être créée soit par le client depuis l'application e-commerce, soit par l'administrateur depuis l'application ERP.
 
-Le client peut créer une demande de maintenance directement depuis l'application.
+\subsubsection{Création d'une demande depuis l'application e-commerce}
 
-Il sélectionne un service de maintenance, son véhicule et un créneau souhaité pour l'intervention.
+La Figure~\ref{fig:creation-demande-maintenance-client} présente l'interface permettant au client de créer une demande en sélectionnant son véhicule, le service souhaité et le créneau.
 
-Le système récupère automatiquement le client connecté à partir de son adresse e-mail, puis vérifie l'existence du véhicule et du service.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint3/7.png}
+\caption{Création d'une demande de maintenance depuis l'application e-commerce}
+\label{fig:creation-demande-maintenance-client}
+\end{figure}
 
-Une nouvelle \texttt{MaintenanceRequest} est créée avec la date de demande, le véhicule, le service et les horaires souhaités.
+\subsubsection{Création d'une demande depuis l'application ERP}
 
-Le système recherche ensuite automatiquement un employé disponible.
+La Figure~\ref{fig:creation-demande-maintenance-erp} présente l'interface permettant à l'administrateur de créer une demande pour un client se présentant directement au garage.
 
-\subsubsection{Création d'une demande par l'Admin}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint3/5.png}
+\caption{Création d'une demande de maintenance depuis l'application ERP}
+\label{fig:creation-demande-maintenance-erp}
+\end{figure}
 
-L'administrateur peut également créer une demande de maintenance pour un client.
+\subsection{Affectation et suivi des interventions}
 
-Dans ce cas, le client concerné est identifié à partir de son identifiant, puis son véhicule et le service de maintenance sont associés à la nouvelle demande.
+L'affectation automatique d'une intervention vérifie le département, la disponibilité et les horaires de l'employé ainsi que ses \texttt{WorkShift} déjà planifiés, afin d'éviter tout conflit. Si aucun employé disponible n'est trouvé, la demande reste ouverte pour une affectation manuelle par l'administrateur.
 
-Le même mécanisme de recherche de disponibilité peut ensuite être utilisé pour déterminer l'employé chargé de l'intervention.
+La Figure~\ref{fig:gestion-demandes-maintenance} présente l'espace permettant à l'administrateur de consulter les demandes, leur état et les employés affectés.
 
-\subsubsection{Consultation des demandes}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{images/interfaces/sprint3/6.png}
+\caption{Espace de gestion et d'affectation des demandes de maintenance}
+\label{fig:gestion-demandes-maintenance}
+\end{figure}
 
-Les demandes de maintenance regroupent toutes les informations nécessaires au suivi d'une intervention.
-
-Les informations retournées comprennent notamment la date de demande, le statut, le nom et le téléphone du client, le véhicule concerné, le service sélectionné, l'employé affecté et le numéro de facture.
-
-Les utilisateurs autorisés peuvent ainsi disposer d'une vision complète de chaque intervention.
-
-\subsection{Planification et affectation des interventions}
-
-\subsubsection{Vérification des disponibilités}
-
-La disponibilité d'un employé est déterminée à partir de plusieurs critères.
-
-Le système vérifie tout d'abord que l'employé appartient au département correspondant au service demandé.
-
-Il vérifie ensuite que le créneau demandé respecte les horaires de travail de l'employé.
-
-Les employés inactifs ou indisponibles sont exclus de la recherche.
-
-Enfin, les \texttt{WorkShift} déjà planifiés sont analysés afin de vérifier qu'aucun conflit n'existe avec le nouveau créneau.
-
-\subsubsection{Affectation automatique d'un employé}
-
-Lorsqu'un employé répond à toutes les conditions de disponibilité, il est automatiquement affecté à la demande.
-
-La demande passe alors au statut \texttt{CONFIRMED}.
-
-Un \texttt{WorkShift} est créé pour représenter l'intervention planifiée. Il contient la date, les horaires, l'employé, le département et l'état du créneau.
-
-Cette automatisation permet de réduire les interventions manuelles nécessaires à la planification des rendez-vous.
-
-\subsubsection{Recherche d'un créneau proche}
-
-Lorsque aucun employé n'est disponible pour le créneau demandé, la demande reste initialement au statut \texttt{REQUESTED}.
-
-Le système recherche alors automatiquement un créneau alternatif proche en utilisant la durée de l'intervention.
-
-La recherche est réalisée progressivement à partir du lendemain du créneau demandé et peut s'étendre sur une période allant jusqu'à trente jours.
-
-Lorsqu'un créneau disponible est trouvé et qu'un employé peut y être affecté, le nouveau créneau est enregistré et la demande passe au statut \texttt{CONFIRMED}.
-
-\subsubsection{Affectation manuelle par l'Admin}
-
-L'administrateur peut également effectuer une affectation manuelle lorsqu'il souhaite choisir directement l'employé responsable de l'intervention.
-
-Le système vérifie que l'utilisateur sélectionné est bien un employé et que le créneau de la demande est défini.
-
-Un \texttt{WorkShift} est ensuite créé pour l'employé sélectionné et la demande passe au statut \texttt{CONFIRMED}.
-
-\subsection{Gestion du cycle de vie des demandes}
-
-\subsubsection{Statut d'une demande}
-
-Le cycle de vie d'une demande de maintenance est représenté par l'énumération \texttt{MaintenanceStatus}.
-
-Les différents états sont les suivants :
-
-\begin{itemize}
-
-\item \texttt{REQUESTED} : la demande a été enregistrée mais aucune intervention n'est encore confirmée.
-
-\item \texttt{CONFIRMED} : un employé et un créneau ont été affectés à l'intervention.
-
-\item \texttt{IN\_PROGRESS} : l'intervention de maintenance est en cours.
-
-\item \texttt{COMPLETED} : l'intervention est terminée.
-
-\item \texttt{CANCELLED} : la demande a été annulée.
-
-\end{itemize}
-
-\subsubsection{Contrôle des droits lors de la modification du statut}
-
-La modification du statut est soumise à un contrôle d'accès.
-
-Lorsqu'un utilisateur souhaite modifier le statut d'une demande, le système vérifie son identité.
-
-L'administrateur dispose des droits nécessaires pour modifier le statut des demandes.
-
-Pour un employé, le système vérifie que celui-ci est bien l'employé affecté à la demande.
-
-Cette vérification permet d'empêcher un employé de modifier le statut d'une intervention qui ne lui est pas attribuée.
-
-\subsection{Intégration avec l'e-commerce et l'ERP}
-
-\subsubsection{Ajout du service de maintenance au panier}
-
-Lorsqu'une demande est créée pour un client, le service de maintenance est automatiquement ajouté à son panier.
-
-Si le client ne possède pas encore de panier actif, un nouveau panier est créé.
-
-Un \texttt{CartItem} est ensuite créé avec la demande de maintenance, une quantité égale à un et le prix du service sélectionné.
-
-Cette intégration permet de considérer la prestation de maintenance comme un élément du processus commercial de la plateforme.
-
-\subsubsection{Génération de la facture de maintenance}
-
-Lors de la création d'une demande, le système fait appel au service de facturation de la maintenance afin de générer une facture.
-
-Le numéro de facture généré est ensuite enregistré dans l'attribut \texttt{invoiceNumber} de la demande.
-
-Cette association permet de relier directement l'intervention de maintenance à son document de facturation dans l'ERP.
-
-\subsubsection{Gestion des employés et des horaires}
-
-La planification des interventions repose sur les informations relatives aux employés, à leurs horaires de travail et aux créneaux déjà planifiés.
-
-Les \texttt{WorkingHours} permettent de déterminer les périodes pendant lesquelles un employé peut intervenir.
-
-Les \texttt{WorkShift} permettent quant à eux d'enregistrer les interventions déjà planifiées et d'éviter les conflits de disponibilité.
-
-Cette organisation permet au système de prendre en compte les contraintes réelles de l'activité de maintenance.
-
+% ============================================================
+% BILAN
+% ============================================================
 \section{Bilan du Sprint}
 
-Ce troisième sprint a permis d'intégrer un module complet de gestion des services de maintenance au sein de la plateforme AutoParts Pro.
+Ce troisième sprint a permis de mettre en place un module complet de gestion des services de maintenance et des interventions au sein de la plateforme AutoParts Pro.
 
-Du côté e-commerce, le client peut consulter les services disponibles, enregistrer ses véhicules et créer une demande de maintenance en sélectionnant le véhicule concerné ainsi qu'un créneau souhaité.
+Du côté e-commerce, le client peut consulter les services, enregistrer ses véhicules, créer des demandes de maintenance et suivre leur état. Du côté ERP, l'administrateur peut gérer les services, consulter les demandes et affecter les employés aux interventions.
 
-Du côté ERP, les administrateurs peuvent gérer les services, consulter les demandes, créer des demandes pour les clients et affecter les employés aux interventions. Le système prend également en compte les horaires de travail et les interventions déjà planifiées afin d'automatiser la recherche des disponibilités.
+Le système intègre également un mécanisme d'affectation automatique basé sur les départements, les horaires de travail et les interventions déjà planifiées. Lorsqu'aucune disponibilité n'est trouvée, un créneau alternatif peut être recherché.
 
-L'affectation automatique permet de confirmer directement une demande lorsqu'un employé est disponible. Dans le cas contraire, le système recherche un créneau alternatif afin de faciliter la planification de l'intervention.
-
-L'intégration avec le panier et la facturation permet également d'assurer la continuité entre le parcours e-commerce et les fonctionnalités commerciales de l'ERP.
-
-Ainsi, ce sprint permet de mettre en place le cycle complet d'une prestation de maintenance, depuis la sélection du service par le client jusqu'à la planification, l'affectation de l'employé, le suivi de l'intervention et son intégration avec les processus commerciaux et financiers de l'entreprise.
-
+Enfin, l'intégration avec le panier et la facturation permet d'assurer la continuité entre les prestations de maintenance et les processus commerciaux de l'ERP. Ce sprint couvre ainsi le cycle principal d'une intervention, depuis la sélection du service par le client jusqu'à sa planification, son traitement et son suivi.

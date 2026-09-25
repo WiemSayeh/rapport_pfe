@@ -11,8 +11,6 @@
 \usepackage{amssymb}
 \usepackage{pifont}
 \usepackage[a4paper,margin=2.5cm]{geometry}
-\usepackage{caption}
-\usepackage{array}
 \usepackage{needspace}
 \usepackage{graphicx}
 \usepackage{float}
@@ -27,10 +25,14 @@
 \usepackage{xcolor}
 \usepackage{caption}
 \usepackage{setspace}
+
 \usepackage[printonlyused]{acronym}
 
-\onehalfspacing
 
+\onehalfspacing
+\usepackage{etoc}
+\etocsettocstyle{\vspace{0.3em}{\bfseries\large Plan}\par\vspace{0.2em}\hrule\vspace{0.4em}}{\vspace{0.6em}}
+\etocsetnexttocdepth{subsection}
 \begin{document}
 
 %====================================

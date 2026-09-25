@@ -1,411 +1,343 @@
-\chapter{Pilotage du projet et conception générale}
 
+\chapter{Specificaton des Besoins et Analyse}
+
+\localtableofcontents
+\newpage
 \section{Introduction}
 
-Ce chapitre présente l'organisation du développement de la solution \textbf{AutoParts Pro} ainsi que les principaux choix effectués avant sa réalisation. Nous commençons par présenter le \textit{Product Backlog}, qui regroupe les fonctionnalités identifiées à partir des besoins de MSG, puis nous décrivons la répartition de ces fonctionnalités à travers les différents Sprints.
+Ce chapitre présente la spécification des besoins de notre solution ainsi que les choix techniques adoptés pour sa réalisation. Nous identifions dans un premier lieu les acteurs du système ainsi que les besoins fonctionnels et non fonctionnels. Nous présentons ensuite les technologies et frameworks utilisés, avant de détailler l'architecture générale de la plateforme \textbf{AutoParts Pro}.
+%---------------------------------------------------------
 
-Nous présentons ensuite le diagramme de cas d'utilisation global afin de donner une vue d'ensemble des interactions entre les acteurs et la plateforme. La suite du chapitre est consacrée aux choix technologiques et aux outils utilisés durant le développement. Enfin, nous décrivons l'architecture générale de la solution et la répartition de ses différents composants.
+\section{Spécification des besoins}
+
+Dans cette section, nous identifions les acteurs du système, puis les exigences fonctionnelles et non fonctionnelles que notre solution doit assurer.
+
+\subsection{Identification des acteurs}
+
+Notre solution comporte trois acteurs principaux :
+
+\begin{itemize}
+    \item \textbf{Customer} : consulte les produits, gère son panier, passe des commandes, effectue des paiements et réserve des services de maintenance.
+    \item \textbf{Employee} : accède aux fonctionnalités selon son rôle et son département (produits, stocks, ventes, maintenance, ressources humaines).
+    \item \textbf{Admin} : gère les comptes des employés, les rôles, les départements et les permissions.
+\end{itemize}
+
+La solution interagit également avec des services externes : l'\ac{OCR} pour la vérification des documents d'identité, et n8n pour l'automatisation des processus et des notifications.
+
+\subsection{Identification des besoins fonctionnels}
+
+Les besoins fonctionnels décrivent les principales fonctionnalités que la plateforme doit proposer afin de répondre aux besoins des différents utilisateurs. Ils concernent à la fois l'application e-commerce destinée aux clients et l'application ERP utilisée par les employés et les administrateurs.
+
+Les principaux besoins fonctionnels identifiés sont les suivants :
+
+\begin{itemize}
+
+\item \textbf{Comptes et authentification} : permettre aux utilisateurs de créer et gérer leur compte, de se connecter de manière sécurisée et de récupérer leur mot de passe. Le système doit également gérer la vérification des comptes et le changement obligatoire du mot de passe lors de la première connexion d'un employé.
+
+\item \textbf{Produits} : permettre la consultation, la recherche et le filtrage des produits disponibles. Les utilisateurs autorisés doivent également pouvoir gérer les informations relatives aux produits et à leur compatibilité avec les véhicules.
+
+\item \textbf{Panier et commandes} : permettre au client d'ajouter des produits à son panier, de modifier les quantités et de valider une commande. Le système doit également assurer le suivi de l'état des commandes.
+
+\item \textbf{Paiements et facturation} : assurer l'enregistrement des paiements liés aux commandes et aux services de maintenance. La plateforme doit également permettre la création et la consultation des factures correspondantes.
+
+\item \textbf{Stocks et fournisseurs} : assurer le suivi des quantités disponibles et des mouvements de stock. Le système doit également permettre la gestion des fournisseurs ainsi que le suivi des opérations d'approvisionnement et de livraison.
+
+\item \textbf{Maintenance} : permettre aux clients de soumettre des demandes de maintenance et de suivre leur évolution. Les employés autorisés doivent pouvoir traiter ces demandes, gérer les statuts et organiser les interventions.
+
+\item \textbf{Ressources humaines} : permettre la gestion des employés, des départements, des horaires de travail, des congés et des avances sur salaire. Les accès aux différentes fonctionnalités RH doivent dépendre des permissions attribuées.
+
+\item \textbf{Utilisateurs et permissions} : permettre à l'administrateur de gérer les comptes des employés, leurs rôles, leurs départements et leurs permissions. Le système doit ainsi contrôler l'accès aux fonctionnalités selon les responsabilités de chaque utilisateur.
+
+\item \textbf{Vérification des documents} : intégrer un mécanisme de reconnaissance optique de caractères (\ac{OCR}) afin d'extraire les informations présentes dans les documents d'identité et de faciliter leur vérification.
+
+\item \textbf{Notifications} : informer les utilisateurs des événements importants liés aux commandes, aux comptes et aux opérations internes. Les notifications peuvent notamment être transmises par e-mail ou via les mécanismes d'automatisation intégrés.
+
+\item \textbf{Automatisation} : automatiser certains processus métier à l'aide de n8n. Cette automatisation permet notamment de déclencher des notifications et des traitements à partir d'événements générés par la plateforme.
+
+\item \textbf{Supervision} : permettre aux utilisateurs autorisés de suivre les principales activités de la plateforme et l'état des différents modules. Cette fonctionnalité facilite le contrôle des opérations réalisées dans le système.
+
+\end{itemize}
+
+\subsection{Identification des besoins non fonctionnels}
+
+Les besoins non fonctionnels définissent les contraintes de qualité que la plateforme doit respecter. Ils concernent notamment la sécurité, les performances, l'ergonomie et la capacité d'évolution de la solution.
+
+Afin de garantir un fonctionnement fiable et adapté aux besoins de l'entreprise, les principales exigences non fonctionnelles sont les suivantes :
+
+\begin{itemize}
+
+
+\item \textbf{Ergonomie} : proposer des interfaces simples, claires et intuitives afin de faciliter l'utilisation des différentes fonctionnalités par les clients, les employés et les administrateurs.
+
+\item \textbf{Sécurité} : assurer la protection des comptes et des données grâce à une authentification sécurisée basée sur Spring Security et \ac{JWT}. Les informations sensibles doivent également être protégées contre les accès non autorisés.
+
+\item \textbf{Contrôle d'accès} : limiter l'accès aux fonctionnalités selon le rôle et les permissions de chaque utilisateur. Les employés doivent notamment accéder uniquement aux modules correspondant à leurs responsabilités.
+
+\item \textbf{Performance} : garantir des temps de réponse acceptables lors de l'utilisation des différentes fonctionnalités, notamment pour la consultation des produits, des commandes et des informations du système.
+
+\item \textbf{Maintenabilité} : adopter une organisation claire du code afin de faciliter les corrections, les tests et les évolutions futures de la plateforme.
+
+\item \textbf{Modularité et extensibilité} : permettre l'évolution indépendante des différents modules de la plateforme et faciliter l'ajout de nouvelles fonctionnalités sans remettre en cause l'ensemble du système.
+
+\item \textbf{Évolutivité} : prévoir la possibilité d'intégrer de nouveaux modules, services ou processus d'automatisation en fonction de l'évolution des besoins de MSG.
+
+\item \textbf{Compatibilité} : assurer l'accès aux applications depuis les principaux navigateurs modernes et proposer des interfaces adaptées aux différentes tailles d'écran.
+
+
+\end{itemize}
+
+
+
+
+\section{Environnements techniques}
+
+Dans cette section, nous détaillons les technologies, frameworks et outils utilisés lors de la réalisation de notre projet, ainsi que les raisons ayant motivé chaque choix.
 
 %---------------------------------------------------------
-\section{Pilotage du projet avec Scrum}
 
-Afin d'organiser le développement de la plateforme \textbf{AutoParts Pro}, nous avons adopté une approche agile basée sur le cadre de travail Scrum. Ce choix permet de diviser le projet en plusieurs itérations et de développer progressivement les différentes fonctionnalités de la solution.
+\subsection{Technologies et frameworks utilisés}
 
-Le développement est ainsi organisé en plusieurs Sprints, chacun étant associé à un objectif fonctionnel précis. Cette organisation permet de suivre régulièrement l'avancement du projet, de tester les fonctionnalités développées et d'apporter des ajustements lorsque cela est nécessaire.
+\begin{itemize}
 
-\subsection{Product Backlog}
+\item \textbf{HTML5} \cite{htmlSpec} :
+langage de balisage standard des pages web. Nous l'avons choisi car il constitue la base indispensable de toute interface web moderne et s'intègre nativement avec Angular.
 
-Le \textit{Product Backlog} constitue une liste structurée des besoins fonctionnels identifiés pour la plateforme. Ces besoins sont exprimés sous forme de \textit{User Stories}, permettant de préciser l'acteur concerné, la fonctionnalité souhaitée et l'objectif recherché.
-
-Les User Stories sont classées selon leur priorité et associées à une estimation de leur charge de réalisation. Le tableau~\ref{tab:product_backlog} présente une synthèse du backlog retenu pour notre projet.
-
-\begin{table}[H]
+\begin{figure}[H]
     \centering
-    \small
-    \begin{tabular}{|c|p{3.4cm}|p{7.2cm}|c|c|}
-        \hline
-        \textbf{ID} &
-        \textbf{Module} &
-        \textbf{User Story} &
-        \textbf{Priorité} &
-        \textbf{Est.} \\
-        \hline
+    \includegraphics[width=0.15\textwidth]{images/logos/HTML-5.png}
+    \caption{Logo HTML5}
+    \label{fig:html5}
+\end{figure}
 
-        US1 &
-        Authentification &
-        En tant qu'utilisateur, je souhaite créer un compte et m'authentifier afin d'accéder aux fonctionnalités qui me sont autorisées. &
-        Élevée &
-        5j \\
-        \hline
+\item \textbf{CSS3} \cite{css3Spec} :
+langage de mise en forme des pages web. Utilisé en complément de Tailwind CSS pour les besoins de style spécifiques non couverts par le framework.
 
-        US2 &
-        Autorisations &
-        En tant qu'Admin, je souhaite gérer les rôles et les permissions afin de contrôler l'accès aux différentes fonctionnalités. &
-        Élevée &
-        5j \\
-        \hline
-
-        US3 &
-        Gestion des employés &
-        En tant qu'Admin, je souhaite créer et gérer les comptes des employés ainsi que leurs départements. &
-        Élevée &
-        6j \\
-        \hline
-
-        US4 &
-        Produits &
-        En tant qu'Employee, je souhaite gérer les produits, catégories, marques et informations associées. &
-        Élevée &
-        7j \\
-        \hline
-
-        US5 &
-        Stock &
-        En tant qu'Employee, je souhaite consulter et gérer les stocks afin de suivre les mouvements des produits. &
-        Élevée &
-        7j \\
-        \hline
-
-        US6 &
-        Fournisseurs &
-        En tant qu'Employee, je souhaite gérer les fournisseurs et les opérations d'approvisionnement. &
-        Moyenne &
-        5j \\
-        \hline
-
-        US7 &
-        E-commerce &
-        En tant que Customer, je souhaite consulter et rechercher les pièces automobiles disponibles afin de trouver les produits adaptés à mes besoins. &
-        Élevée &
-        7j \\
-        \hline
-
-        US8 &
-        Commandes &
-        En tant que Customer, je souhaite gérer mon panier et passer une commande afin d'acheter les produits sélectionnés. &
-        Élevée &
-        7j \\
-        \hline
-
-        US9 &
-        Paiements &
-        En tant que Customer, je souhaite effectuer le paiement de ma commande et consulter les informations relatives à celui-ci. &
-        Élevée &
-        5j \\
-        \hline
-
-        US10 &
-        Maintenance &
-        En tant que Customer, je souhaite réserver un service de maintenance en renseignant les informations relatives à mon véhicule. &
-        Élevée &
-        8j \\
-        \hline
-
-        US11 &
-        Interventions &
-        En tant qu'Employee, je souhaite gérer les demandes de maintenance et suivre les interventions réalisées. &
-        Élevée &
-        7j \\
-        \hline
-
-        US12 &
-        Ressources humaines &
-        En tant qu'Admin, je souhaite gérer les informations des employés, les congés, les horaires et les shifts. &
-        Moyenne &
-        8j \\
-        \hline
-
-        US13 &
-        Automatisation &
-        En tant qu'administrateur, je souhaite automatiser certaines opérations afin de réduire les tâches répétitives. &
-        Moyenne &
-        6j \\
-        \hline
-
-    \end{tabular}
-    \caption{Product Backlog du projet AutoParts Pro}
-    \label{tab:product_backlog}
-\end{table}
-
-\subsection{Planification des Sprints}
-
-Après l'identification des fonctionnalités, le Product Backlog a été réparti sur plusieurs Sprints en tenant compte des dépendances entre les modules et de leur priorité.
-
-Le développement commence par les fonctionnalités nécessaires à la sécurisation de la plateforme. Les modules de gestion des produits et des stocks sont ensuite développés avant d'intégrer les fonctionnalités liées à la maintenance, aux ressources humaines et à l'automatisation.
-
-Le tableau~\ref{tab:planification_sprints} présente la planification générale retenue.
-
-\begin{table}[H]
+\begin{figure}[H]
     \centering
-    \small
-    \begin{tabular}{|c|p{4.2cm}|p{6.5cm}|c|}
-        \hline
-        \textbf{Sprint} &
-        \textbf{Intitulé} &
-        \textbf{Fonctionnalités principales} &
-        \textbf{Période} \\
-        \hline
+    \includegraphics[width=0.15\textwidth]{images/logos/css3.png}
+    \caption{Logo CSS3}
+    \label{fig:css3}
+\end{figure}
 
-        Sprint 0 &
-        Initialisation du projet &
-        Analyse des besoins, prise en main de l'environnement technique, définition de l'architecture et préparation du projet. &
-        À préciser \\
-        \hline
+\item \textbf{Tailwind CSS} \cite{tailwindDocs} :
+framework CSS utilitaire. Nous l'avons choisi car il évite la prolifération de fichiers CSS séparés en appliquant les styles directement dans le HTML, ce qui accélère le développement, et son système de classes responsives intégré simplifie l'adaptation de l'interface aux différentes tailles d'écran sans media queries manuelles.
 
-        Sprint 1 &
-        Authentification et autorisations &
-        Authentification, inscription, vérification e-mail, réinitialisation du mot de passe, JWT, rôles et permissions. &
-        À préciser \\
-        \hline
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.15\textwidth]{images/logos/tail.png}
+    \caption{Logo Tailwind CSS}
+    \label{fig:tailwind}
+\end{figure}
 
-        Sprint 2 &
-        Produits et gestion du stock &
-        Gestion des produits, catégories, marques, fournisseurs et suivi des stocks. &
-        À préciser \\
-        \hline
+\item \textbf{Angular} \cite{angularDocs} :
+framework frontend basé sur TypeScript. Nous l'avons choisi car son typage statique réduit les erreurs à la compilation plutôt qu'à l'exécution, son architecture par modules et composants impose une structure de code cohérente sur un projet de cette taille, et son système d'injection de dépendances facilite les tests unitaires.
 
-        Sprint 3 &
-        ERP et services de maintenance &
-        Gestion des opérations ERP, réservations de maintenance, véhicules, demandes et interventions. &
-        À préciser \\
-        \hline
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.15\textwidth]{images/logos/angular-logo-1.png}
+    \caption{Logo Angular}
+    \label{fig:angular}
+\end{figure}
 
-        Sprint 4 &
-        Ressources humaines &
-        Gestion des employés, départements, horaires, shifts et congés. &
-        À préciser \\
-        \hline
+\item \textbf{Spring Boot} \cite{springInAction} :
+framework Java pour le développement backend. Nous l'avons choisi car son approche par convention élimine une grande partie de la configuration manuelle habituellement nécessaire avec Spring classique, son intégration native avec Spring Data JPA simplifie l'accès à la base de données, et Spring Security \cite{springSecurityDoc} fournit un mécanisme d'authentification et d'autorisation éprouvé, directement compatible avec \ac{JWT}.
 
-        Sprint 5 &
-        E-commerce et automatisation &
-        Commandes, paiements, factures, fonctionnalités e-commerce et automatisation des processus. &
-        À préciser \\
-        \hline
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.15\textwidth]{images/logos/spring-boot-logo.png}
+    \caption{Logo Spring Boot}
+    \label{fig:springboot}
+\end{figure}
 
-    \end{tabular}
-    \caption{Planification des Sprints}
-    \label{tab:planification_sprints}
-\end{table}
+\item \textbf{MySQL} \cite{mysqlDocs} :
+système de gestion de base de données relationnelle. Nous l'avons choisi car nos données (produits, stocks, commandes, employés) présentent des relations fortes entre elles, ce qui rend un modèle relationnel plus adapté qu'une base NoSQL, et sa gratuité ainsi que sa compatibilité native avec Spring Data JPA en font un choix cohérent avec le reste de notre stack.
 
-Cette organisation permet de construire progressivement la solution en commençant par les fonctionnalités fondamentales, puis en ajoutant les différents modules métier. Les détails de chaque Sprint seront présentés dans les chapitres dédiés à leur réalisation.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.15\textwidth]{images/logos/mysql.png}
+    \caption{Logo MySQL}
+    \label{fig:mysql}
+\end{figure}
 
-%---------------------------------------------------------
-\section{Diagramme de cas d'utilisation global}
+\item \textbf{\ac{JWT}} \cite{jwtRFC} :
+standard de transmission sécurisée d'informations sous forme de token. Nous l'avons choisi car il permet une authentification sans état (\textit{stateless}), ce qui évite de stocker les sessions côté serveur et facilite le passage à l'échelle, tout en étant nativement supporté par Spring Security.
 
-Le diagramme de cas d'utilisation global permet de présenter les principales fonctionnalités de la plateforme ainsi que les interactions entre les différents acteurs.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.15\textwidth]{images/logos/jwt.png}
+    \caption{Logo JWT}
+    \label{fig:jwt}
+\end{figure}
 
-Dans notre solution, trois utilisateurs principaux interagissent directement avec la plateforme : le \textbf{Customer}, l'\textbf{Employee} et l'\textbf{Admin}. Le système intervient également pour réaliser automatiquement certaines opérations, notamment l'envoi des e-mails et la gestion des mécanismes d'authentification.
+\item \textbf{n8n} \cite{n8nDocs} :
+outil d'automatisation de workflows. Nous l'avons choisi car il permet de connecter notre backend Spring Boot à des services externes via de simples webhooks, sans développer de code d'intégration spécifique pour chaque automatisation, et parce qu'il est open source et auto-hébergeable, contrairement à des solutions équivalentes comme Zapier ou Make qui sont payantes au-delà d'un certain volume.
 
-Le \textbf{Customer} utilise principalement la partie e-commerce et les services de maintenance. Il peut créer son compte, consulter les produits, rechercher des pièces, gérer son panier, effectuer des commandes et réserver des interventions.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.2\textwidth]{images/logos/n8N.png}
+    \caption{Logo n8n}
+    \label{fig:n8n}
+\end{figure}
 
-L'\textbf{Employee} intervient principalement dans la gestion opérationnelle de l'entreprise. Selon ses permissions, il peut gérer les produits, les stocks, les fournisseurs, les commandes ou encore les interventions de maintenance.
-
-L'\textbf{Admin} dispose de fonctionnalités d'administration permettant notamment de gérer les employés, les départements, les rôles et les permissions.
-
-Le diagramme permet ainsi d'avoir une vision globale du système avant d'étudier séparément les fonctionnalités de chaque Sprint.
-
-%---------------------------------------------------------
-% Figure du cas d'utilisation global
-% Décommenter lorsque le diagramme sera disponible
-%
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=\textwidth]{images/uml/use_case_global.png}
-%    \caption{Diagramme de cas d'utilisation global d'AutoParts Pro}
-%    \label{fig:use_case_global}
-%\end{figure}
-%---------------------------------------------------------
-
-\section{Choix techniques}
-
-La réalisation d'AutoParts Pro nécessite plusieurs technologies permettant de couvrir les différents niveaux de la solution. Les choix techniques ont été effectués en tenant compte des besoins du projet, de la maintenabilité du code, de la sécurité et de la possibilité de faire évoluer la plateforme.
-
-L'environnement technique est organisé autour de plusieurs éléments : le frontend destiné aux utilisateurs, le backend chargé de la logique métier, le système de gestion de données ainsi que les outils utilisés pour le développement et la collaboration.
-
-\subsection{Environnement logiciel}
-
-\subsubsection{Technologies du frontend}
-
-\textbf{Angular} : est un framework open source développé par Google pour la conception d'applications web dynamiques. Il repose notamment sur TypeScript et propose une architecture basée sur les composants et les services.
-
-Dans notre projet, Angular est utilisé pour développer les interfaces de l'application, notamment les interfaces d'administration de l'ERP et les différentes fonctionnalités accessibles aux utilisateurs.
-
-\textbf{TypeScript} : est un langage développé par Microsoft qui étend JavaScript en ajoutant notamment le typage statique. Il facilite la structuration et la maintenance des applications web de grande taille.
-
-TypeScript est utilisé dans notre projet pour développer les composants, services, modèles et différents éléments de l'application Angular.
-
-\textbf{HTML5 et CSS3} : sont utilisés pour structurer et mettre en forme les interfaces web. Ils permettent de construire des interfaces adaptées aux différentes fonctionnalités de la plateforme.
-
-\textbf{Tailwind CSS} : est utilisé pour faciliter la conception des interfaces et permettre une mise en page cohérente et adaptable aux différentes tailles d'écran.
-
-\subsubsection{Technologies du backend}
-
-\textbf{Java} : constitue le langage principal utilisé pour le développement de la partie serveur. Sa robustesse, son typage et son large écosystème en font une technologie adaptée à la réalisation d'applications métier.
-
-\textbf{Spring Boot} : est un framework Java permettant de développer des applications backend de manière structurée et efficace. Il facilite notamment la création d'API REST et l'organisation de la logique métier.
-
-Dans AutoParts Pro, Spring Boot assure le traitement des requêtes provenant du frontend, l'application des règles métier et l'accès aux données.
-
-\textbf{Spring Security} : est utilisé pour mettre en place les mécanismes d'authentification et d'autorisation. Il permet notamment de sécuriser les ressources de l'application et de contrôler les accès selon les rôles et permissions.
-
-\textbf{JWT} (\textit{JSON Web Token}) : est utilisé pour transmettre de manière sécurisée les informations nécessaires à l'authentification entre le frontend et le backend. Après une authentification réussie, un token est généré puis utilisé lors de l'accès aux ressources protégées.
-
-\subsubsection{Système de gestion des données}
-
-\textbf{MySQL} : est un système de gestion de bases de données relationnelles. Il permet de stocker et d'organiser les informations nécessaires au fonctionnement de la plateforme.
-
-Dans notre projet, la base de données contient notamment les informations relatives aux utilisateurs, employés, produits, catégories, fournisseurs, stocks, commandes, paiements, factures et opérations de maintenance.
-
-\textbf{Spring Data JPA} : est utilisé pour faciliter l'interaction entre l'application Java et la base de données. Il permet de manipuler les données à travers des repositories et de réduire le code nécessaire aux opérations courantes d'accès aux données.
-
-%---------------------------------------------------------
-\section{Outils de développement}
-
-Plusieurs outils ont été utilisés afin de faciliter la réalisation, le test et la maintenance de la plateforme.
-
-\subsection{Environnement de développement}
-
-\textbf{Visual Studio Code} : est un éditeur de code utilisé principalement pour le développement de la partie Angular. Il propose de nombreuses extensions facilitant le développement TypeScript, Angular, HTML et CSS.
-
-\textbf{IntelliJ IDEA} : est un environnement de développement intégré utilisé pour la réalisation de la partie backend Java et Spring Boot. Il fournit notamment des outils d'analyse du code, de débogage et de gestion des projets Maven.
-
-\subsection{Outil de construction}
-
-\textbf{Maven} : est utilisé pour gérer la construction du projet backend ainsi que les dépendances nécessaires à l'application Spring Boot. Il permet également d'automatiser différentes opérations liées au cycle de développement.
-
-\subsection{Outils de gestion de versions}
-
-\textbf{Git} : est un système de gestion de versions distribué permettant de conserver l'historique des modifications apportées au code source et de travailler avec différentes branches.
-
-\textbf{GitHub} : est utilisé comme plateforme d'hébergement des dépôts Git. Il facilite la sauvegarde du code, la gestion des branches et le suivi des différentes versions du projet.
-
-\subsection{Outil de gestion du projet}
-
-\textbf{Trello} : peut être utilisé pour organiser les tâches du projet sous forme de tableaux et de cartes. Il permet de suivre l'état d'avancement des différentes User Stories et tâches associées aux Sprints.
-
-%---------------------------------------------------------
-\section{Outils de conception et de modélisation}
-
-\textbf{PlantUML} : est un outil permettant de générer différents types de diagrammes à partir d'une description textuelle. Il est utilisé dans notre projet pour représenter notamment les diagrammes UML.
-
-Cette approche facilite la modification des diagrammes au cours de l'évolution du projet et permet de conserver une représentation cohérente avec la conception du système.
-
-Les diagrammes utilisés dans le cadre du projet comprennent principalement :
-
-\begin{itemize}
-    \item les diagrammes de cas d'utilisation ;
-    \item les diagrammes de classes ;
-    \item les diagrammes de séquence.
 \end{itemize}
 
 %---------------------------------------------------------
-\section{Architecture de l'application}
 
-Le choix de l'architecture représente une étape importante dans la conception d'AutoParts Pro. Une organisation claire des différentes responsabilités permet de faciliter la maintenance, l'évolution et la sécurisation de la plateforme.
-
-Nous avons adopté une architecture en couches séparant principalement la présentation, la logique métier et l'accès aux données. Cette organisation permet de limiter les dépendances directes entre les différentes parties du système.
-
-%---------------------------------------------------------
-% Figure architecture
-% Décommenter lorsque le diagramme sera disponible
-%
-%\begin{figure}[H]
-%    \centering
-%    \includegraphics[width=\textwidth]{images/architecture/architecture_generale.png}
-%    \caption{Architecture générale de la plateforme AutoParts Pro}
-%    \label{fig:architecture_generale}
-%\end{figure}
-%---------------------------------------------------------
-
-\subsection{Couche présentation}
-
-La couche présentation correspond à l'application frontend développée avec Angular. Elle assure l'interaction avec les utilisateurs et prend en charge l'affichage des informations ainsi que la récupération des données depuis le backend.
-
-Elle est principalement composée des éléments suivants :
+\subsection{Langage et outils de conception}
 
 \begin{itemize}
 
-    \item \textbf{Components :}
-    ils représentent les différentes interfaces et assurent la gestion des interactions avec les utilisateurs.
+\item \textbf{\ac{UML}} \cite{umlSpec} :
+langage de modélisation orienté objet permettant de représenter de manière claire et précise la structure et le comportement d'un système, indépendamment de tout langage de programmation. Nous l'avons utilisé pour l'ensemble des diagrammes de conception du projet (cas d'utilisation, séquence, classes) présentés dans les chapitres suivants.
 
-    \item \textbf{Services Angular :}
-    ils assurent la communication avec le backend à travers des requêtes HTTP et permettent de centraliser les appels aux différentes API.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.15\textwidth]{images/logos/logouml.png}
+    \caption{Logo UML}
+    \label{fig:uml}
+\end{figure}
 
-    \item \textbf{Models :}
-    ils permettent de représenter côté frontend les données manipulées par l'application.
+\item \textbf{Draw.io} \cite{drawioTool} :
+application gratuite de création de diagrammes en ligne. Nous l'avons choisie pour la réalisation de nos diagrammes \ac{UML} ainsi que des schémas d'architecture du projet, grâce à sa prise en main simple et à la possibilité d'exporter les diagrammes dans différents formats.
 
-    \item \textbf{Guards et Interceptors :}
-    ils participent à la sécurisation de l'application frontend, notamment en contrôlant l'accès aux routes et en ajoutant les informations d'authentification aux requêtes.
-    
-\end{itemize}
-
-\subsection{Couche métier}
-
-La couche métier correspond à l'application backend développée avec Spring Boot. Elle reçoit les requêtes provenant du frontend, applique les règles métier et retourne les résultats nécessaires.
-
-Elle est organisée autour de plusieurs composants :
-
-\begin{itemize}
-
-    \item \textbf{Controllers :}
-    ils reçoivent les requêtes HTTP et exposent les différentes API REST de l'application.
-
-    \item \textbf{Services :}
-    ils contiennent la logique métier et assurent le traitement des opérations demandées.
-
-    \item \textbf{Repositories :}
-    ils assurent l'accès aux données stockées dans la base de données.
-
-    \item \textbf{Entities :}
-    elles représentent les principales données métier manipulées par l'application et sont associées aux tables de la base de données.
-
-    \item \textbf{DTO :}
-    les objets de transfert de données permettent d'échanger uniquement les informations nécessaires entre le frontend et le backend.
-
-    \item \textbf{Mappers :}
-    ils assurent la conversion entre les entités métier et les DTO utilisés pour les échanges avec le frontend.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{images/logos/draw.io.png}
+    \caption{Logo Draw.io}
+    \label{fig:drawio}
+\end{figure}
 
 \end{itemize}
 
-\subsection{Couche données}
 
-La couche données correspond à la base de données relationnelle MySQL. Elle assure la persistance des informations utilisées par les différents modules de la plateforme.
 
-Les données stockées concernent notamment :
 
-\begin{itemize}
-    \item les utilisateurs et leurs rôles ;
-    \item les employés et les départements ;
-    \item les produits, catégories et marques ;
-    \item les fournisseurs et les stocks ;
-    \item les clients et les véhicules ;
-    \item les commandes et les lignes de commande ;
-    \item les paiements et les factures ;
-    \item les services et les interventions de maintenance.
-\end{itemize}
 
-Cette séparation en différentes couches permet de mieux organiser le code et de faciliter les évolutions futures de la plateforme.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 %---------------------------------------------------------
-\section{Architecture générale des échanges}
+\section{Architecture générale de la plateforme}
 
-Le fonctionnement général de la plateforme repose sur une communication entre le frontend Angular et le backend Spring Boot à travers des API REST.
+La plateforme \textbf{AutoParts Pro} est composée de deux applications frontend développées avec Angular : une application e-commerce destinée aux clients, et une application \ac{ERP} destinée aux employés et aux administrateurs. Ces deux applications s'appuient sur un backend commun développé avec Spring Boot, qui centralise la logique métier, la sécurité et l'accès aux données.
 
-Lorsqu'un utilisateur effectue une opération depuis l'interface, le composant Angular concerné transmet la demande au service correspondant. Celui-ci envoie une requête HTTP vers l'API REST du backend.
+La Figure~\ref{fig:architecture_generale} présente une vue globale de l'architecture de la plateforme.
 
-Le contrôleur Spring Boot reçoit ensuite la requête et la transmet au service métier approprié. Le service applique les règles nécessaires et utilise les repositories pour accéder aux données stockées dans MySQL.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{images/architecture/architecture_generale_MSG_corrigee.png}
+    \caption{Architecture générale de la plateforme AutoParts}
+    \label{fig:architecture_generale}
+\end{figure}
 
-Une fois le traitement terminé, le résultat est retourné au frontend sous forme de données JSON afin d'être affiché à l'utilisateur.
+%---------------------------------------------------------
 
-Cette organisation permet de séparer clairement l'interface utilisateur, la logique métier et la persistance des données, tout en facilitant la maintenance et l'évolution de la solution.
+\subsection{Architecture physique}
+
+L'architecture physique décrit la répartition des composants de la plateforme sur les différents environnements d'hébergement. Elle distingue les applications frontend, le backend, la base de données et les services externes.
+
+Les deux applications Angular, à savoir l'application e-commerce destinée aux clients et l'application \ac{ERP} destinée aux employés et aux administrateurs, sont hébergées sur \textbf{Firebase Hosting}. Ce service facilite le déploiement des applications et assure leur accès sécurisé via le protocole \ac{HTTPS}.
+
+Le backend Spring Boot, la base de données MySQL et n8n sont prévus pour être déployés sur un serveur privé virtuel (\ac{VPS}). Chaque composant est exécuté dans un conteneur Docker afin de faciliter le déploiement et la maintenance. Le backend expose une \ac{API} \ac{REST} consommée par les deux applications Angular et communique avec MySQL via Spring Data \ac{JPA}. Il échange également avec n8n à travers des \textit{webhooks} pour déclencher les processus d'automatisation.
+
+La plateforme utilise enfin des services externes pour certaines fonctionnalités, notamment un service d'\ac{OCR} pour la vérification des documents d'identité et un service \ac{SMTP} pour l'envoi des e-mails.
+
+À la date de rédaction de ce rapport, le \ac{VPS} a été provisionné et son déploiement est en cours de finalisation. Le développement et les tests ont été réalisés principalement en environnement local.
+
+La Figure~\ref{fig:architecture_physique} illustre l'architecture physique cible de la plateforme.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/architecture/architecture_physique.png}
+    \caption{Architecture physique de la plateforme AutoParts}
+    \label{fig:architecture_physique}
+\end{figure}
+%---------------------------------------------------------
+
+
+
+
+
+\subsection{Architecture logique}
+
+L'architecture logique de la plateforme repose sur une organisation en couches, assurant une séparation claire des responsabilités entre la présentation, la logique métier et l'accès aux données.
+
+\subsubsection{Couche présentation}
+
+Les deux applications Angular sont organisées autour des éléments suivants :
+
+\begin{itemize}
+    \item \textbf{Components} : gestion de l'affichage et des interactions utilisateur ;
+    \item \textbf{Services} : communication avec l'\ac{API} \ac{REST} du backend ;
+    \item \textbf{Models} : structures de données de l'application ;
+    \item \textbf{Guards} : contrôle d'accès aux routes selon l'authentification et les autorisations ;
+    \item \textbf{Interceptors} : gestion des requêtes \ac{HTTP} et transmission des informations d'authentification.
+\end{itemize}
+
+Les échanges avec le backend se font via des requêtes \ac{HTTP} au format \ac{JSON}.
+
+\subsubsection{Couche métier}
+
+Développée en Java avec Spring Boot, cette couche expose les fonctionnalités via des \ac{API} \ac{REST} et est organisée comme suit :
+
+\begin{itemize}
+    \item \textbf{Controllers} : réception des requêtes des applications Angular ;
+    \item \textbf{Services} : logique métier et règles de gestion ;
+    \item \textbf{Repositories} : accès aux données via Spring Data JPA ;
+    \item \textbf{Entities} : données persistées ;
+    \item \textbf{DTO / Mappers} : structuration et conversion des données échangées entre couches.
+\end{itemize}
+
+La sécurité est assurée par Spring Security et \ac{JWT}.
+
+La Figure~\ref{fig:architecture_backend} détaille l'organisation interne du backend.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{images/architecture/architecture_backend_MSG.png}
+    \caption{Architecture interne du backend Spring Boot}
+    \label{fig:architecture_backend}
+\end{figure}
+
+\subsubsection{Couche données}
+
+Basée sur MySQL, cette couche assure la persistance des informations de la plateforme (utilisateurs, employés, produits, fournisseurs, stocks, commandes, paiements, factures, maintenance, congés, etc.). L'accès aux données se fait via les \textit{Repositories} à travers Spring Data JPA.
+
+\subsubsection{Communication entre les couches}
+
+Une opération initiée depuis une application Angular suit le flux suivant : le composant sollicite un service Angular, qui envoie une requête \ac{HTTP} à l'\ac{API} \ac{REST} du backend. Le contrôleur reçoit la requête et la transmet au service métier, qui fait appel aux repositories si un accès aux données est nécessaire. Le résultat est ensuite retourné au frontend au format \ac{JSON} pour mettre à jour l'interface.
+
+Le backend communique également avec des services externes : \textbf{n8n} pour l'automatisation de certains processus métier, et un service d'\ac{OCR} pour la vérification des documents d'identité.
 
 %---------------------------------------------------------
 \section{Conclusion}
 
-Dans ce chapitre, nous avons présenté l'organisation du projet AutoParts Pro à travers le Product Backlog et la planification des différents Sprints. Nous avons également décrit le diagramme de cas d'utilisation global afin de présenter les principales interactions entre les acteurs et le système.
+Ce chapitre a permis de spécifier les besoins de la plateforme \textbf{AutoParts Pro}, à travers l'identification des acteurs ainsi que des besoins fonctionnels et non fonctionnels. Les principales technologies et frameworks utilisés ont également été présentés, en justifiant les choix effectués pour le frontend, le backend et la base de données.
 
-Nous avons ensuite présenté les technologies et les outils retenus pour le développement, notamment Angular, TypeScript, Java, Spring Boot, Spring Security, JWT et MySQL, ainsi que les outils utilisés pour le développement, la gestion des versions et la modélisation.
+Enfin, l'architecture générale de la plateforme a été détaillée, mettant en évidence les deux applications Angular et leur communication avec le backend commun développé avec Spring Boot.
 
-Enfin, l'architecture générale de la plateforme a été décrite en présentant les responsabilités des différentes couches et les échanges entre le frontend, le backend et la base de données.
-
-Ces choix constituent la base technique et organisationnelle nécessaire à la réalisation progressive de la solution. Les chapitres suivants seront consacrés à la réalisation des différents Sprints et à la présentation détaillée des fonctionnalités développées.
+Ces éléments constituent la base technique du projet et serviront de référence pour la réalisation des fonctionnalités présentées dans les chapitres consacrés aux différents Sprints.

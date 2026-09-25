@@ -1,5 +1,6 @@
-\chapter{Intégration et automatisation avec n8n}
-
+\chapter{Sprint 5:Intégration et automatisation avec n8n}
+\localtableofcontents
+\newpage
 \section{Introduction}
 
 Ce sprint est consacré à l'intégration de la plateforme n8n avec le backend de l'application afin d'automatiser plusieurs processus métier. 
@@ -8,17 +9,27 @@ Contrairement aux sprints précédents, ce sprint ne porte pas sur la création 
 L'intégration est réalisée entre le backend Spring Boot et n8n à travers des Webhooks HTTP. 
 Lorsqu'un événement métier se produit dans l'application, le backend prépare les informations nécessaires et les transmet au workflow n8n correspondant.
 
-Les principaux événements pris en charge concernent la confirmation des commandes, les paiements de maintenance, les situations de stock faible, la réception des livraisons ainsi que les demandes de congé.
+La Figure~\ref{fig:n8n-overview} présente une vue globale de l'intégration de n8n dans la plateforme. Elle met en évidence les principaux composants impliqués dans l'automatisation ainsi que les échanges entre le backend Spring Boot et les workflows n8n.
 
 % -------------------------------------------------------------------
 % FIGURE 5.1
 % -------------------------------------------------------------------
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{images/sprint5/n8n-overview.png}
-%     \caption{Vue générale de l'intégration de n8n}
-%     \label{fig:n8n-overview}
-% \end{figure}
+\begin{figure}[H]
+
+    \centering
+
+    \includegraphics[
+        width=0.98\textwidth,
+        height=0.90\textheight,
+        keepaspectratio
+    ]{images/architecture/archn8n1.png}
+
+    \caption{Vue générale de l'intégration de n8n}
+
+    \label{fig:n8n-overview}
+
+\end{figure}
+
 %
 % Description de la figure :
 % Cette figure présente une vue générale de l'intégration de n8n dans
@@ -32,99 +43,150 @@ Les principaux événements pris en charge concernent la confirmation des comman
 
 \subsection{Présentation de n8n}
 
-n8n est une plateforme d'automatisation permettant de créer et d'exécuter des workflows reliant différentes applications et services. 
-Elle permet notamment de recevoir des données à travers des Webhooks, de les traiter et de déclencher automatiquement différentes actions selon le workflow configuré.
+n8n est une plateforme d'automatisation permettant de créer et d'exécuter des workflows reliant différentes applications et services \cite{n8nDocs}.
 
-Dans notre application, n8n est utilisé comme un composant externe chargé d'exécuter des traitements d'automatisation à partir d'événements générés par le backend Spring Boot. 
+Elle permet notamment de recevoir des données à travers des Webhooks, de les traiter et de déclencher automatiquement différentes actions selon le workflow configuré \cite{n8nWebhook}.
+
+Dans notre application, n8n est utilisé comme un composant externe chargé d'exécuter des traitements d'automatisation à partir d'événements générés par le backend Spring Boot.
+
 La communication entre les deux systèmes est réalisée à travers des requêtes HTTP envoyées vers des Webhooks n8n.
 
-Cette approche permet de séparer la logique métier principale de l'application des traitements d'automatisation. 
-Ainsi, les workflows peuvent être modifiés ou enrichis indépendamment du code principal du backend.
+Cette approche permet de séparer la logique métier principale de l'application des traitements d'automatisation. Ainsi, les workflows peuvent être modifiés ou enrichis indépendamment du code principal du backend.
 
-% -------------------------------------------------------------------
-% FIGURE 5.2
-% -------------------------------------------------------------------
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.85\textwidth]{images/sprint5/n8n-workflow.png}
-%     \caption{Exemple de workflow n8n utilisé pour l'automatisation}
-%     \label{fig:n8n-workflow}
-% \end{figure}
-%
-% Description de la figure :
-% Cette figure présente l'interface d'un workflow n8n. Elle illustre
-% l'enchaînement des différents noeuds permettant de recevoir les
-% données envoyées par le backend et d'exécuter automatiquement les
-% traitements configurés.
-% -------------------------------------------------------------------
+La figure suivante présente un exemple de workflow n8n utilisé dans le cadre
+de l'application AutoParts. Le workflow « Leave Request Response » permet de
+traiter les informations relatives à une demande de congé et d'exécuter
+automatiquement les actions configurées à partir des données reçues.
 
+\begin{figure}[H]
 
+    \centering
+
+    \includegraphics[
+        width=0.98\textwidth,
+        height=0.90\textheight,
+        keepaspectratio
+    ]{images/architecture/archn8n2.png}
+
+    \caption{Workflow n8n « Leave Request Response »}
+
+    \label{fig:leave-request-response}
+
+\end{figure}
 \subsection{Objectifs du Sprint}
 
-L'objectif principal de ce sprint est d'intégrer n8n au backend afin d'automatiser plusieurs processus déclenchés par des événements métier.
+L'objectif principal de ce sprint est d'intégrer n8n au backend Spring Boot
+afin d'automatiser certains processus métier à partir d'événements générés
+par l'application.
 
-Les objectifs réalisés durant ce sprint sont les suivants :
+Les objectifs de ce sprint sont de :
 
 \begin{itemize}
-    \item intégrer n8n avec le backend Spring Boot ;
-    \item mettre en place des Webhooks pour recevoir les événements provenant de l'application ;
-    \item automatiser la notification après la confirmation d'une commande ;
-    \item automatiser la notification après un paiement de maintenance ;
-    \item générer des alertes lorsqu'un produit atteint un niveau de stock faible ;
-    \item automatiser la notification lors de la réception d'une livraison ;
-    \item transmettre automatiquement les informations relatives aux demandes de congé.
+
+    \item mettre en place la communication entre le backend et n8n à travers
+    des Webhooks HTTP ;
+
+    \item automatiser différents processus métier à partir des événements
+    générés par l'application ;
+
+    \item transmettre automatiquement les données nécessaires aux workflows
+    n8n ;
+
+    \item faciliter l'envoi de notifications et l'exécution d'actions
+    automatiques.
+
 \end{itemize}
 
 
 \subsection{Sprint Backlog}
 
-Le Sprint Backlog regroupe les fonctionnalités développées durant ce sprint pour mettre en place l'intégration entre le backend Spring Boot et n8n.
+Le Sprint Backlog présente les principales fonctionnalités réalisées pour
+mettre en place l'intégration entre le backend Spring Boot et n8n.
+Le Tableau~\ref{tab:sprint5-backlog} présente le Sprint Backlog de ce Sprint.
 
-\begin{table}[H]
-\centering
+\begin{longtable}{|>{\RaggedRight\arraybackslash}p{4cm}|>{\RaggedRight\arraybackslash}p{8cm}|c|}
 \caption{Sprint Backlog du Sprint 5}
-\label{tab:sprint5-backlog}
-\begin{tabular}{|p{3.5cm}|p{7cm}|p{2cm}|}
-\hline
-\textbf{Fonctionnalité} & \textbf{Description} & \textbf{Priorité} \\
-\hline
-Intégration de n8n & Mettre en place la communication entre Spring Boot et n8n à travers des Webhooks HTTP. & Haute \\
-\hline
-Confirmation de commande & Transmettre les informations d'une commande confirmée au workflow n8n et mettre à jour la caisse. & Haute \\
-\hline
-Paiement de maintenance & Transmettre les informations relatives au paiement d'une maintenance au workflow n8n. & Haute \\
-\hline
-Alerte de stock faible & Détecter les produits dont le stock est faible et transmettre leurs informations à n8n. & Haute \\
-\hline
-Réception de livraison & Transmettre les informations relatives à une livraison reçue et mettre à jour la caisse. & Haute \\
-\hline
-Demande de congé & Transmettre automatiquement les informations d'une demande de congé à n8n. & Moyenne \\
-\hline
-\end{tabular}
-\end{table}
+\label{tab:sprint5-backlog}\\
 
+\hline
+
+\textbf{Fonctionnalité} & \textbf{Description} & \textbf{Priorité} \\
+
+\hline
+
+\endfirsthead
+
+\hline
+
+\textbf{Fonctionnalité} & \textbf{Description} & \textbf{Priorité} \\
+
+\hline
+
+\endhead
+
+Intégration de n8n &
+Mettre en place la communication entre Spring Boot et n8n à travers des Webhooks HTTP. &
+Haute \\
+
+\hline
+
+Confirmation de commande &
+Transmettre les informations d'une commande confirmée au workflow n8n et mettre à jour la caisse. &
+Haute \\
+
+\hline
+
+Paiement de maintenance &
+Transmettre les informations relatives au paiement d'une maintenance au workflow n8n. &
+Haute \\
+
+\hline
+
+Alerte de stock faible &
+Détecter les produits dont le stock est faible et transmettre leurs informations à n8n. &
+Haute \\
+
+\hline
+
+Réception de livraison &
+Transmettre les informations relatives à une livraison reçue et mettre à jour la caisse. &
+Haute \\
+
+\hline
+
+Demande de congé &
+Transmettre automatiquement les informations d'une demande de congé à n8n. &
+Moyenne \\
+
+\hline
+
+\end{longtable}
 
 \section{Intégration de n8n}
 
 \subsection{Architecture de l'intégration}
 
-L'intégration repose sur une communication entre le backend Spring Boot et la plateforme n8n. 
-Le backend reste responsable de la logique métier et détecte les événements nécessitant une automatisation. 
-Le service \texttt{N8nNotifierService} assure ensuite la préparation et l'envoi des données vers le Webhook n8n correspondant.
+L'intégration repose sur une communication entre le backend Spring Boot et la
+plateforme n8n.
 
-La communication peut être représentée de manière générale comme suit :
+Le backend reste responsable de la logique métier et détecte les événements
+nécessitant une automatisation. Le service \texttt{N8nNotifierService}
+prépare ensuite les données nécessaires et les transmet au Webhook n8n
+correspondant à l'aide d'une requête HTTP.
 
-\begin{center}
-\textit{Backend Spring Boot}
-$\rightarrow$
-\textit{N8nNotifierService}
-$\rightarrow$
-\textit{Webhook n8n}
-$\rightarrow$
-\textit{Workflow n8n}
-$\rightarrow$
-\textit{Action automatisée}
-\end{center}
+Le workflow n8n reçoit les données, exécute les traitements configurés et
+déclenche les actions automatisées nécessaires.
+
+La Figure~\ref{fig:n8n-architecture} présente l'architecture générale de la communication entre Spring Boot et n8n. Elle met en évidence le rôle du service \texttt{N8nNotifierService}, des Webhooks et des workflows dans le déclenchement des traitements automatisés.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.42\textwidth]{images/architecture/archn8n3.jpg}
+    \caption{Architecture générale de l'intégration entre Spring Boot et n8n}
+\label{fig:n8n-architecture}
+
+\end{figure}
 
 % -------------------------------------------------------------------
 % FIGURE 5.3
@@ -221,11 +283,17 @@ Chaque événement possède son propre payload contenant les informations néces
 
 \subsection{Automatisation de la confirmation des commandes}
 
-Lorsqu'une commande est confirmée, le backend déclenche la méthode \texttt{notifyOrderConfirmed}. 
-Cette méthode réalise d'abord l'enregistrement de la vente dans la caisse à travers le service \texttt{CashRegisterService}.
+Lorsqu'une commande est confirmée, le backend déclenche la méthode
+\texttt{notifyOrderConfirmed}. 
 
-Le montant total de la commande est crédité dans la caisse avec la catégorie \texttt{SALE\_CASH}. 
-Le nouveau solde de la caisse est ensuite récupéré afin de l'intégrer dans les données envoyées à n8n.
+Cette méthode réalise d'abord l'enregistrement de la vente dans la caisse à
+travers le service \texttt{CashRegisterService}.
+
+Le montant total de la commande est crédité dans la caisse avec la catégorie
+\texttt{SALE\_CASH}. 
+
+Le nouveau solde de la caisse est ensuite récupéré afin de l'intégrer dans les
+données envoyées à n8n.
 
 Le payload transmis contient notamment :
 
@@ -239,55 +307,52 @@ Le payload transmis contient notamment :
 
 Le payload est ensuite envoyé au Webhook associé à la confirmation de commande.
 
-% -------------------------------------------------------------------
-% FIGURE 5.6
-% -------------------------------------------------------------------
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{images/sprint5/order-confirmed-workflow.png}
-%     \caption{Workflow n8n déclenché après la confirmation d'une commande}
-%     \label{fig:order-confirmed-workflow}
-% \end{figure}
-%
-% Description de la figure :
-% Cette figure montre le workflow n8n déclenché lorsqu'une commande est
-% confirmée. Le Webhook reçoit les informations envoyées par Spring Boot
-% et les transmet aux différentes étapes du workflow.
-% -------------------------------------------------------------------
 
+% -------------------------------------------------------------------
 
 \subsection{Automatisation des paiements de maintenance}
 
-Lorsqu'un paiement relatif à une maintenance est effectué, la méthode \texttt{notifyMaintenancePayment} est appelée.
+Lorsqu'un paiement relatif à une maintenance est effectué, la méthode
+\texttt{notifyMaintenancePayment} est appelée.
 
-Le service récupère le nouveau solde de la caisse et prépare un payload contenant les informations du paiement. 
-Ces informations comprennent notamment le numéro de facture, le montant payé, le ou les moyens de paiement utilisés, la date du paiement ainsi que le solde actuel de la caisse.
+Le service récupère le nouveau solde de la caisse et prépare un payload
+contenant les informations du paiement. 
 
-Les données sont ensuite transmises au Webhook n8n dédié aux paiements de maintenance.
+Ces informations comprennent notamment le numéro de facture, le montant payé,
+le ou les moyens de paiement utilisés, la date du paiement ainsi que le solde
+actuel de la caisse.
+
+Les données sont ensuite transmises au Webhook n8n dédié aux paiements de
+maintenance.
+
+Une notification est ensuite générée automatiquement et envoyée sur Telegram
+afin d'assurer le suivi des opérations.
+
 
 % -------------------------------------------------------------------
-% FIGURE 5.7
-% -------------------------------------------------------------------
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{images/sprint5/maintenance-payment-workflow.png}
-%     \caption{Workflow n8n pour les paiements de maintenance}
-%     \label{fig:maintenance-payment-workflow}
-% \end{figure}
-%
-% Description de la figure :
-% Cette figure présente le workflow n8n déclenché après un paiement
-% de maintenance. Elle montre la réception des informations du paiement
-% par le Webhook et leur traitement dans le workflow.
+% FIGURE COMMUNE AUX DEUX AUTOMATISATIONS
 % -------------------------------------------------------------------
 
+La Figure~\ref{fig:telegram-notification} présente un exemple concret de notification Telegram générée à la suite du traitement automatisé d'une commande ou d'un paiement de maintenance. Elle illustre ainsi le résultat obtenu après l'exécution du workflow n8n.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{images/captures/commandeetmaintenance.jpeg}
+    \caption{Exemple de notification Telegram générée par les workflows n8n}
+    \label{fig:telegram-notification}
+\end{figure}
+
+% -------------------------------------------------------------------
 
 \subsection{Gestion des alertes de stock faible}
 
-Le système permet également d'automatiser la gestion des situations de stock faible.
+Le système permet également d'automatiser la gestion des situations de stock
+faible.
 
-La méthode \texttt{notifyLowStock} reçoit une liste de produits dont le niveau de stock nécessite une attention particulière. 
-Pour chaque produit, les informations relatives au stock sont préparées avant d'être regroupées dans un payload.
+La méthode \texttt{notifyLowStock} reçoit une liste de produits dont le niveau
+de stock nécessite une attention particulière. 
+
+Pour chaque produit, les informations relatives au stock sont préparées avant
+d'être regroupées dans un payload.
 
 Les données transmises comprennent notamment :
 
@@ -300,32 +365,35 @@ Les données transmises comprennent notamment :
     \item la date et l'heure de la vérification.
 \end{itemize}
 
-Ces informations sont envoyées au Webhook n8n dédié à la gestion des stocks faibles.
+Ces informations sont envoyées au Webhook n8n dédié à la gestion des stocks
+faibles.
+
+Le workflow traite ensuite les données reçues et déclenche automatiquement
+une notification Telegram afin d'informer l'administrateur de la situation
+du stock.
+
+La Figure~\ref{fig:telegram-stock} illustre cette notification automatique et montre concrètement comment l'administrateur est informé lorsqu'une situation de stock faible est détectée.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{images/captures/alertstock.jpeg}
+    \caption{Notification Telegram relative à une alerte de stock faible}
+    \label{fig:telegram-stock}
+\end{figure}
+
 
 % -------------------------------------------------------------------
-% FIGURE 5.8
-% -------------------------------------------------------------------
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{images/sprint5/low-stock-workflow.png}
-%     \caption{Workflow n8n de gestion des alertes de stock faible}
-%     \label{fig:low-stock-workflow}
-% \end{figure}
-%
-% Description de la figure :
-% Cette figure présente le workflow n8n déclenché lorsqu'un ou plusieurs
-% produits atteignent un niveau de stock faible. Le workflow reçoit la
-% liste des produits concernés à travers le Webhook et effectue les
-% traitements d'automatisation configurés.
-% -------------------------------------------------------------------
-
 
 \subsection{Automatisation de la réception des livraisons}
 
-Lorsqu'une livraison est reçue, la méthode \texttt{notifySupplyReceived} est utilisée pour transmettre les informations relatives à l'opération à n8n.
+Lorsqu'une livraison est reçue, la méthode
+\texttt{notifySupplyReceived} est utilisée pour transmettre les informations
+relatives à l'opération à n8n.
 
-Avant l'envoi du payload, le coût total de la réception est calculé à partir de la quantité reçue et du prix unitaire. 
-Le montant correspondant est ensuite débité de la caisse avec la catégorie \texttt{PURCHASE\_CASH}.
+Avant l'envoi du payload, le coût total de la réception est calculé à partir
+de la quantité reçue et du prix unitaire. 
+
+Le montant correspondant est ensuite débité de la caisse avec la catégorie
+\texttt{PURCHASE\_CASH}.
 
 Le payload envoyé à n8n contient notamment :
 
@@ -341,31 +409,33 @@ Le payload envoyé à n8n contient notamment :
     \item le nouveau solde de la caisse.
 \end{itemize}
 
-Le Webhook n8n correspondant reçoit ces informations afin de déclencher le workflow associé à la réception de la livraison.
+Le Webhook n8n correspondant reçoit ces informations afin de déclencher le
+workflow associé à la réception de la livraison.
+
+Une notification Telegram peut ensuite être générée afin de confirmer la
+réception de la livraison et de transmettre les principales informations
+relatives à l'opération.
+La Figure~\ref{fig:telegram-livraison} présente un exemple concret de cette notification et met en évidence les informations transmises automatiquement après la réception de la livraison.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{images/captures/telegram4.jpeg}
+    \caption{Notification Telegram relative à la réception d'une livraison}
+    \label{fig:telegram-livraison}
+\end{figure}
+
 
 % -------------------------------------------------------------------
-% FIGURE 5.9
-% -------------------------------------------------------------------
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{images/sprint5/supply-received-workflow.png}
-%     \caption{Workflow n8n déclenché lors de la réception d'une livraison}
-%     \label{fig:supply-received-workflow}
-% \end{figure}
-%
-% Description de la figure :
-% Cette figure présente le workflow n8n associé à la réception d'une
-% livraison. Elle montre la réception des données relatives au produit,
-% au fournisseur, à la quantité reçue et au coût de l'opération.
-% -------------------------------------------------------------------
-
 
 \subsection{Notification des demandes de congé}
 
-L'intégration de n8n est également utilisée pour automatiser le traitement des demandes de congé.
+L'intégration de n8n est également utilisée pour automatiser le traitement
+des demandes de congé.
 
-Lorsqu'un employé soumet une demande, le backend sauvegarde la demande puis appelle la méthode \texttt{notifyLeaveRequest}. 
-Cette méthode prépare les informations nécessaires et les transmet au Webhook n8n correspondant.
+Lorsqu'un employé soumet une demande, le backend sauvegarde la demande puis
+appelle la méthode \texttt{notifyLeaveRequest}. 
+
+Cette méthode prépare les informations nécessaires et les transmet au Webhook
+n8n correspondant.
 
 Le payload contient notamment :
 
@@ -381,25 +451,18 @@ Le payload contient notamment :
     \item la date et l'heure de création de la demande.
 \end{itemize}
 
-Ces informations permettent au workflow n8n de déclencher les actions d'automatisation configurées pour les demandes de congé.
+Ces informations permettent au workflow n8n de déclencher les actions
+d'automatisation configurées pour les demandes de congé.
 
-% -------------------------------------------------------------------
-% FIGURE 5.10
-% -------------------------------------------------------------------
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{images/sprint5/leave-request-workflow.png}
-%     \caption{Workflow n8n pour les demandes de congé}
-%     \label{fig:leave-request-workflow}
-% \end{figure}
-%
-% Description de la figure :
-% Cette figure montre le workflow n8n déclenché lors de la création
-% d'une demande de congé. Le Webhook reçoit les informations de la
-% demande transmises par Spring Boot et les utilise pour effectuer
-% les automatisations configurées.
-% -------------------------------------------------------------------
-
+Une notification est alors envoyée automatiquement sur Telegram afin
+d'informer l'administrateur de la création de la demande.
+La Figure~\ref{fig:telegram-conge} illustre cette notification automatique et montre concrètement le résultat du traitement de la demande de congé par le workflow n8n.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{images/captures/congee.jpeg}
+    \caption{Notification Telegram lors de la création d'une demande de congé}
+    \label{fig:telegram-conge}
+\end{figure}
 
 \section{Bilan du Sprint}
 

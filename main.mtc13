@@ -1,0 +1,16 @@
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {7.1}Introduction}{\reset@font\mtcSfont 103}{section.7.1}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {7.2}Présentation et analyse du Sprint}{\reset@font\mtcSfont 104}{section.7.2}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.2.1}Présentation de n8n}{\reset@font\mtcSSfont 104}{subsection.7.2.1}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.2.2}Objectifs du Sprint}{\reset@font\mtcSSfont 104}{subsection.7.2.2}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.2.3}Sprint Backlog}{\reset@font\mtcSSfont 105}{subsection.7.2.3}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {7.3}Intégration de n8n}{\reset@font\mtcSfont 105}{section.7.3}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.3.1}Architecture de l'intégration}{\reset@font\mtcSSfont 105}{subsection.7.3.1}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.3.2}Communication entre Spring Boot et n8n}{\reset@font\mtcSSfont 106}{subsection.7.3.2}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.3.3}Gestion des Webhooks}{\reset@font\mtcSSfont 107}{subsection.7.3.3}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {7.4}Réalisation}{\reset@font\mtcSfont 107}{section.7.4}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.4.1}Automatisation de la confirmation des commandes}{\reset@font\mtcSSfont 107}{subsection.7.4.1}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.4.2}Automatisation des paiements de maintenance}{\reset@font\mtcSSfont 107}{subsection.7.4.2}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.4.3}Gestion des alertes de stock faible}{\reset@font\mtcSSfont 108}{subsection.7.4.3}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.4.4}Automatisation de la réception des livraisons}{\reset@font\mtcSSfont 109}{subsection.7.4.4}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.4.5}Notification des demandes de congé}{\reset@font\mtcSSfont 110}{subsection.7.4.5}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {7.5}Bilan du Sprint}{\reset@font\mtcSfont 111}{section.7.5}}

@@ -1,0 +1,27 @@
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {6.1}Introduction}{\reset@font\mtcSfont 87}{section.6.1}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {6.2}Analyse du Sprint}{\reset@font\mtcSfont 87}{section.6.2}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.2.1}Sprint Backlog}{\reset@font\mtcSSfont 87}{subsection.6.2.1}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {6.3}Conception}{\reset@font\mtcSfont 89}{section.6.3}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.3.1}Diagramme de Cas d'Utilisation}{\reset@font\mtcSSfont 89}{subsection.6.3.1}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Description des Cas d'Utilisation}{\reset@font\mtcSSSfont 91}{section*.123}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode UC1 : Vérifier l'identité d'un employé par CIN}{\reset@font\mtcSSSfont 91}{section*.124}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode UC2 : Gérer et consulter les horaires et les shifts}{\reset@font\mtcSSSfont 92}{section*.125}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode UC3 : Demander un congé}{\reset@font\mtcSSSfont 92}{section*.126}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode UC4 : Approuver ou rejeter une demande de congé}{\reset@font\mtcSSSfont 93}{section*.127}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode UC5 : Gérer les demandes d'avance sur salaire}{\reset@font\mtcSSSfont 94}{section*.128}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.3.2}Diagramme de Séquence : Demande et traitement d'un congé}{\reset@font\mtcSSfont 94}{subsection.6.3.2}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.3.3}Diagramme de Classes}{\reset@font\mtcSSfont 97}{subsection.6.3.3}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {6.4}Réalisation}{\reset@font\mtcSfont 97}{section.6.4}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.4.1}Vérification d'un Employee par CIN}{\reset@font\mtcSSfont 98}{subsection.6.4.1}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.4.2}Gestion des horaires de travail}{\reset@font\mtcSSfont 98}{subsection.6.4.2}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Gestion des horaires par l'administrateur}{\reset@font\mtcSSSfont 98}{section*.133}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Consultation de l'emploi du temps par l'Employee}{\reset@font\mtcSSSfont 99}{section*.135}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.4.3}Gestion des shifts}{\reset@font\mtcSSfont 99}{subsection.6.4.3}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Consultation des shifts par l'Employee}{\reset@font\mtcSSSfont 99}{section*.137}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.4.4}Gestion des demandes de congé}{\reset@font\mtcSSfont 100}{subsection.6.4.4}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Demande de congé par l'Employee}{\reset@font\mtcSSSfont 100}{section*.139}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Gestion des demandes de congé par l'administrateur}{\reset@font\mtcSSSfont 100}{section*.141}}
+{\reset@font\mtcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.4.5}Gestion des avances sur salaire}{\reset@font\mtcSSfont 101}{subsection.6.4.5}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Demande d'avance par l'Employee}{\reset@font\mtcSSSfont 101}{section*.143}}
+{\reset@font\mtcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode Gestion des avances par l'administrateur}{\reset@font\mtcSSSfont 101}{section*.145}}
+{\reset@font\mtcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {6.5}Bilan du Sprint}{\reset@font\mtcSfont 102}{section.6.5}}
